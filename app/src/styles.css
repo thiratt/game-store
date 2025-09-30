@@ -1,11 +1,13 @@
-@use 'tailwindcss';
-
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+
+@import 'tailwindcss';
+@plugin 'tailwindcss-primeui';
+@custom-variant dark (&:where(.kiro-dark, .kiro-dark *));
 
 * {
   font-family: 'Noto Sans Thai', sans-serif;
   font-optical-sizing: auto;
-  // font-weight: <weight>;
+  /* // font-weight: <weight>; */
   font-style: normal;
   font-variation-settings: 'wdth' 100;
 }
