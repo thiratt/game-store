@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { Navbar } from "../../components/navbar/navbar";
+import { Hero } from "../../components/landing/hero/hero";
 
 @Component({
   selector: 'app-index',
-  imports: [Navbar],
+  imports: [Navbar, Hero],
   templateUrl: './index.html',
-  styleUrl: './index.scss'
+  styleUrl: './index.scss',
 })
-export class Index {
-
-}
+export class Index {}
