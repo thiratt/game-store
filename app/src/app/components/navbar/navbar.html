@@ -1,64 +1,71 @@
-<div class="relative py-3 px-4 flex items-center justify-between">
-  <div
-    class="flex items-center gap-4"
-    [class.hidden]="isSearchFocused"
-    [class.md:flex]="isSearchFocused"
-  >
-    <div class="flex items-center">
-      <img src="/logo.png" alt="Kiro Logo" width="40" height="40" class="mr-2" />
-      <span class="text-2xl font-bold">Kiro</span>
-    </div>
+<nav class="bg-surface-950/70 shadow-md fixed top-0 left-0 right-0 z-50">
+  <div class="relative py-3 px-4 flex items-center justify-between">
+    <div
+      class="flex items-center gap-4"
+      [class.hidden]="isSearchFocused"
+      [class.md:flex]="isSearchFocused"
+    >
+      <div class="flex items-center">
+        <img src="/logo.png" alt="Kiro Logo" width="40" height="40" class="mr-2" />
+        <span class="text-2xl font-bold">Kiro</span>
+      </div>
 
-    <div class="flex items-center gap-2">
-      @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route)) {
-      <p-button label="{{ link.label }}" [routerLink]="link.route" size="small" [rounded]="true" />
-      } @else {
-      <p-button
-        label="{{ link.label }}"
-        [routerLink]="link.route"
-        size="small"
-        variant="text"
-        [rounded]="true"
-      />
-      } }
-    </div>
-  </div>
-
-  <div
-    class="search-container transition-all duration-300 ease-in-out"
-    [class.search-expanded]="isSearchFocused"
-    [class.search-normal]="!isSearchFocused"
-  >
-    <p-floatlabel variant="on">
-      <p-iconfield>
-        <p-inputicon class="pi pi-search" />
-        <input
-          pInputText
-          id="on_label"
-          autocomplete="off"
-          pSize="small"
-          class="w-full transition-all duration-300 ease-in-out"
-          [(ngModel)]="searchQuery"
-          (focus)="onSearchFocus()"
-          (blur)="onSearchBlur()"
-          (input)="onSearchInput()"
-          (keyup.escape)="onSearchBlur()"
+      <div class="flex items-center gap-2">
+        @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route)) {
+        <p-button
+          label="{{ link.label }}"
+          [routerLink]="link.route"
+          size="small"
+          [rounded]="true"
         />
-        @if (isSearchFocused) {
-        <p-inputicon class="pi pi-times hover:cursor-pointer" (click)="onSearchBlur()" />
-        }
-      </p-iconfield>
-      <label for="on_label">ค้นหา</label>
-    </p-floatlabel>
-  </div>
+        } @else {
+        <p-button
+          label="{{ link.label }}"
+          [routerLink]="link.route"
+          size="small"
+          variant="text"
+          [rounded]="true"
+        />
+        } }
+      </div>
+    </div>
 
-  <div
-    class="flex items-center gap-2"
-    [class.hidden]="isSearchFocused"
-    [class.md:flex]="isSearchFocused"
-  >
-    <p-button label="เข้าสู่ระบบ" variant="text" size="small" />
-    <p-button label="ลงทะเบียน" size="small" />
+    <div
+      class="search-container transition-all duration-300 ease-in-out"
+      [class.search-expanded]="isSearchFocused"
+      [class.search-normal]="!isSearchFocused"
+    >
+      <p-floatlabel variant="on">
+        <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input
+            pInputText
+            id="on_label"
+            autocomplete="off"
+            pSize="small"
+            class="w-full transition-all duration-300 ease-in-out"
+            [(ngModel)]="searchQuery"
+            (focus)="onSearchFocus()"
+            (blur)="onSearchBlur()"
+            (input)="onSearchInput()"
+            (keyup.escape)="onSearchBlur()"
+          />
+          @if (isSearchFocused) {
+          <p-inputicon class="pi pi-times hover:cursor-pointer" (click)="onSearchBlur()" />
+          }
+        </p-iconfield>
+        <label for="on_label">ค้นหา</label>
+      </p-floatlabel>
+    </div>
+
+    <div
+      class="flex items-center gap-2"
+      [class.hidden]="isSearchFocused"
+      [class.md:flex]="isSearchFocused"
+    >
+      <p-button label="เข้าสู่ระบบ" variant="text" size="small" />
+      <p-button label="ลงทะเบียน" size="small" />
+    </div>
   </div>
-</div>
-<div class="search-overlay" [class.active]="isSearchFocused" (click)="onSearchBlur()"></div>
+  <div class="search-overlay" [class.active]="isSearchFocused" (click)="onSearchBlur()"></div>
+</nav>
