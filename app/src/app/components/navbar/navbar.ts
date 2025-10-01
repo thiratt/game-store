@@ -48,15 +48,25 @@ export class Navbar {
 
   onSearchFocus() {
     this.isSearchFocused = true;
+    this.setDisableBodyScrolling(true);
   }
 
   onSearchBlur() {
     this.isSearchFocused = false;
+    this.setDisableBodyScrolling(false);
   }
 
   onSearchInput() {
     if (this.searchQuery.trim()) {
       this.isSearchFocused = true;
+      this.setDisableBodyScrolling(true);
+    }
+  }
+
+  private setDisableBodyScrolling(disable: boolean) {
+    const body = document.body;
+    if (body) {
+      body.style.overflow = disable ? 'hidden' : '';
     }
   }
 }
