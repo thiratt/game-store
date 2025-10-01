@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,10 +30,11 @@ import { FloatLabelModule } from 'primeng/floatlabel';
   styleUrl: './navbar.scss',
 })
 export class Navbar {
+  @Input() disableMenu: boolean = false;
+  @ViewChild('searchInput') searchInput: ElementRef | undefined;
   searchQuery: string = '';
   isMobileMenuOpen: boolean = false;
   isSearchFocused: boolean = false;
-  @ViewChild('searchInput') searchInput: ElementRef | undefined;
 
   navigationItems = [
     { label: 'หน้าหลัก', route: '/' },
