@@ -5,3 +5,8 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4.11.0"
+sqlx = { version = "0.8", features = [ "runtime-tokio", "mysql", "chrono", "bigdecimal" ] }
+serde = { version = "1", features = ["derive"] }
+dotenvy = "0.15.7"
+chrono = { version = "0.4.42", features = ["serde"] }
+bigdecimal = { version = "0.4", features = ["serde"] }
