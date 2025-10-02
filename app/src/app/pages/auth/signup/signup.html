@@ -33,29 +33,35 @@
               <label for="email">อีเมล</label>
             </p-floatlabel>
 
-            <p-floatlabel variant="on">
-              <input
-                class="w-full"
-                pInputText
-                id="password"
-                autocomplete="off"
-                type="password"
-                [(ngModel)]="signupForm.password"
-              />
-              <label for="password">รหัสผ่าน</label>
-            </p-floatlabel>
+            <div class="space-y-0.5">
+              <p-floatlabel variant="on">
+                <input
+                  class="w-full"
+                  pInputText
+                  id="password"
+                  autocomplete="off"
+                  type="password"
+                  [(ngModel)]="signupForm.password"
+                />
+                <label for="password">รหัสผ่าน</label>
+              </p-floatlabel>
+              <small id="password_help">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร</small>
+            </div>
 
-            <p-floatlabel variant="on">
-              <input
-                class="w-full"
-                pInputText
-                id="confirm_password"
-                autocomplete="off"
-                type="password"
-                [(ngModel)]="signupForm.confirmPassword"
-              />
-              <label for="confirm_password">ยืนยันรหัสผ่าน</label>
-            </p-floatlabel>
+            <div class="space-y-0.5">
+              <p-floatlabel variant="on">
+                <input
+                  class="w-full"
+                  pInputText
+                  id="confirm_password"
+                  autocomplete="off"
+                  type="password"
+                  [(ngModel)]="signupForm.confirmPassword"
+                />
+                <label for="confirm_password">ยืนยันรหัสผ่าน</label>
+              </p-floatlabel>
+              <small id="confirm_password_help">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร</small>
+            </div>
 
             <div class="flex justify-end pt-4">
               <p-button
@@ -82,11 +88,41 @@
           </div>
 
           <div class="space-y-4">
-            <div class="flex flex-col items-center gap-3">
+            <div class="flex flex-col items-center gap-3 mb-14">
               <div class="w-44 rounded-full overflow-hidden">
+                @if (uploadedImageUrl) {
+                <img [src]="uploadedImageUrl" />
+                } @else {
                 <img src="/default-avatar.png" />
+                }
               </div>
-              <p-button label="อัปโหลดรูปภาพ" icon="pi pi-upload" variant="text" size="small" />
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onImageUpload($event)"
+                id="avatarUpload"
+                hidden
+                #avatarUpload
+              />
+              <div class="flex gap-2">
+                <p-button
+                  label="อัปโหลดรูปภาพ"
+                  icon="pi pi-upload"
+                  variant="text"
+                  size="small"
+                  (click)="avatarUpload.click()"
+                />
+                @if (uploadedImageUrl) {
+                <p-button
+                  label="ลบรูปภาพ"
+                  icon="pi pi-times"
+                  severity="danger"
+                  variant="text"
+                  size="small"
+                  (click)="removeUploadedImage()"
+                />
+                }
+              </div>
             </div>
 
             <div class="flex justify-between">

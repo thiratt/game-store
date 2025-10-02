@@ -8,6 +8,8 @@ export interface User {
   username: string;
   email: string;
   role: string;
+  displayName?: string;
+  avatar?: string;
 }
 
 export interface LoginRequest {
@@ -15,7 +17,21 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface SignupRequest {
+  username: string;
+  email: string;
+  password: string;
+  displayName: string;
+  avatar: string;
+}
+
 export interface LoginResponse {
+  success: boolean;
+  user?: User;
+  message?: string;
+}
+
+export interface SignupResponse {
   success: boolean;
   user?: User;
   message?: string;
@@ -55,6 +71,36 @@ export class AuthService {
         }
       })
     );
+  }
+
+  signup(signupData: SignupRequest): Observable<SignupResponse> {
+    return this.http.post<SignupResponse>(`${this.apiUrl}/auth/signup-with-image`, signupData).pipe(
+      tap((response) => {
+        if (response.success && response.user) {
+          // Store user in localStorage and update subject (auto-login after signup)
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+          this.currentUserSubject.next(response.user);
+        }
+      })
+    );
+  }
+
+  // Check if email is already taken
+  checkEmailAvailability(email: string): Observable<{ available: boolean }> {
+    return this.http
+      .get<{ success: boolean; data: boolean; message?: string }>(
+        `${this.apiUrl}/auth/check-email?email=${encodeURIComponent(email)}`
+      )
+      .pipe(map((response) => ({ available: response.data })));
+  }
+
+  // Check if username is already taken
+  checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
+    return this.http
+      .get<{ success: boolean; data: boolean; message?: string }>(
+        `${this.apiUrl}/auth/check-username?username=${encodeURIComponent(username)}`
+      )
+      .pipe(map((response) => ({ available: response.data })));
   }
 
   logout(): void {
