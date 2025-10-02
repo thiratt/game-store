@@ -1,0 +1,112 @@
+<div class="min-h-svh flex items-center justify-center">
+  <p-card class="w-full max-w-4xl p-2 signup-card">
+    <!-- Step 1: Account Information -->
+    <div class="signup-step" [class.active]="currentStep === 1" *ngIf="currentStep === 1">
+      <div class="flex flex-col">
+        <img src="/logo.png" alt="Logo" class="w-32 h-32" />
+        <div class="grid grid-cols-2 gap-8">
+          <div class="space-y-2">
+            <h2 class="text-3xl font-bold">สมัครสมาชิก</h2>
+            <h5 class="text-lg">กรอกข้อมูลเพื่อใช้ในการเข้าสู่ระบบครั้งถัดไป</h5>
+          </div>
+          <div class="space-y-4">
+            <p-floatlabel variant="on">
+              <input
+                class="w-full"
+                pInputText
+                id="username"
+                autocomplete="off"
+                [(ngModel)]="signupForm.username"
+              />
+              <label for="username">ชื่อผู้ใช้งาน</label>
+            </p-floatlabel>
+
+            <p-floatlabel variant="on">
+              <input
+                class="w-full"
+                pInputText
+                id="email"
+                autocomplete="off"
+                type="email"
+                [(ngModel)]="signupForm.email"
+              />
+              <label for="email">อีเมล</label>
+            </p-floatlabel>
+
+            <p-floatlabel variant="on">
+              <input
+                class="w-full"
+                pInputText
+                id="password"
+                autocomplete="off"
+                type="password"
+                [(ngModel)]="signupForm.password"
+              />
+              <label for="password">รหัสผ่าน</label>
+            </p-floatlabel>
+
+            <p-floatlabel variant="on">
+              <input
+                class="w-full"
+                pInputText
+                id="confirm_password"
+                autocomplete="off"
+                type="password"
+                [(ngModel)]="signupForm.confirmPassword"
+              />
+              <label for="confirm_password">ยืนยันรหัสผ่าน</label>
+            </p-floatlabel>
+
+            <div class="flex justify-end pt-4">
+              <p-button
+                label="ถัดไป"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="nextStep()"
+                [disabled]="!validateCurrentStep()"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Profile Setup -->
+    <div class="signup-step" [class.active]="currentStep === 2" *ngIf="currentStep === 2">
+      <div class="flex flex-col">
+        <img src="/logo.png" alt="Logo" class="w-32 h-32" />
+        <div class="grid grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <h2 class="text-3xl font-bold">สมัครสมาชิก</h2>
+            <h5 class="text-lg">เพิ่มรูปโปรไฟล์</h5>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex flex-col items-center gap-3">
+              <div class="w-44 rounded-full overflow-hidden">
+                <img src="/default-avatar.png" />
+              </div>
+              <p-button label="อัปโหลดรูปภาพ" icon="pi pi-upload" variant="text" size="small" />
+            </div>
+
+            <div class="flex justify-between">
+              <p-button
+                label="ย้อนกลับ"
+                icon="pi pi-arrow-left"
+                severity="secondary"
+                variant="outlined"
+                (click)="previousStep()"
+              />
+              <p-button
+                label="สมัครสมาชิก"
+                icon="pi pi-check"
+                iconPos="right"
+                (click)="submitSignup()"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>
