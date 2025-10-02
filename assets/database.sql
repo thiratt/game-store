@@ -92,11 +92,11 @@ CREATE TABLE user_game (
   user_id  CHAR(36) NOT NULL,
   game_id  CHAR(36) NOT NULL,
   owned_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  UNIQUE(user_id, game_id)
   CONSTRAINT fk_ug_user FOREIGN KEY (user_id) REFERENCES account(id)
     ON DELETE CASCADE,
   CONSTRAINT fk_ug_game FOREIGN KEY (game_id) REFERENCES game(id)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
+  UNIQUE(user_id, game_id)
 );
 
 CREATE TABLE transaction_history (
