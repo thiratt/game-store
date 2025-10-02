@@ -3,6 +3,7 @@ import { Index } from './pages/index';
 import { Login } from './pages/auth/login/login';
 import { Auth } from './components/layout/auth/auth';
 import { Signup } from './pages/auth/signup/signup';
+import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,7 @@ export const routes: Routes = [
   {
     path: 'auth',
     component: Auth,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'login',

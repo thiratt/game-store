@@ -9,17 +9,43 @@
           <h2 class="text-3xl font-bold">เข้าสู่ระบบ</h2>
           <h5 class="text-lg">Kiro Game Store</h5>
         </div>
-        <div class="space-y-4">
+        <form (ngSubmit)="onLogin()" class="space-y-4">
+          @if (errorMessage) {
+          <p-message severity="error" [text]="errorMessage" class="w-full" />
+          }
           <p-floatlabel variant="on">
-            <input class="w-full" pInputText id="identifier" autocomplete="off" />
+            <input
+              class="w-full"
+              pInputText
+              id="identifier"
+              autocomplete="username"
+              [(ngModel)]="loginData.identifier"
+              name="identifier"
+              required
+            />
             <label for="identifier">ชื่อผู้ใช้งานหรืออีเมล</label>
           </p-floatlabel>
           <p-floatlabel variant="on">
-            <input class="w-full" pInputText id="password" autocomplete="off" type="password" />
+            <input
+              class="w-full"
+              pInputText
+              id="password"
+              autocomplete="current-password"
+              type="password"
+              [(ngModel)]="loginData.password"
+              name="password"
+              required
+            />
             <label for="password">รหัสผ่าน</label>
           </p-floatlabel>
-          <p-button label="เข้าสู่ระบบ" class="flex justify-end" />
-        </div>
+          <p-button
+            type="submit"
+            label="เข้าสู่ระบบ"
+            class="flex justify-end"
+            [loading]="loading"
+            [disabled]="!loginData.identifier || !loginData.password"
+          />
+        </form>
       </div>
     </div>
   </p-card>
