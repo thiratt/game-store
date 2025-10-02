@@ -1,6 +1,4 @@
-<nav
-  class="fixed bg-surface-950/60 backdrop-blur-xs shadow-md top-0 left-0 right-0 z-50"
->
+<nav class="fixed bg-surface-950/60 backdrop-blur-xs shadow-md top-0 left-0 right-0 z-50">
   <div class="relative py-3 px-4 flex items-center justify-between">
     <div
       class="flex items-center gap-4"
@@ -39,6 +37,8 @@
       class="search-container transition-all duration-300 ease-in-out"
       [class.search-expanded]="isSearchFocused"
       [class.search-normal]="!isSearchFocused"
+      [class.right-[9rem]]="isAuthenticated"
+      [class.right-[200px]]="!isAuthenticated"
     >
       <p-floatlabel variant="on">
         <p-iconfield>
@@ -69,8 +69,27 @@
       [class.hidden]="isSearchFocused"
       [class.md:flex]="isSearchFocused"
     >
+      @if (!isAuthenticated) {
       <p-button label="เข้าสู่ระบบ" variant="text" size="small" [routerLink]="['/auth/login']" />
       <p-button label="สมัครสมาชิก" size="small" [routerLink]="['/auth/signup']" />
+      } @else {
+      <p-button
+        icon="pi pi-shopping-cart"
+        variant="text"
+        size="small"
+        [routerLink]="['/cart']"
+      />
+      <p-button
+        [label]="currentUser?.username || ''"
+        icon="pi pi-user"
+        variant="text"
+        size="small"
+        tooltipPosition="bottom"
+        #userMenu
+        (click)="menu.toggle($event)"
+      />
+      <p-menu #menu [model]="userMenuItems" [popup]="true" />
+      }
     </div>
   </div>
 </nav>
