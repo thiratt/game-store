@@ -43,8 +43,6 @@ export class Signup {
     email: '',
     password: '',
     confirmPassword: '',
-    avatar: '',
-    displayName: '',
   };
 
   // Form validation errors
@@ -53,13 +51,10 @@ export class Signup {
     email: '',
     password: '',
     confirmPassword: '',
-    displayName: '',
   };
 
   // Track if user has attempted to proceed (to show errors only after attempt)
   hasAttemptedNext = false;
-
-  selectedAvatar = '';
 
   // Image upload properties
   uploadedImageUrl: string | null = null;
@@ -113,16 +108,7 @@ export class Signup {
       email: '',
       password: '',
       confirmPassword: '',
-      displayName: '',
     };
-  }
-
-  selectAvatar(avatarId: string) {
-    this.selectedAvatar = avatarId;
-    this.signupForm.avatar = avatarId;
-    // Clear uploaded image when selecting predefined avatar
-    this.uploadedImageUrl = null;
-    this.uploadedImageFile = null;
   }
 
   // Image upload methods
@@ -131,18 +117,6 @@ export class Signup {
     if (file) {
       this.handleImageFile(file);
     }
-  }
-
-  onImageDrop(event: DragEvent) {
-    event.preventDefault();
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      this.handleImageFile(files[0]);
-    }
-  }
-
-  onImageDragOver(event: DragEvent) {
-    event.preventDefault();
   }
 
   handleImageFile(file: File) {
@@ -172,10 +146,6 @@ export class Signup {
       this.uploadedImageUrl = e.target?.result as string;
       this.uploadedImageFile = file;
 
-      // Clear predefined avatar selection
-      this.selectedAvatar = '';
-      this.signupForm.avatar = 'uploaded-image';
-
       this.messageService.add({
         severity: 'success',
         summary: 'อัปโหลดสำเร็จ',
@@ -188,8 +158,6 @@ export class Signup {
   removeUploadedImage() {
     this.uploadedImageUrl = null;
     this.uploadedImageFile = null;
-    this.selectedAvatar = '';
-    this.signupForm.avatar = '';
   }
 
   triggerFileUpload() {
@@ -258,20 +226,6 @@ export class Signup {
     return true;
   }
 
-  validateDisplayName(showErrors = false): boolean {
-    const displayName = this.signupForm.displayName.trim();
-    if (!displayName) {
-      if (showErrors) this.formErrors.displayName = 'กรุณากรอกชื่อที่จะแสดง';
-      return false;
-    }
-    if (displayName.length < 2) {
-      if (showErrors) this.formErrors.displayName = 'ชื่อที่จะแสดงต้องมีอย่างน้อย 2 ตัวอักษร';
-      return false;
-    }
-    this.formErrors.displayName = '';
-    return true;
-  }
-
   validateCurrentStep(showErrors = false): boolean {
     try {
       if (this.currentStep === 1) {
@@ -314,21 +268,12 @@ export class Signup {
     this.isLoading = true;
 
     try {
-      // Prepare avatar data
-      let avatarData = this.selectedAvatar;
-
-      // If user uploaded an image, use the base64 data
-      if (this.uploadedImageUrl && this.uploadedImageFile) {
-        avatarData = this.uploadedImageUrl; // This is already base64 from FileReader
-      }
-
       // Prepare signup data
       const signupData: SignupRequest = {
         username: this.signupForm.username.trim(),
         email: this.signupForm.email.trim(),
         password: this.signupForm.password,
-        displayName: this.signupForm.displayName.trim(),
-        avatar: avatarData,
+        profileImage: this.uploadedImageFile || undefined,
       };
 
       // Call API
@@ -411,9 +356,5 @@ export class Signup {
       return this.uploadedImageUrl;
     }
     return '/default-avatar.png';
-  }
-
-  hasAvatarSelected(): boolean {
-    return !!this.selectedAvatar || !!this.uploadedImageUrl;
   }
 }
