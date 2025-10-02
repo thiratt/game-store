@@ -10,9 +10,6 @@
           <h5 class="text-lg">Kiro Game Store</h5>
         </div>
         <form (ngSubmit)="onLogin()" class="space-y-4">
-          @if (errorMessage) {
-          <p-message severity="error" [text]="errorMessage" class="w-full" />
-          }
           <p-floatlabel variant="on">
             <input
               class="w-full"
@@ -38,6 +35,11 @@
             />
             <label for="password">รหัสผ่าน</label>
           </p-floatlabel>
+          @if (errorMessage) {
+          <p-message severity="error" class="w-full" styleClass="mb-4" variant="outlined">
+            {{ errorMessage }}
+          </p-message>
+          }
           <p-button
             type="submit"
             label="เข้าสู่ระบบ"
