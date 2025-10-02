@@ -41,7 +41,7 @@ export interface SignupResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8080';
+  private apiUrl = 'http://localhost:5053';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -74,7 +74,7 @@ export class AuthService {
   }
 
   signup(signupData: SignupRequest): Observable<SignupResponse> {
-    return this.http.post<SignupResponse>(`${this.apiUrl}/auth/signup-with-image`, signupData).pipe(
+    return this.http.post<SignupResponse>(`${this.apiUrl}/auth/register`, signupData).pipe(
       tap((response) => {
         if (response.success && response.user) {
           // Store user in localStorage and update subject (auto-login after signup)
