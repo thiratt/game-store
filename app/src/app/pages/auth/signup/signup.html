@@ -11,16 +11,20 @@
             <h5 class="text-lg">กรอกข้อมูลเพื่อใช้ในการเข้าสู่ระบบครั้งถัดไป</h5>
           </div>
           <div class="space-y-4">
-            <p-floatlabel variant="on">
-              <input
-                class="w-full"
-                pInputText
-                id="username"
-                autocomplete="off"
-                [(ngModel)]="signupForm.username"
-              />
-              <label for="username">ชื่อผู้ใช้งาน</label>
-            </p-floatlabel>
+            <div class="space-y-0.5">
+              <p-floatlabel variant="on">
+                <input
+                  class="w-full"
+                  pInputText
+                  id="username"
+                  autocomplete="off"
+                  type="text"
+                  [(ngModel)]="signupForm.username"
+                />
+                <label for="username">ชื่อผู้ใช้</label>
+              </p-floatlabel>
+              <small id="username_help">ชื่อผู้ใช้ต้องมีความยาวอย่างน้อย 3 ตัวอักษร</small>
+            </div>
 
             <p-floatlabel variant="on">
               <input
