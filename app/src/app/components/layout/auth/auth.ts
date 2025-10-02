@@ -10,6 +10,8 @@ import { Navbar } from '../../navbar/navbar';
 })
 export class Auth {
   constructor(router: Router) {
-    router.navigate(['/auth/login']);
+    if (router.url === '/auth') {
+      router.navigate(['/auth/login']);
+    }
   }
 }
