@@ -1,4 +1,8 @@
-<nav class="bg-surface-950/60 backdrop-blur-xs shadow-md fixed top-0 left-0 right-0 z-50">
+<nav
+  class="bg-surface-950/60 backdrop-blur-xs shadow-md top-0 left-0 right-0 z-50"
+  [class.fixed]="!authMode"
+  [class.relative]="authMode"
+>
   <div class="relative py-3 px-4 flex items-center justify-between">
     <div
       class="flex items-center gap-4"
@@ -10,7 +14,7 @@
         <span class="text-2xl font-bold">Kiro</span>
       </div>
 
-      @if (!disableMenu) {
+      @if (!authMode) {
       <div class="flex items-center gap-2">
         @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route)) {
         <p-button
@@ -32,6 +36,7 @@
       }
     </div>
 
+    @if (!authMode) {
     <div
       class="search-container transition-all duration-300 ease-in-out"
       [class.search-expanded]="isSearchFocused"
@@ -59,6 +64,7 @@
         <label for="on_label">ค้นหา</label>
       </p-floatlabel>
     </div>
+    }
 
     <div
       class="flex items-center gap-2"

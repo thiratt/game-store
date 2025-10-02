@@ -30,7 +30,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
   styleUrl: './navbar.scss',
 })
 export class Navbar {
-  @Input() disableMenu: boolean = false;
+  @Input() authMode: boolean = false;
   @ViewChild('searchInput') searchInput: ElementRef | undefined;
   searchQuery: string = '';
   isMobileMenuOpen: boolean = false;
