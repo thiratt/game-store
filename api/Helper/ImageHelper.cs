@@ -20,7 +20,7 @@ public static class ImageHelper
 
         await image.CopyToAsync(stream);
 
-        return $"/uploads/{uniqueFileName}";
+        return $"/image/{uniqueFileName}";
     }
 
     public static bool Delete(string imagePath)
