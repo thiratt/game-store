@@ -95,17 +95,17 @@ export class AuthService {
 
   checkEmailAvailability(email: string): Observable<{ available: boolean }> {
     return this.http
-      .get<{ success: boolean; data: boolean; message?: string }>(
+      .get<{ success: boolean; data?: boolean; message?: string }>(
         `${this.apiUrl}/auth/check?email=${encodeURIComponent(email)}`
       )
-      .pipe(map((response) => ({ available: response.data })));
+      .pipe(map((response) => ({ available: response.success })));
   }
 
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http
-      .get<{ success: boolean; data: boolean; message?: string }>(
+      .get<{ success: boolean; data?: boolean; message?: string }>(
         `${this.apiUrl}/auth/check?username=${encodeURIComponent(username)}`
       )
-      .pipe(map((response) => ({ available: response.data })));
+      .pipe(map((response) => ({ available: response.success })));
   }
 }

@@ -11,7 +11,8 @@ import { DividerModule } from 'primeng/divider';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService, SignupRequest } from '../../../services/auth.service';
-import { MessageModule } from "primeng/message";
+import { MessageModule } from 'primeng/message';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -25,8 +26,8 @@ import { MessageModule } from "primeng/message";
     AvatarModule,
     DividerModule,
     ToastModule,
-    MessageModule
-],
+    MessageModule,
+  ],
   providers: [MessageService],
   templateUrl: './signup.html',
   styleUrl: './signup.scss',
@@ -68,12 +69,31 @@ export class Signup {
     private messageService: MessageService
   ) {}
 
-
-
-  nextStep() {
+  async nextStep() {
     try {
       // Set flag to show errors
       this.hasAttemptedNext = true;
+
+      const [isUsernameAvailable, isEmailAvailable] = await Promise.all([
+        this.checkUsernameAvailability(),
+        this.checkEmailAvailability(),
+      ]);
+
+      if (!isUsernameAvailable) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'ชื่อผู้ใช้งานนี้ถูกใช้งานแล้ว',
+        });
+        return;
+      }
+
+      if (!isEmailAvailable) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'อีเมลนี้ถูกใช้งานแล้ว',
+        });
+        return;
+      }
 
       if (this.validateCurrentStep(true)) {
         if (this.currentStep < this.totalSteps) {
@@ -177,7 +197,8 @@ export class Signup {
       return false;
     }
     if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      if (showErrors) this.formErrors.username = 'ชื่อผู้ใช้งานสามารถใช้ได้เฉพาะตัวอักษร ตัวเลข และ _';
+      if (showErrors)
+        this.formErrors.username = 'ชื่อผู้ใช้งานสามารถใช้ได้เฉพาะตัวอักษร ตัวเลข และ _';
       return false;
     }
     this.formErrors.username = '';
@@ -306,48 +327,41 @@ export class Signup {
   }
 
   // Check email availability (optional - call on blur)
-  async checkEmailAvailability() {
-    if (!this.validateEmail()) return;
+  async checkEmailAvailability(): Promise<boolean> {
+    if (!this.validateEmail()) return false;
 
     try {
-      const result = await this.authService
-        .checkEmailAvailability(this.signupForm.email)
-        .toPromise();
+      const result = await firstValueFrom(
+        this.authService.checkEmailAvailability(this.signupForm.email)
+      );
 
-      if (result && result.available === false) {
-        this.formErrors.email = 'อีเมลนี้ถูกใช้งานแล้ว';
-      } else if (result && result.available === true) {
-        // Clear error if email is available
-        if (this.formErrors.email === 'อีเมลนี้ถูกใช้งานแล้ว') {
-          this.formErrors.email = '';
-        }
-      }
+      if (!result) return false;
+
+      return result.available;
     } catch (error) {
       // Silently handle error - don't show to user for UX
       console.error('Error checking email availability:', error);
+      return false;
     }
   }
 
   // Check username availability (optional - call on blur)
-  async checkUsernameAvailability() {
-    if (!this.validateUsername()) return;
+  async checkUsernameAvailability(): Promise<boolean> {
+    if (!this.validateUsername()) return false;
 
     try {
-      const result = await this.authService
-        .checkUsernameAvailability(this.signupForm.username)
-        .toPromise();
+      const result = await firstValueFrom(
+        this.authService.checkUsernameAvailability(this.signupForm.username)
+      );
 
-      if (result && result.available === false) {
-        this.formErrors.username = 'ชื่อผู้ใช้นี้ถูกใช้งานแล้ว';
-      } else if (result && result.available === true) {
-        // Clear error if username is available
-        if (this.formErrors.username === 'ชื่อผู้ใช้นี้ถูกใช้งานแล้ว') {
-          this.formErrors.username = '';
-        }
-      }
+      if (!result) return false;
+
+      return result.available;
     } catch (error) {
       // Silently handle error - don't show to user for UX
       console.error('Error checking username availability:', error);
+
+      return false;
     }
   }
 }
