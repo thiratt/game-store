@@ -350,11 +350,4 @@ export class Signup {
       console.error('Error checking username availability:', error);
     }
   }
-
-  getCurrentAvatarDisplay(): string {
-    if (this.uploadedImageUrl) {
-      return this.uploadedImageUrl;
-    }
-    return '/default-avatar.png';
-  }
 }
