@@ -1,45 +1,42 @@
 <nav class="fixed bg-surface-950/60 backdrop-blur-xs shadow-md top-0 left-0 right-0 z-50">
-  <div class="relative py-3 px-4 flex items-center">
-    <div
-      class="flex items-center gap-4"
-      [class.hidden]="isSearchFocused"
-      [class.md:flex]="isSearchFocused"
-    >
-      <a class="flex items-center" href="/">
-        <img src="/logo.png" alt="Kiro Logo" width="40" height="40" class="mr-2" />
-        <span class="text-2xl font-bold">Kiro</span>
-      </a>
+  <div class="py-3 px-4 flex items-center justify-between">
+    <div class="relative flex flex-1 items-center me-2">
+      <div
+        class="flex items-center gap-4"
+        [class.hidden]="isSearchFocused"
+        [class.md:flex]="isSearchFocused"
+      >
+        <a class="flex items-center" href="/">
+          <img src="/logo.png" alt="Kiro Logo" width="40" height="40" class="mr-2" />
+          <span class="text-2xl font-bold">Kiro</span>
+        </a>
 
-      @if (!authMode) {
-      <div class="flex items-center gap-2">
-        @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route)) {
-        <p-button
-          label="{{ link.label }}"
-          [routerLink]="link.route"
-          size="small"
-          [rounded]="true"
-        />
-        } @else {
-        <p-button
-          label="{{ link.label }}"
-          [routerLink]="link.route"
-          size="small"
-          variant="text"
-          [rounded]="true"
-        />
-        } }
+        @if (!authMode) {
+        <div class="flex items-center gap-2">
+          @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route)) {
+          <p-button
+            label="{{ link.label }}"
+            [routerLink]="link.route"
+            size="small"
+            [rounded]="true"
+          />
+          } @else {
+          <p-button
+            label="{{ link.label }}"
+            [routerLink]="link.route"
+            size="small"
+            variant="text"
+            [rounded]="true"
+          />
+          } }
+        </div>
+        }
       </div>
-      }
-    </div>
 
-    <div class="flex justify-center items-center ms-auto w-1/2">
       @if (!authMode) {
       <div
-        class="search-container transition-all duration-300 ease-in-out"
-        [class.search-expanded]="isSearchFocused"
-        [class.search-normal]="!isSearchFocused"
-        [class.right-50]="!isAuthenticated"
-        [class.right-36]="isAuthenticated"
+        class="absolute transition-all duration-300 ease-in-out right-0 w-1/4"
+        [class.w-full]="isSearchFocused"
       >
         <p-floatlabel variant="on">
           <p-iconfield>
@@ -64,8 +61,11 @@
         </p-floatlabel>
       </div>
       }
+    </div>
+
+    <div class="flex justify-center items-center">
       <div
-        class="flex items-center gap-2 ms-auto"
+        class="flex items-center gap-2"
         [class.hidden]="isSearchFocused"
         [class.md:flex]="isSearchFocused"
       >
