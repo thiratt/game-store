@@ -298,7 +298,7 @@ export class Signup {
       };
 
       // Call API
-      const response = await this.authService.signup(signupData).toPromise();
+      const response = await firstValueFrom(this.authService.signup(signupData));
 
       if (response?.success) {
         this.messageService.add({
