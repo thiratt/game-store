@@ -9,3 +9,30 @@
     visibility: hidden;
   }
 }
+
+.search-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  user-select: none;
+
+  &.active-fixed {
+    top: 0;
+    opacity: 1;
+    visibility: visible;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  &.active-static {
+    top: 64px; // Height of the navbar
+    opacity: 1;
+    visibility: visible;
+    overflow: hidden;
+    z-index: 1;
+  }
+}
