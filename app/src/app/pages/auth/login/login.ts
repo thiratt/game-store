@@ -8,6 +8,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { Button } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { AuthService, LoginRequest } from '../../../services/auth.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -19,9 +21,11 @@ import { AuthService, LoginRequest } from '../../../services/auth.service';
     FloatLabelModule,
     Button,
     MessageModule,
+    ToastModule,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
+  providers: [MessageService],
 })
 export class Login implements OnInit {
   loginData: LoginRequest = {
@@ -30,9 +34,12 @@ export class Login implements OnInit {
   };
 
   loading = false;
-  errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     // Redirect to home if already authenticated
@@ -43,12 +50,15 @@ export class Login implements OnInit {
 
   onLogin() {
     if (!this.loginData.identifier || !this.loginData.password) {
-      this.errorMessage = 'กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน';
+      this.messageService.add({
+        severity: 'error',
+        summary: 'ข้อผิดพลาด',
+        detail: 'กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน',
+      });
       return;
     }
 
     this.loading = true;
-    this.errorMessage = '';
 
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
@@ -56,12 +66,20 @@ export class Login implements OnInit {
         if (response.success) {
           this.router.navigate(['/']);
         } else {
-          this.errorMessage = response.message || 'เข้าสู่ระบบไม่สำเร็จ';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'ข้อผิดพลาด',
+            detail: response.message || 'เข้าสู่ระบบไม่สำเร็จ',
+          });
         }
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ กรุณาลองใหม่อีกครั้ง';
+        this.messageService.add({
+          severity: 'error',
+          summary: 'ข้อผิดพลาด',
+          detail: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ กรุณาลองใหม่อีกครั้ง',
+        });
         console.error('Login error:', error);
       },
     });
