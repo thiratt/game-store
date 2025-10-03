@@ -24,13 +24,13 @@ export interface SignupRequest {
 
 export interface LoginResponse {
   success: boolean;
-  user?: User;
+  data?: User;
   message?: string;
 }
 
 export interface SignupResponse {
   success: boolean;
-  user?: User;
+  data?: User;
   message?: string;
 }
 
@@ -60,9 +60,9 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap((response) => {
-        if (response.success && response.user) {
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
+        if (response.success && response.data) {
+          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          this.currentUserSubject.next(response.data);
         }
       })
     );
@@ -80,9 +80,9 @@ export class AuthService {
 
     return this.http.post<SignupResponse>(`${this.apiUrl}/auth/signup`, formData).pipe(
       tap((response) => {
-        if (response.success && response.user) {
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
+        if (response.success && response.data) {
+          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          this.currentUserSubject.next(response.data);
         }
       })
     );
