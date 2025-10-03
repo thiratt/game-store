@@ -14,6 +14,9 @@ import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService, User } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar',
@@ -31,9 +34,12 @@ import { Subscription } from 'rxjs';
     FloatLabelModule,
     MenuModule,
     TooltipModule,
+    ToastModule,
+    ConfirmDialogModule,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
+  providers: [ConfirmationService, MessageService],
 })
 export class Navbar implements OnInit, OnDestroy {
   @Input() authMode: boolean = false;
@@ -58,11 +64,16 @@ export class Navbar implements OnInit, OnDestroy {
     {
       label: 'ออกจากระบบ',
       icon: 'pi pi-sign-out',
-      command: () => this.logout(),
+      command: () => this.onLogout(),
     },
   ];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     this.authSubscription = this.authService.currentUser$.subscribe((user) => {
@@ -95,6 +106,32 @@ export class Navbar implements OnInit, OnDestroy {
       this.isSearchFocused = true;
       this.setDisableBodyScrolling(true);
     }
+  }
+
+  onLogout() {
+    this.confirmationService.confirm({
+      message: 'คุณแน่ใจหรือว่าต้องการออกจากระบบ?',
+      header: 'ออกจากระบบ',
+      closable: true,
+      closeOnEscape: true,
+      rejectButtonProps: {
+        label: 'ยกเลิก',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: 'ตกลง',
+        size: 'small',
+      },
+      accept: () => {
+        this.logout();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'สำเร็จ',
+          detail: 'ออกจากระบบเรียบร้อยแล้ว',
+        });
+      },
+    });
   }
 
   logout() {
