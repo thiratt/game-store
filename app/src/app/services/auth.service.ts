@@ -104,7 +104,7 @@ export class AuthService {
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http
       .get<{ success: boolean; data: boolean; message?: string }>(
-        `${this.apiUrl}/auth/check-username?username=${encodeURIComponent(username)}`
+        `${this.apiUrl}/auth/check?username=${encodeURIComponent(username)}`
       )
       .pipe(map((response) => ({ available: response.data })));
   }
