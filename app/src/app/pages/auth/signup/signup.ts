@@ -37,6 +37,7 @@ export class Signup {
   totalSteps = 2;
   isLoading = false;
   isCurrentStepValid = false;
+  isRedirecting = false;
 
   // Form data
   signupForm = {
@@ -301,6 +302,7 @@ export class Signup {
       const response = await firstValueFrom(this.authService.signup(signupData));
 
       if (response?.success) {
+        this.isRedirecting = true;
         this.messageService.add({
           severity: 'success',
           summary: 'สำเร็จ!',

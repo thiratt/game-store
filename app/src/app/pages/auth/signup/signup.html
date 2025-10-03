@@ -143,6 +143,8 @@
                 icon="pi pi-check"
                 iconPos="right"
                 (click)="submitSignup()"
+                [loading]="isLoading"
+                [disabled]="isLoading || isRedirecting"
               />
             </div>
           </div>
