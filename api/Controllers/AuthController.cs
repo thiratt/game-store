@@ -16,30 +16,43 @@ namespace api.Controllers
         private readonly KiroContext _context = context;
 
         [HttpGet("check")]
-        public async Task<ActionResult<KiroResponse>> CheckAvailabilityAsync([FromQuery] string type, [FromQuery] string value)
+        public async Task<ActionResult<KiroResponse>> CheckAvailabilityAsync([FromQuery] string? username, [FromQuery] string? email)
         {
-            if (string.IsNullOrWhiteSpace(type) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(email))
             {
                 return BadRequest(new KiroResponse
                 {
                     Success = false,
-                    Message = "Type and value query parameters are required"
+                    Message = "Either 'username' or 'email' query parameter is required."
                 });
             }
 
             try
             {
-                bool isAvailable = type.ToLower() switch
+                if (!string.IsNullOrWhiteSpace(username))
                 {
-                    "username" => !await _context.Accounts.AnyAsync(u => u.Username == value),
-                    "email" => !await _context.Accounts.AnyAsync(u => u.Email == value),
-                    _ => throw new ArgumentException("Invalid type. Must be 'username' or 'email'.")
-                };
+                    bool isAvailable = !await _context.Accounts.AnyAsync(u => u.Username == username);
+                    return Ok(new KiroResponse
+                    {
+                        Success = isAvailable,
+                        Message = isAvailable ? "Username is available" : "Username is already taken"
+                    });
+                }
 
-                return Ok(new KiroResponse
+                if (!string.IsNullOrWhiteSpace(email))
                 {
-                    Success = isAvailable,
-                    Message = isAvailable ? $"{type} is available" : $"{type} is already taken"
+                    bool isAvailable = !await _context.Accounts.AnyAsync(u => u.Email == email);
+                    return Ok(new KiroResponse
+                    {
+                        Success = isAvailable,
+                        Message = isAvailable ? "Email is available" : "Email is already taken"
+                    });
+                }
+
+                return BadRequest(new KiroResponse
+                {
+                    Success = false,
+                    Message = "Invalid request."
                 });
             }
             catch (Exception)
@@ -47,7 +60,7 @@ namespace api.Controllers
                 return StatusCode(500, new KiroResponse
                 {
                     Success = false,
-                    Message = "An error occurred while checking availability"
+                    Message = "An error occurred while checking availability."
                 });
             }
         }
