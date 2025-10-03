@@ -96,7 +96,7 @@ export class AuthService {
   checkEmailAvailability(email: string): Observable<{ available: boolean }> {
     return this.http
       .get<{ success: boolean; data: boolean; message?: string }>(
-        `${this.apiUrl}/auth/check-email?email=${encodeURIComponent(email)}`
+        `${this.apiUrl}/auth/check?email=${encodeURIComponent(email)}`
       )
       .pipe(map((response) => ({ available: response.data })));
   }
