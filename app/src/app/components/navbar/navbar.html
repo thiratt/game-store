@@ -1,4 +1,8 @@
-<nav class="fixed bg-surface-950/60 backdrop-blur-xs shadow-md top-0 left-0 right-0 z-50">
+<nav
+  class="bg-surface-950/60 backdrop-blur-xs shadow-md top-0 left-0 right-0 z-50"
+  [class.fixed]="position === 'fixed'"
+  [class.static]="position === 'static'"
+>
   <div class="py-3 px-4 flex items-center justify-between">
     <div class="relative flex flex-1 items-center me-2">
       <div
