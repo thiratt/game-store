@@ -8,6 +8,8 @@ export interface User {
   username: string;
   email: string;
   role: string;
+  profileImage?: string;
+  walletBalance: number;
 }
 
 export interface LoginRequest {

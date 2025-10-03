@@ -74,15 +74,13 @@
         <p-button label="สมัครสมาชิก" size="small" [routerLink]="['/auth/signup']" />
         } @else {
         <p-button icon="pi pi-shopping-cart" variant="text" size="small" [routerLink]="['/cart']" />
-        <p-button
-          [label]="currentUser?.username || ''"
-          icon="pi pi-user"
-          variant="text"
-          size="small"
-          tooltipPosition="bottom"
-          #userMenu
-          (click)="menu.toggle($event)"
-        />
+        <p-button variant="text" size="small" (click)="menu.toggle($event)">
+          <img
+            [src]="'http://localhost:5053' + currentUser?.profileImage"
+            alt="User Avatar"
+            class="w-6 h-6 rounded-full object-cover"
+          />
+        </p-button>
         <p-menu #menu [model]="userMenuItems" [popup]="true" />
         }
       </div>
