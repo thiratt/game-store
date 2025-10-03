@@ -23,12 +23,34 @@ public static class ImageHelper
         return $"/image/{uniqueFileName}";
     }
 
-    public static bool Delete(string imagePath)
+    public static async Task<byte[]?> GetImageAsync(string filename)
     {
-        if (string.IsNullOrEmpty(imagePath))
+        if (string.IsNullOrEmpty(filename))
+            return null;
+
+        if (!Guid.TryParse(Path.GetFileNameWithoutExtension(filename), out Guid id))
+            return null;
+
+        if(Path.GetExtension(filename) == null)
+            return null;
+
+        var safeFilename = Path.GetFileName(id.ToString() + Path.GetExtension(filename));
+        var fullPath = Path.Combine(_uploadsDir, safeFilename);
+        if (!File.Exists(fullPath))
+            return null;
+
+        return await File.ReadAllBytesAsync(fullPath);
+    }
+
+    public static bool Delete(string filename)
+    {
+        if (string.IsNullOrEmpty(filename))
             return false;
 
-        var fullPath = Path.Combine(Directory.GetCurrentDirectory(), imagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+        if (!Guid.TryParse(Path.GetFileNameWithoutExtension(filename), out Guid id))
+            return false;
+
+        var fullPath = Path.Combine(_uploadsDir, id.ToString());
         if (File.Exists(fullPath))
         {
             File.Delete(fullPath);
