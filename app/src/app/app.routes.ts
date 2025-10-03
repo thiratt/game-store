@@ -4,11 +4,16 @@ import { Login } from './pages/auth/login/login';
 import { Auth } from './components/layout/auth/auth';
 import { Signup } from './pages/auth/signup/signup';
 import { AuthGuard } from './services/auth.guard';
+import { Profile } from './pages/profile/profile';
 
 export const routes: Routes = [
   {
     path: '',
     component: Index,
+  },
+  {
+    path: 'profile',
+    component: Profile
   },
   {
     path: 'auth',
