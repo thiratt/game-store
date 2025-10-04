@@ -19,7 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-user-navigation-bar',
   imports: [
     CommonModule,
     RouterModule,

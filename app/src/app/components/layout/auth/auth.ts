@@ -5,7 +5,7 @@ import { UserNavigationBar } from '../../navbar/user/user-navigation-bar';
 @Component({
   selector: 'app-auth',
   imports: [RouterModule, UserNavigationBar],
-  template: ` <app-navbar [authMode]="true"></app-navbar>
+  template: ` <app-user-navigation-bar [authMode]="true"></app-user-navigation-bar>
     <router-outlet></router-outlet>`,
 })
 export class Auth {
