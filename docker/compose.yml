@@ -11,6 +11,17 @@ services:
             - "7778:3306"
         command: ["--log_bin_trust_function_creators=1"]
 
+    api:
+        image: kiro-image:latest
+        env_file:
+            - .env
+        depends_on:
+            - db
+        ports:
+            - "5053:8080"
+        volumes:
+            - kiro-api:/app/upload
+
     phpmyadmin:
         image: phpmyadmin
         # restart: always
@@ -25,3 +36,4 @@ services:
 
 volumes:
     kiro-db:
+    kiro-api:
