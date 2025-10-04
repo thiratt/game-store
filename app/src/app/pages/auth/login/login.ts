@@ -64,7 +64,11 @@ export class Login implements OnInit {
       next: (response) => {
         this.loading = false;
         if (response.success) {
-          this.router.navigate(['/']);
+          if (response.data?.role.toLowerCase() === 'admin') {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/']);
+          }
         } else {
           this.messageService.add({
             severity: 'error',
