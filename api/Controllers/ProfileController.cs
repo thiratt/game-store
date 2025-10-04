@@ -31,6 +31,7 @@ namespace api.Controllers
                     user.Email,
                     user.ProfileImage,
                     user.Role,
+                    user.WalletBalance,
                     user.CreatedAt
                 }
             });
@@ -122,6 +123,7 @@ namespace api.Controllers
                         user.Email,
                         user.ProfileImage,
                         user.Role,
+                        user.WalletBalance,
                         user.UpdatedAt
                     }
                 });
