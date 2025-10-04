@@ -54,7 +54,6 @@
               class="w-full transition-all duration-300 ease-in-out"
               [(ngModel)]="searchQuery"
               (focus)="onSearchFocus()"
-              
               (input)="onSearchInput()"
               (keyup.escape)="onSearchBlur()"
             />
@@ -68,7 +67,7 @@
       }
     </div>
 
-    <div class="flex justify-center items-center">
+    <div class="relative flex justify-center items-center">
       <div
         class="action-buttons flex items-center gap-2"
         [class.hidden]="isSearchFocused"
@@ -86,10 +85,19 @@
             class="w-6 h-6 rounded-full object-cover"
           />
         </p-button>
-        <p-menu #menu [model]="userMenuItems" [popup]="true" />
         }
       </div>
+      <p-button
+        class="absolute w-full action-buttons"
+        [class.hidden]="!isSearchFocused"
+        [class.md:flex]="!isSearchFocused"
+        fluid
+        label="ปิด"
+        size="small"
+        (click)="onSearchBlur()"
+      />
     </div>
+    <p-menu #menu [model]="userMenuItems" [popup]="true" />
   </div>
 </nav>
 <div

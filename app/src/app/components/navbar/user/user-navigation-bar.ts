@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild, OnInit, OnDestroy, input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, OnInit, OnDestroy, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -45,6 +45,7 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   @Input() authMode: boolean = false;
   @Input() position: 'static' | 'fixed' = 'fixed';
   @ViewChild('searchInput') searchInput: ElementRef | undefined;
+
   searchQuery: string = '';
   isMobileMenuOpen: boolean = false;
   isSearchFocused: boolean = false;
