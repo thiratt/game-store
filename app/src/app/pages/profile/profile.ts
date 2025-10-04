@@ -10,6 +10,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TableModule } from 'primeng/table';
 import { InputNumber } from 'primeng/inputnumber';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -24,6 +25,7 @@ import { InputNumber } from 'primeng/inputnumber';
     InputIcon,
     TableModule,
     InputNumber,
+    RouterLink,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
