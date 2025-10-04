@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: string;
@@ -47,7 +48,7 @@ export interface SignupResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5053';
+  private apiUrl = environment.endpoint;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -66,8 +67,12 @@ export class AuthService {
     return !!this.currentUser;
   }
 
+  get endpoint(): string {
+    return this.apiUrl;
+  }
+
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post<LoginResponse>(`${this.endpoint}/auth/login`, credentials).pipe(
       tap((response) => {
         if (response.success && response.data) {
           localStorage.setItem('currentUser', JSON.stringify(response.data));
@@ -87,7 +92,7 @@ export class AuthService {
       formData.append('profileImage', signupData.profileImage, signupData.profileImage.name);
     }
 
-    return this.http.post<SignupResponse>(`${this.apiUrl}/auth/signup`, formData).pipe(
+    return this.http.post<SignupResponse>(`${this.endpoint}/auth/signup`, formData).pipe(
       tap((response) => {
         if (response.success && response.data) {
           localStorage.setItem('currentUser', JSON.stringify(response.data));
@@ -118,7 +123,7 @@ export class AuthService {
     }
 
     return this.http.put<SignupResponse>(
-      `${this.apiUrl}/profile/${this.currentUser?.id}`,
+      `${this.endpoint}/profile/${this.currentUser?.id}`,
       formData
     ).pipe(
       tap((response) => {
@@ -138,7 +143,7 @@ export class AuthService {
   checkEmailAvailability(email: string): Observable<{ available: boolean }> {
     return this.http
       .get<{ success: boolean; data?: boolean; message?: string }>(
-        `${this.apiUrl}/auth/check?email=${encodeURIComponent(email)}`
+        `${this.endpoint}/auth/check?email=${encodeURIComponent(email)}`
       )
       .pipe(map((response) => ({ available: response.success })));
   }
@@ -146,7 +151,7 @@ export class AuthService {
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http
       .get<{ success: boolean; data?: boolean; message?: string }>(
-        `${this.apiUrl}/auth/check?username=${encodeURIComponent(username)}`
+        `${this.endpoint}/auth/check?username=${encodeURIComponent(username)}`
       )
       .pipe(map((response) => ({ available: response.success })));
   }
