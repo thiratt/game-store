@@ -7,8 +7,9 @@
   <div class="grid grid-cols-[25%_auto] gap-4 mt-2">
     <p-card class="overflow-hidden">
       <ng-template #header>
-        <div class="flex justify-center rounded-full overflow-hidden h-1/2 w-1/2 mx-auto mt-3">
+        <div class="flex justify-center rounded-full overflow-hidden h-28 w-28 mx-auto mt-3">
           <img
+            class="w-full h-full object-cover"
             alt="Card"
             [src]="previewImageUrl || 'http://localhost:5053' + currentUser?.profileImage"
           />
