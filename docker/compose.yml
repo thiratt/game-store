@@ -12,7 +12,10 @@ services:
         command: ["--log_bin_trust_function_creators=1"]
 
     api:
-        image: kiro-image:latest
+        image: kiro-api
+        build:
+            context: ../api
+            dockerfile: Dockerfile
         env_file:
             - .env
         depends_on:
@@ -20,7 +23,7 @@ services:
         ports:
             - "5053:8080"
         volumes:
-            - kiro-api:/app/upload
+            - kiro-api:/app/uploads
 
     phpmyadmin:
         image: phpmyadmin
