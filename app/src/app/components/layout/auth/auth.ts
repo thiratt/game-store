@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Navbar } from '../../navbar/user/navbar';
+import { UserNavigationBar } from '../../navbar/user/user-navigation-bar';
 
 @Component({
   selector: 'app-auth',
-  imports: [RouterModule, Navbar],
+  imports: [RouterModule, UserNavigationBar],
   template: ` <app-navbar [authMode]="true"></app-navbar>
     <router-outlet></router-outlet>`,
 })

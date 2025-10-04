@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Navbar } from '../../components/navbar/user/navbar';
+import { UserNavigationBar } from '../../components/navbar/user/user-navigation-bar';
 import { Hero } from '../../components/landing/hero/hero';
 
 @Component({
   selector: 'app-index',
-  imports: [Navbar, Hero],
+  imports: [UserNavigationBar, Hero],
   templateUrl: './index.html',
   styleUrl: './index.scss',
 })

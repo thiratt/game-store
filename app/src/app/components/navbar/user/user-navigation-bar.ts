@@ -37,11 +37,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     ToastModule,
     ConfirmDialogModule,
   ],
-  templateUrl: './navbar.html',
-  styleUrl: './navbar.scss',
+  templateUrl: './user-navigation-bar.html',
+  styleUrl: './user-navigation-bar.scss',
   providers: [ConfirmationService, MessageService],
 })
-export class Navbar implements OnInit, OnDestroy {
+export class UserNavigationBar implements OnInit, OnDestroy {
   @Input() authMode: boolean = false;
   @Input() position: 'static' | 'fixed' = 'fixed';
   @ViewChild('searchInput') searchInput: ElementRef | undefined;
