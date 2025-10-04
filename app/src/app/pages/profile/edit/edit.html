@@ -11,7 +11,7 @@
           <img
             class="w-full h-full object-cover"
             alt="Card"
-            [src]="previewImageUrl || 'http://localhost:5053' + currentUser?.profileImage"
+            [src]="previewImageUrl || endpoint + currentUser?.profileImage"
           />
         </div>
       </ng-template>

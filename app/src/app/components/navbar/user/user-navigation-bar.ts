@@ -150,6 +150,10 @@ export class UserNavigationBar implements OnInit, OnDestroy {
     return this.authService.isAuthenticated;
   }
 
+  get endpoint(): string {
+    return this.authService.endpoint;
+  }
+
   private setDisableBodyScrolling(disable: boolean) {
     const body = document.body;
     if (body) {

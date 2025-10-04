@@ -85,6 +85,10 @@ export class Edit implements OnInit, OnDestroy {
     return this.authService.currentUser;
   }
 
+  get endpoint(): string {
+    return this.authService.endpoint;
+  }
+
   get usernameLengthError(): string | null {
     if (this.formData.username && this.formData.username.length < this.usernameMinLength) {
       return `ชื่อผู้ใช้ต้องมีอย่างน้อย ${this.usernameMinLength} ตัวอักษร`;

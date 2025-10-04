@@ -26,4 +26,8 @@ export class AdminProfile {
   get currentUser() {
     return this.authService.currentUser;
   }
+
+  get endpoint(): string {
+    return this.authService.endpoint;
+  }
 }

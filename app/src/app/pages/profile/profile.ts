@@ -50,6 +50,10 @@ export class UserProfile {
     return this.authService.currentUser;
   }
 
+  get endpoint() {
+    return this.authService.endpoint;
+  }
+
   toggleTopup(): void {
     this.isTopupVisible = !this.isTopupVisible;
 

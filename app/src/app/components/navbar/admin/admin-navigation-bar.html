@@ -32,7 +32,7 @@
     <div class="flex justify-center items-center">
       <p-button variant="text" size="small" (click)="menu.toggle($event)">
         <img
-          [src]="'http://localhost:5053' + currentUser?.profileImage"
+          [src]="endpoint + currentUser?.profileImage"
           alt="User Avatar"
           class="w-6 h-6 rounded-full object-cover"
         />

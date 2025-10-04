@@ -80,7 +80,7 @@
         <p-button icon="pi pi-shopping-cart" variant="text" size="small" [routerLink]="['/cart']" />
         <p-button variant="text" size="small" (click)="menu.toggle($event)">
           <img
-            [src]="'http://localhost:5053' + currentUser?.profileImage"
+            [src]="endpoint + currentUser?.profileImage"
             alt="User Avatar"
             class="w-6 h-6 rounded-full object-cover"
           />

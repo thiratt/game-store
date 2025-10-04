@@ -121,4 +121,8 @@ export class AdminNavigationBar implements OnInit, OnDestroy {
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated;
   }
+
+  get endpoint(): string {
+    return this.authService.endpoint;
+  }
 }
