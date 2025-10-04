@@ -1,1 +1,45 @@
-<p>admin-navigation-bar works!</p>
+<nav class="bg-surface-950/60 backdrop-blur-xs shadow-md">
+  <div class="py-3 px-4 flex items-center justify-between">
+    <div class="relative flex flex-1 items-center me-2">
+      <div class="flex items-center gap-4">
+        <a class="flex items-center" href="/dashboard">
+          <img src="/logo.png" alt="Kiro Logo" width="40" height="40" class="mr-2" />
+          <h1 class="flex items-center text-2xl font-bold gap-1">
+            Kiro <span class="text-xl">(Admin)</span>
+          </h1>
+        </a>
+        <div class="flex items-center gap-2">
+          @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route)) {
+          <p-button
+            label="{{ link.label }}"
+            [routerLink]="link.route"
+            size="small"
+            [rounded]="true"
+          />
+          } @else {
+          <p-button
+            label="{{ link.label }}"
+            [routerLink]="link.route"
+            size="small"
+            variant="text"
+            [rounded]="true"
+          />
+          } }
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center items-center">
+      <p-button variant="text" size="small" (click)="menu.toggle($event)">
+        <img
+          [src]="'http://localhost:5053' + currentUser?.profileImage"
+          alt="User Avatar"
+          class="w-6 h-6 rounded-full object-cover"
+        />
+      </p-button>
+      <p-menu #menu [model]="userMenuItems" [popup]="true" />
+    </div>
+  </div>
+</nav>
+<p-toast />
+<p-confirmdialog />
