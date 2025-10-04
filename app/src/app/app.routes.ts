@@ -8,6 +8,7 @@ import { UserProfile } from './pages/profile/profile';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Edit } from './pages/profile/edit/edit';
 import { AdminProfile } from './pages/dashboard/profile/admin-profile';
+import { AdminEditProfile } from './pages/dashboard/profile/edit/admin-edit-profile';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,10 @@ export const routes: Routes = [
   {
     path: 'dashboard/profile',
     component: AdminProfile,
+  },
+  {
+    path: 'dashboard/profile/edit',
+    component: AdminEditProfile,
   },
   {
     path: 'auth',
