@@ -45,7 +45,7 @@ RUN addgroup -g 1001 -S nginx-user && \
 USER nginx-user
 
 # Expose port 8080 (nginx will run on this port)
-EXPOSE 8080
+EXPOSE 7771
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
