@@ -12,7 +12,7 @@ namespace api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            
+
             new EnvLoader().Load();
             ConfigureServices(builder.Services);
 
@@ -70,6 +70,13 @@ namespace api
                           .AllowAnyMethod()
                           .AllowCredentials();
                 });
+                options.AddPolicy("AllowProductionAngularClient", policy =>
+                {
+                    policy.WithOrigins("https://kiro.weallarethe.best")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
             });
 
             services.AddProblemDetails();
@@ -92,15 +99,16 @@ namespace api
             {
                 app.MapOpenApi();
                 app.UseDeveloperExceptionPage();
+                app.UseCors("AllowAngularClient");
             }
             else
             {
                 app.UseExceptionHandler("/error");
                 app.UseHsts();
                 app.UseHttpsRedirection();
+                app.UseCors("AllowProductionAngularClient");
             }
 
-            app.UseCors("AllowAngularClient");
             app.UseStatusCodePages();
             app.UseRateLimiter();
             app.UseAuthentication();
