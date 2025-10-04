@@ -26,7 +26,7 @@ import { RouterLink } from '@angular/router';
     TableModule,
     InputNumber,
     RouterLink,
-  ],
+],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
