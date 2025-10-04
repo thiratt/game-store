@@ -19,6 +19,6 @@ RUN mkdir -p /app/uploads && \
     chmod 755 /app/uploads
 
 USER $APP_UID
-ENV ASPNETCORE_URLS=http://+:7772
+ENV HTTP_PORTS=7772
 
 ENTRYPOINT ["dotnet", "api.dll"]

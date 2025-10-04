@@ -20,8 +20,8 @@ services:
             - .env
         depends_on:
             - db
-        ports:
-            - "7772:8080"
+        # ports:
+        #     - "7772:8080"
         volumes:
             - kiro-api:/app/uploads
 
@@ -48,6 +48,8 @@ services:
             # - PMA_ARBITRARY=1
             - PMA_HOST=db
             - PMA_PORT=3306
+        depends_on:
+            - db
 
 volumes:
     kiro-db:
