@@ -50,7 +50,11 @@ public static class ImageHelper
         if (!Guid.TryParse(Path.GetFileNameWithoutExtension(filename), out Guid id))
             return false;
 
-        var fullPath = Path.Combine(_uploadsDir, id.ToString());
+        if(Path.GetExtension(filename) == null)
+            return false;
+
+        var safeFilename = Path.GetFileName(id.ToString() + Path.GetExtension(filename));
+        var fullPath = Path.Combine(_uploadsDir, safeFilename);
         if (File.Exists(fullPath))
         {
             File.Delete(fullPath);
