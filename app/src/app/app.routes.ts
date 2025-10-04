@@ -6,6 +6,7 @@ import { Signup } from './pages/auth/signup/signup';
 import { AuthGuard } from './services/auth.guard';
 import { Profile } from './pages/profile/profile';
 import { Dashboard } from './pages/dashboard/dashboard';
+import { Edit } from './pages/profile/edit/edit';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,10 @@ export const routes: Routes = [
     path: 'profile',
     component: Profile,
     title: 'โปรไฟล์',
+  },
+  {
+    path: 'profile/edit',
+    component: Edit,
   },
   {
     path: 'dashboard',
