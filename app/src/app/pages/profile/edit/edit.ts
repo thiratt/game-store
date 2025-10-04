@@ -1,0 +1,239 @@
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
+import { Location } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { UserNavigationBar } from '../../../components/navbar/user/user-navigation-bar';
+import { AuthService } from '../../../services/auth.service';
+import { debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil } from 'rxjs';
+
+@Component({
+  selector: 'app-edit',
+  imports: [
+    FormsModule,
+    UserNavigationBar,
+    CardModule,
+    ButtonModule,
+    FloatLabelModule,
+    InputTextModule,
+    MessageModule,
+  ],
+  templateUrl: './edit.html',
+  styleUrl: './edit.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Edit implements OnInit, OnDestroy {
+  formData = {
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
+
+  usernameAvailable: boolean | null = null;
+  emailAvailable: boolean | null = null;
+
+  private readonly emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  private readonly usernameMinLength = 3;
+  private readonly passwordMinLength = 6;
+
+  private usernameCheck$ = new Subject<string>();
+  private emailCheck$ = new Subject<string>();
+  private readonly destroy$ = new Subject<void>();
+
+  constructor(
+    private readonly location: Location,
+    private readonly authService: AuthService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
+    this.setupUsernameCheck();
+    this.setupEmailCheck();
+  }
+
+  ngOnInit(): void {
+    if (this.currentUser) {
+      this.formData.username = this.currentUser.username || '';
+      this.formData.email = this.currentUser.email || '';
+      this.usernameAvailable = true;
+      this.emailAvailable = true;
+    }
+    this.cdr.markForCheck();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  get currentUser() {
+    return this.authService.currentUser;
+  }
+
+  get usernameLengthError(): string | null {
+    if (this.formData.username && this.formData.username.length < this.usernameMinLength) {
+      return `ชื่อผู้ใช้ต้องมีอย่างน้อย ${this.usernameMinLength} ตัวอักษร`;
+    }
+    return null;
+  }
+
+  get emailFormatError(): string | null {
+    if (this.formData.email && !this.emailRegex.test(this.formData.email)) {
+      return 'รูปแบบอีเมลไม่ถูกต้อง';
+    }
+    return null;
+  }
+
+  get passwordLengthError(): string | null {
+    const { password, confirmPassword } = this.formData;
+
+    if (!password && !confirmPassword) return null;
+    if (password && password.length < this.passwordMinLength) {
+      return `รหัสผ่านต้องมีอย่างน้อย ${this.passwordMinLength} ตัวอักษร`;
+    }
+
+    return null;
+  }
+
+  get confirmPasswordMismatchError(): string | null {
+    const { password, confirmPassword } = this.formData;
+
+    if (!password && !confirmPassword) return null;
+    if (confirmPassword && !password) {
+      return 'กรุณากรอกรหัสผ่านใหม่';
+    }
+    if (
+      password.length >= this.passwordMinLength &&
+      confirmPassword &&
+      password !== confirmPassword
+    ) {
+      return 'รหัสผ่านไม่ตรงกัน';
+    }
+
+    return null;
+  }
+
+  onUsernameChange(value: string): void {
+    if (value === this.currentUser?.username) {
+      this.usernameAvailable = true;
+      this.cdr.markForCheck();
+      return;
+    }
+    this.usernameCheck$.next(value);
+  }
+
+  onEmailChange(value: string): void {
+    if (value === this.currentUser?.email) {
+      this.emailAvailable = true;
+      this.cdr.markForCheck();
+      return;
+    }
+    this.emailCheck$.next(value);
+  }
+
+  onSave(): void {
+    if (!this.validateForm()) return;
+
+    this.authService.updateProfile(this.formData).subscribe({
+      next: (response) => {
+        this.location.back();
+      },
+      error: (error) => {
+        console.error('Error updating profile:', error);
+      },
+    });
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
+
+  private setupUsernameCheck(): void {
+    this.usernameCheck$
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((username) => {
+          if (!username.trim() || username.length < this.usernameMinLength) {
+            this.usernameAvailable = null;
+            this.cdr.markForCheck();
+            return of(null);
+          }
+          return this.authService.checkUsernameAvailability(username);
+        })
+      )
+      .subscribe((result) => {
+        if (result === null) return;
+        this.usernameAvailable = result.available;
+        this.cdr.markForCheck();
+      });
+  }
+
+  private setupEmailCheck(): void {
+    this.emailCheck$
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((email) => {
+          if (!email.trim() || !this.emailRegex.test(email)) {
+            this.emailAvailable = null;
+            this.cdr.markForCheck();
+            return of(null);
+          }
+          return this.authService.checkEmailAvailability(email);
+        })
+      )
+      .subscribe((result) => {
+        if (result === null) return;
+        this.emailAvailable = result.available;
+        this.cdr.markForCheck();
+      });
+  }
+
+  validateForm(): boolean {
+    const { username, email, password, confirmPassword } = this.formData;
+
+    const isAnyFieldFilled =
+      username.trim() !== '' ||
+      email.trim() !== '' ||
+      password.trim() !== '' ||
+      confirmPassword.trim() !== '';
+
+    const isUsernameValid =
+      !username.trim() ||
+      (username.length >= this.usernameMinLength && this.usernameAvailable === true);
+
+    const isEmailValid =
+      !email.trim() || (this.emailRegex.test(email) && this.emailAvailable === true);
+
+    const result = isAnyFieldFilled && isUsernameValid && isEmailValid && this.isPasswordValid();
+
+    return result;
+  }
+
+  private isPasswordValid(): boolean {
+    const { password, confirmPassword } = this.formData;
+
+    const isPasswordFilled = password.trim() !== '';
+    const isConfirmFilled = confirmPassword.trim() !== '';
+
+    if (!isPasswordFilled && !isConfirmFilled) return true;
+    if (isPasswordFilled && isConfirmFilled) {
+      const isLengthValid = password.length >= this.passwordMinLength;
+      const isMatch = password === confirmPassword;
+      return isLengthValid && isMatch;
+    }
+
+    return false;
+  }
+}
