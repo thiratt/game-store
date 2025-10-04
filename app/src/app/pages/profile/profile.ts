@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Card } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { Navbar } from "../../components/navbar/admin/navbar";
+import { Navbar } from '../../components/navbar/user/navbar';
 import { AuthService } from '../../services/auth.service';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
