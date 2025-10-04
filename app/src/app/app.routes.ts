@@ -4,7 +4,7 @@ import { Login } from './pages/auth/login/login';
 import { Auth } from './components/layout/auth/auth';
 import { Signup } from './pages/auth/signup/signup';
 import { AuthGuard } from './services/auth.guard';
-import { Profile } from './pages/profile/profile';
+import { UserProfile } from './pages/profile/profile';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Edit } from './pages/profile/edit/edit';
 
@@ -15,7 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    component: Profile,
+    component: UserProfile,
     title: 'โปรไฟล์',
   },
   {

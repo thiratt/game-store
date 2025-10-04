@@ -13,7 +13,7 @@ import { InputNumber } from 'primeng/inputnumber';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-user-profile',
   imports: [
     CommonModule,
     UserNavigationBar,
@@ -26,11 +26,11 @@ import { RouterLink } from '@angular/router';
     TableModule,
     InputNumber,
     RouterLink,
-],
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile {
+export class UserProfile {
   isTopupVisible: boolean = false;
   selectedAmount: number | null = null;
   customAmount: number | null = null;
