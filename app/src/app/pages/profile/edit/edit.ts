@@ -37,10 +37,12 @@ export class Edit implements OnInit, OnDestroy {
     email: '',
     password: '',
     confirmPassword: '',
+    profileImage: null as File | null,
   };
 
   usernameAvailable: boolean | null = null;
   emailAvailable: boolean | null = null;
+  previewImageUrl: string | null = null;
 
   private readonly emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   private readonly usernameMinLength = 3;
@@ -72,6 +74,11 @@ export class Edit implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    // Clean up preview URL to prevent memory leaks
+    if (this.previewImageUrl) {
+      URL.revokeObjectURL(this.previewImageUrl);
+    }
   }
 
   get currentUser() {
@@ -139,10 +146,41 @@ export class Edit implements OnInit, OnDestroy {
     this.emailCheck$.next(value);
   }
 
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.formData.profileImage = input.files[0];
+
+      // Create preview URL for the selected image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewImageUrl = e.target?.result as string;
+        this.cdr.markForCheck();
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  resetImageSelection(): void {
+    this.formData.profileImage = null;
+    if (this.previewImageUrl) {
+      URL.revokeObjectURL(this.previewImageUrl);
+      this.previewImageUrl = null;
+    }
+    this.cdr.markForCheck();
+  }
+
   onSave(): void {
     if (!this.validateForm()) return;
 
-    this.authService.updateProfile(this.formData).subscribe({
+    const updateRequest = {
+      username: this.formData.username,
+      email: this.formData.email,
+      password: this.formData.password,
+      profileImage: this.formData.profileImage || undefined,
+    };
+
+    this.authService.updateProfile(updateRequest).subscribe({
       next: (response) => {
         this.location.back();
       },
@@ -201,13 +239,14 @@ export class Edit implements OnInit, OnDestroy {
   }
 
   validateForm(): boolean {
-    const { username, email, password, confirmPassword } = this.formData;
+    const { username, email, password, confirmPassword, profileImage } = this.formData;
 
     const isAnyFieldFilled =
       username.trim() !== '' ||
       email.trim() !== '' ||
       password.trim() !== '' ||
-      confirmPassword.trim() !== '';
+      confirmPassword.trim() !== '' ||
+      profileImage !== null;
 
     const isUsernameValid =
       !username.trim() ||

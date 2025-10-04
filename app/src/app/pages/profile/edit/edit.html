@@ -8,12 +8,36 @@
     <p-card class="overflow-hidden">
       <ng-template #header>
         <div class="flex justify-center rounded-full overflow-hidden h-1/2 w-1/2 mx-auto mt-3">
-          <img alt="Card" [src]="'http://localhost:5053' + currentUser?.profileImage" />
+          <img
+            alt="Card"
+            [src]="previewImageUrl || 'http://localhost:5053' + currentUser?.profileImage"
+          />
         </div>
       </ng-template>
 
-      <div class="flex justify-center mt-2">
-        <p-button icon="pi pi-upload" label="อัปโหลดรูปภาพ" variant="text" />
+      <div class="flex justify-center mt-2 gap-2">
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          (change)="onImageSelected($event)"
+          style="display: none"
+        />
+        <p-button
+          icon="pi pi-upload"
+          label="อัปโหลดรูปภาพ"
+          variant="text"
+          (onClick)="fileInput.click()"
+        />
+        @if (previewImageUrl) {
+        <p-button
+          icon="pi pi-times"
+          label="ยกเลิก"
+          variant="text"
+          severity="secondary"
+          (onClick)="resetImageSelection()"
+        />
+        }
       </div>
     </p-card>
     <p-card class="overflow-hidden">
