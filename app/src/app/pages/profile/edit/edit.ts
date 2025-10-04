@@ -61,8 +61,8 @@ export class Edit implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.currentUser) {
-      this.formData.username = this.currentUser.username || '';
-      this.formData.email = this.currentUser.email || '';
+      this.formData.username = '';
+      this.formData.email = '';
       this.usernameAvailable = true;
       this.emailAvailable = true;
     }
