@@ -12,7 +12,7 @@ import { BadgeModule } from 'primeng/badge';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
-import { AuthService, User } from '../../services/auth.service';
+import { AuthService, User } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';

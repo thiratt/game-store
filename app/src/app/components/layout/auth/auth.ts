@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Navbar } from '../../navbar/navbar';
+import { Navbar } from '../../navbar/admin/navbar';
 
 @Component({
   selector: 'app-auth',
