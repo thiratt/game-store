@@ -46,6 +46,7 @@
           <p-iconfield>
             <p-inputicon class="pi pi-search" />
             <input
+              #searchInput
               pInputText
               id="on_label"
               autocomplete="off"
@@ -53,12 +54,12 @@
               class="w-full transition-all duration-300 ease-in-out"
               [(ngModel)]="searchQuery"
               (focus)="onSearchFocus()"
-              (blur)="onSearchBlur()"
+              
               (input)="onSearchInput()"
               (keyup.escape)="onSearchBlur()"
             />
             @if (isSearchFocused) {
-            <p-inputicon class="pi pi-times cursor-pointer" (click)="onSearchBlur()" />
+            <p-inputicon class="pi pi-times cursor-pointer z-50" (click)="clearSearch()" />
             }
           </p-iconfield>
           <label for="on_label">ค้นหา</label>

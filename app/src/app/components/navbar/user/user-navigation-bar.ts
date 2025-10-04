@@ -88,6 +88,11 @@ export class UserNavigationBar implements OnInit, OnDestroy {
     }
   }
 
+  clearSearch() {
+    console.log('Clear search clicked');
+    this.searchQuery = '';
+  }
+
   isActiveRoute(route: string): boolean {
     return this.router.url === route;
   }
