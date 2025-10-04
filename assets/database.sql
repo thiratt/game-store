@@ -109,3 +109,24 @@ CREATE TABLE transaction_history (
   CONSTRAINT fk_tx_user FOREIGN KEY (user_id) REFERENCES account(id)
     ON DELETE CASCADE
 );
+
+CREATE TABLE admin_activity_log (
+  id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+  admin_id      CHAR(36) NOT NULL,
+  action_type   ENUM(
+                   'ADD_GAME',
+                   'UPDATE_GAME',
+                   'DELETE_GAME',
+                   'ADD_DISCOUNT',
+                   'UPDATE_DISCOUNT',
+                   'DELETE_DISCOUNT',
+                   'OTHER'
+                 ) NOT NULL,
+  target_id     CHAR(36) NULL,
+  target_table  VARCHAR(50) NULL,
+  description   TEXT NULL,
+  created_at    TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+  CONSTRAINT fk_admin_log_admin FOREIGN KEY (admin_id) REFERENCES account(id)
+    ON DELETE CASCADE
+);
