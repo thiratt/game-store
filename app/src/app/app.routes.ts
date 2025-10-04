@@ -7,6 +7,7 @@ import { AuthGuard } from './services/auth.guard';
 import { UserProfile } from './pages/profile/profile';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Edit } from './pages/profile/edit/edit';
+import { AdminProfile } from './pages/dashboard/profile/admin-profile';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,10 @@ export const routes: Routes = [
     path: 'dashboard',
     component: Dashboard,
     title: 'แดชบอร์ด',
+  },
+  {
+    path: 'dashboard/profile',
+    component: AdminProfile,
   },
   {
     path: 'auth',
