@@ -24,6 +24,13 @@ export interface SignupRequest {
   profileImage?: File;
 }
 
+export interface UpdateProfileRequest {
+  username?: string;
+  email?: string;
+  password?: string;
+  profileImage?: File;
+}
+
 export interface LoginResponse {
   success: boolean;
   data?: User;
@@ -81,6 +88,39 @@ export class AuthService {
     }
 
     return this.http.post<SignupResponse>(`${this.apiUrl}/auth/signup`, formData).pipe(
+      tap((response) => {
+        if (response.success && response.data) {
+          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          this.currentUserSubject.next(response.data);
+        }
+      })
+    );
+  }
+
+  // TODO: Change return type to UpdateProfileResponse if needed
+  updateProfile(request: UpdateProfileRequest): Observable<SignupResponse> {
+    const formData = new FormData();
+
+    if (request.username) {
+      formData.append('username', request.username);
+    }
+
+    if (request.email) {
+      formData.append('email', request.email);
+    }
+
+    if (request.password) {
+      formData.append('password', request.password);
+    }
+
+    if (request.profileImage) {
+      formData.append('profileImage', request.profileImage, request.profileImage.name);
+    }
+
+    return this.http.put<SignupResponse>(
+      `${this.apiUrl}/profile/${this.currentUser?.id}`,
+      formData
+    ).pipe(
       tap((response) => {
         if (response.success && response.data) {
           localStorage.setItem('currentUser', JSON.stringify(response.data));
