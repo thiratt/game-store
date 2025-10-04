@@ -5,10 +5,11 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { AuthService } from '../../../services/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-profile',
-  imports: [AdminNavigationBar, CardModule, ButtonModule, TableModule, DatePipe],
+  imports: [AdminNavigationBar, CardModule, ButtonModule, TableModule, DatePipe, RouterLink],
   templateUrl: './admin-profile.html',
   styleUrl: './admin-profile.scss',
 })
