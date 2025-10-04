@@ -23,6 +23,8 @@ public partial class Account
 
     public DateTime UpdatedAt { get; set; }
 
+    public virtual ICollection<AdminActivityLog> AdminActivityLogs { get; set; } = new List<AdminActivityLog>();
+
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
     public virtual ICollection<DiscountUsage> DiscountUsages { get; set; } = new List<DiscountUsage>();

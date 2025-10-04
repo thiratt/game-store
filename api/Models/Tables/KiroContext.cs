@@ -13,6 +13,8 @@ public partial class KiroContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<AdminActivityLog> AdminActivityLogs { get; set; }
+
     public virtual DbSet<CartItem> CartItems { get; set; }
 
     public virtual DbSet<DiscountCode> DiscountCodes { get; set; }
@@ -70,6 +72,36 @@ public partial class KiroContext : DbContext
             entity.Property(e => e.WalletBalance)
                 .HasPrecision(10)
                 .HasColumnName("wallet_balance");
+        });
+
+        modelBuilder.Entity<AdminActivityLog>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("admin_activity_log");
+
+            entity.HasIndex(e => e.AdminId, "fk_admin_log_admin");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ActionType)
+                .HasColumnType("enum('ADD_GAME','UPDATE_GAME','DELETE_GAME','ADD_DISCOUNT','UPDATE_DISCOUNT','DELETE_DISCOUNT','OTHER')")
+                .HasColumnName("action_type");
+            entity.Property(e => e.AdminId).HasColumnName("admin_id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasColumnType("timestamp(3)")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Description)
+                .HasColumnType("text")
+                .HasColumnName("description");
+            entity.Property(e => e.TargetId).HasColumnName("target_id");
+            entity.Property(e => e.TargetTable)
+                .HasMaxLength(50)
+                .HasColumnName("target_table");
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.AdminActivityLogs)
+                .HasForeignKey(d => d.AdminId)
+                .HasConstraintName("fk_admin_log_admin");
         });
 
         modelBuilder.Entity<CartItem>(entity =>
