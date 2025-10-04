@@ -13,7 +13,8 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    component: Profile
+    component: Profile,
+    title: 'โปรไฟล์',
   },
   {
     path: 'auth',
@@ -23,10 +24,12 @@ export const routes: Routes = [
       {
         path: 'login',
         component: Login,
+        title: 'เข้าสู่ระบบ',
       },
       {
         path: 'signup',
         component: Signup,
+        title: 'สมัครสมาชิก',
       },
     ],
   },

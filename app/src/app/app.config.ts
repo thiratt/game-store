@@ -4,11 +4,12 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, TitleStrategy, withViewTransitions } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import Noir from '../themes/noir';
+import { KiroTitleStrategy } from './title-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +21,9 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: Noir,
     }),
+    {
+      provide: TitleStrategy,
+      useClass: KiroTitleStrategy,
+    },
   ],
 };
