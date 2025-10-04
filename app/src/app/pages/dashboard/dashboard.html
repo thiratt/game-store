@@ -1,1 +1,54 @@
 <app-admin-navigation-bar></app-admin-navigation-bar>
+<main class="px-6 py-6">
+  <h1 class="text-3xl font-bold mb-6">เกมทั้งหมด</h1>
+
+  <!-- Filter / Search -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div class="flex flex-1 items-center gap-3">
+      <p-select
+        [(ngModel)]="selectedCategory"
+        [options]="gameCategories"
+        placeholder="ทั้งหมด"
+        optionLabel="label"
+        class="min-w-[150px]"
+      />
+      <p-floatlabel variant="on" class="flex-1 max-w-md">
+        <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input pInputText id="search-game" class="w-full" />
+          <label for="search-game">ค้นหาเกม</label>
+        </p-iconfield>
+      </p-floatlabel>
+      <p-button label="ค้นหา" icon="pi pi-search" />
+    </div>
+    <div>
+      <p-button label="เพิ่มเกม" icon="pi pi-plus" />
+    </div>
+  </div>
+
+  <!-- Game List -->
+  <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    @for (game of games; track $index) {
+    <p-card class="rounded-2xl overflow-hidden">
+      <ng-template #header>
+        <img alt="Card" class="w-full h-56 object-cover" src="/1401549.jpg" />
+      </ng-template>
+
+      <ng-template #title> {{ game.title }} </ng-template>
+
+      <ng-template #subtitle> {{ game.price | number : '1.0-0' }} บาท </ng-template>
+
+      <ng-template #footer>
+        <div class="flex gap-2 mt-3">
+          <p-button label="แก้ไข" class="flex-1" styleClass="w-full" />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            class="flex items-center justify-center [&_span]:text-white"
+          />
+        </div>
+      </ng-template>
+    </p-card>
+    }
+  </div>
+</main>
