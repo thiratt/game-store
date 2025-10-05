@@ -35,7 +35,15 @@ services:
         depends_on:
             - api
         ports:
-            - "7771:8080"
+            - "7771:7771"
+
+    nginx:
+        image: kiro-nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - app
+            - api
 
     phpmyadmin:
         image: phpmyadmin
