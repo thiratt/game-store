@@ -11,6 +11,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Edit } from './pages/profile/edit/edit';
 import { AdminProfile } from './pages/dashboard/profile/admin-profile';
 import { AdminEditProfile } from './pages/dashboard/profile/edit/admin-edit-profile';
+import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
   {
@@ -63,6 +64,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '',
+    component: NotFound,
   },
 ];
