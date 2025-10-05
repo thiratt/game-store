@@ -2,13 +2,14 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using api.Models.Tables;
+using api.Services;
 using DotEnv.Core;
 
 namespace api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +18,33 @@ namespace api
 
             var app = builder.Build();
 
+            await RunStartupValidationsAsync(app);
+
             ConfigureMiddleware(app);
 
             app.Run();
+        }
+
+        private static async Task RunStartupValidationsAsync(WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var validationService = scope.ServiceProvider.GetRequiredService<StartupValidationService>();
+
+            try
+            {
+                await validationService.ValidateStartupRequirementsAsync();
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                logger.LogCritical(ex, "Application failed to start due to validation errors");
+
+                Console.WriteLine("🚨 APPLICATION STARTUP FAILED 🚨");
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine("\nPlease fix the above issues and restart the application.");
+
+                Environment.Exit(1);
+            }
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -62,6 +87,9 @@ namespace api
 
             services.AddProblemDetails();
             services.AddHttpClient();
+
+            services.AddScoped<StartupValidationService>();
+
             services.AddControllers()
             .AddJsonOptions(
                 o =>
@@ -91,7 +119,6 @@ namespace api
             }
 
             app.UseStatusCodePages();
-            app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseWebSockets();
