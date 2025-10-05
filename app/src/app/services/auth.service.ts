@@ -67,6 +67,10 @@ export class AuthService {
     return !!this.currentUser;
   }
 
+  get isAdmin(): boolean {
+    return this.currentUser?.role.toLowerCase() === 'admin';
+  }
+
   get endpoint(): string {
     return this.apiUrl;
   }
