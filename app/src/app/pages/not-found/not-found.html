@@ -1,0 +1,12 @@
+<div class="min-h-svh flex flex-col">
+  @if(isAdmin) {
+  <app-admin-navigation-bar></app-admin-navigation-bar>
+  } @else {
+  <app-user-navigation-bar></app-user-navigation-bar>
+  }
+  <main class="flex-grow flex flex-col items-center justify-center text-center">
+    <h1 class="text-6xl font-bold mb-4">404</h1>
+    <p class="text-xl mb-8">ไม่พบหน้าที่คุณต้องการ</p>
+    <a pButton routerLink="/"> กลับไปที่หน้าแรก </a>
+  </main>
+</div>
