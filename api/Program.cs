@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.RateLimiting;
 using System.Text.Json;
 using api.Models.Tables;
 using DotEnv.Core;
@@ -41,24 +40,6 @@ namespace api
                     connectionString,
                     ServerVersion.AutoDetect(connectionString)
                 );
-            });
-
-            services.AddRateLimiter(options =>
-            {
-                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-                options.AddFixedWindowLimiter("LoginPolicy", opt =>
-                {
-                    opt.PermitLimit = 5;
-                    opt.Window = TimeSpan.FromMinutes(1);
-                    // opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                    opt.QueueLimit = 0;
-                });
-                options.AddFixedWindowLimiter("ApiGlobalPolicy", opt =>
-                {
-                    opt.PermitLimit = 100;
-                    opt.Window = TimeSpan.FromMinutes(1);
-                    opt.QueueLimit = 0;
-                });
             });
 
             services.AddCors(options =>
