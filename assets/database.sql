@@ -1,3 +1,5 @@
+use kiro;
+
 CREATE TABLE account (
   id            CHAR(36)     NOT NULL PRIMARY KEY,
   username      VARCHAR(50)  NOT NULL UNIQUE,
