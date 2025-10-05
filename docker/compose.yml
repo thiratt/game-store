@@ -7,8 +7,8 @@ services:
             - .env
         volumes:
             - kiro-db:/var/lib/mysql
-        ports:
-            - "7773:3306"
+        # ports:
+        #     - "7773:3306"
         command: ["--log_bin_trust_function_creators=1"]
 
     api:
@@ -34,8 +34,8 @@ services:
             - .env
         depends_on:
             - api
-        ports:
-            - "7771:7771"
+        # ports:
+        #     - "7771:7771"
 
     nginx:
         image: kiro-nginx
@@ -48,8 +48,8 @@ services:
     phpmyadmin:
         image: phpmyadmin
         # restart: always
-        ports:
-            - 7774:80
+        # ports:
+        #     - 7774:80
         # volumes:
         #     - ./theme:/var/www/html/themes/testdee:ro
         environment:
