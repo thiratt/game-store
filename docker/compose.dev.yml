@@ -1,0 +1,29 @@
+name: kiro-dev
+
+services:
+    db:
+        image: mysql:8.4.6
+        env_file:
+            - .env
+        volumes:
+            - kiro-dev-db:/var/lib/mysql
+        ports:
+            - "7773:3306"
+        command: ["--log_bin_trust_function_creators=1"]
+
+    phpmyadmin:
+        image: phpmyadmin
+        # restart: always
+        ports:
+            - 7774:80
+        # volumes:
+        #     - ./theme:/var/www/html/themes/testdee:ro
+        environment:
+            # - PMA_ARBITRARY=1
+            - PMA_HOST=db
+            - PMA_PORT=3306
+        depends_on:
+            - db
+
+volumes:
+    kiro-dev-db:
