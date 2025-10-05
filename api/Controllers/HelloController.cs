@@ -17,11 +17,7 @@ namespace api.Controllers
             var response = new KiroResponse
             {
                 Success = true,
-                Message = "Hello, World!",
-                Data = new
-                {
-                    Ip = HttpContext.Connection.RemoteIpAddress?.ToString(),
-                }
+                Message = "Hello, World!"
             };
             return Ok(response);
         }
