@@ -4,6 +4,8 @@ import { Login } from './pages/auth/login/login';
 import { Auth } from './components/layout/auth/auth';
 import { Signup } from './pages/auth/signup/signup';
 import { AuthGuard } from './services/auth.guard';
+import { AdminGuard } from './services/admin.guard';
+import { GuestGuard } from './services/guest.guard';
 import { UserProfile } from './pages/profile/profile';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Edit } from './pages/profile/edit/edit';
@@ -19,28 +21,33 @@ export const routes: Routes = [
     path: 'profile',
     component: UserProfile,
     title: 'โปรไฟล์',
+    canActivate: [AuthGuard],
   },
   {
     path: 'profile/edit',
     component: Edit,
+    canActivate: [AuthGuard],
   },
   {
     path: 'dashboard',
     component: Dashboard,
     title: 'แดชบอร์ด',
+    canActivate: [AdminGuard],
   },
   {
     path: 'dashboard/profile',
     component: AdminProfile,
+    canActivate: [AdminGuard],
   },
   {
     path: 'dashboard/profile/edit',
     component: AdminEditProfile,
+    canActivate: [AdminGuard],
   },
   {
     path: 'auth',
     component: Auth,
-    canActivate: [AuthGuard],
+    canActivate: [GuestGuard],
     children: [
       {
         path: 'login',
@@ -53,5 +60,9 @@ export const routes: Routes = [
         title: 'สมัครสมาชิก',
       },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
