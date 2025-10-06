@@ -1,0 +1,3 @@
+<?
+$cfg['ThemeDefault'] = 'testdee';
+?>

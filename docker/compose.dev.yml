@@ -16,8 +16,9 @@ services:
         # restart: always
         ports:
             - 7774:80
-        # volumes:
-        #     - ./theme:/var/www/html/themes/testdee:ro
+        volumes:
+            - ../assets/testdee-theme:/var/www/html/themes/testdee:ro
+            - ../assets/testdee-theme/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
         environment:
             # - PMA_ARBITRARY=1
             - PMA_HOST=db
