@@ -44,5 +44,22 @@ namespace api.Controllers
             };
             return Ok(response);
         }
+
+        [HttpGet("categories")]
+        public async Task<ActionResult<KiroResponse>> GetCategories()
+        {
+            var categories = await _context.Categories.ToListAsync();
+            var categoryDtos = categories.Select(c => new GameCategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToList();
+            var response = new KiroResponse
+            {
+                Success = true,
+                Data = categoryDtos
+            };
+            return Ok(response);
+        }
     }
 }
