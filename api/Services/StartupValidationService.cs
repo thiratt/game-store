@@ -162,7 +162,7 @@ namespace api.Services
                     "discount_code" => await dbContext.DiscountCodes.CountAsync(),
                     "discount_usage" => await dbContext.DiscountUsages.CountAsync(),
                     "game" => await dbContext.Games.CountAsync(),
-                    "game_category" => await dbContext.GameCategories.CountAsync(),
+                    "category" => await dbContext.Categories.CountAsync(),
                     "purchase" => await dbContext.Purchases.CountAsync(),
                     "purchase_item" => await dbContext.PurchaseItems.CountAsync(),
                     "transaction_history" => await dbContext.TransactionHistories.CountAsync(),
