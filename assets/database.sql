@@ -13,7 +13,7 @@ CREATE TABLE account (
     ON UPDATE CURRENT_TIMESTAMP(3)
 );
 
-CREATE TABLE game_category (
+CREATE TABLE category (
   id    INT AUTO_INCREMENT PRIMARY KEY,
   name  VARCHAR(100) NOT NULL UNIQUE
 );
@@ -22,12 +22,17 @@ CREATE TABLE game (
   id            CHAR(36) PRIMARY KEY,
   title         VARCHAR(255) NOT NULL,
   price         DECIMAL(10,2) NOT NULL,
-  category_id   INT NOT NULL,
   image_url     VARCHAR(255) NOT NULL,
   description   TEXT NOT NULL,
-  release_date  TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  CONSTRAINT fk_game_category FOREIGN KEY (category_id) REFERENCES game_category(id)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+  release_date  TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+);
+
+CREATE TABLE game_category (
+  game_id     CHAR(36) NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (game_id, category_id),
+  CONSTRAINT fk_gc_game FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE,
+  CONSTRAINT fk_gc_category FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart_item (
