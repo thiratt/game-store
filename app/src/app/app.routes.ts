@@ -6,6 +6,7 @@ import { Signup } from './pages/auth/signup/signup';
 import { AuthGuard } from './services/auth.guard';
 import { AdminGuard } from './services/admin.guard';
 import { GuestGuard } from './services/guest.guard';
+import { HomeGuard } from './services/home.guard';
 import { UserProfile } from './pages/profile/profile';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Edit } from './pages/profile/edit/edit';
@@ -17,6 +18,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Index,
+    canActivate: [HomeGuard],
   },
   {
     path: 'profile',
