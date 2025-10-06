@@ -108,7 +108,7 @@ namespace api.Services
                 "discount_code",
                 "discount_usage",
                 "game",
-                "game_category",
+                "category",
                 "purchase",
                 "purchase_item",
                 "transaction_history",
