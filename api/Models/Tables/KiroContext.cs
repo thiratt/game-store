@@ -35,6 +35,10 @@ public partial class KiroContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+            .UseCollation("utf8mb4_0900_ai_ci")
+            .HasCharSet("utf8mb4");
+
         modelBuilder.Entity<Account>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -47,7 +51,7 @@ public partial class KiroContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("created_at");
             entity.Property(e => e.Email).HasColumnName("email");
@@ -63,14 +67,14 @@ public partial class KiroContext : DbContext
                 .HasColumnName("role");
             entity.Property(e => e.UpdatedAt)
                 .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("updated_at");
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");
             entity.Property(e => e.WalletBalance)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("wallet_balance");
         });
 
@@ -88,7 +92,7 @@ public partial class KiroContext : DbContext
                 .HasColumnName("action_type");
             entity.Property(e => e.AdminId).HasColumnName("admin_id");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("created_at");
             entity.Property(e => e.Description)
@@ -116,7 +120,7 @@ public partial class KiroContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AddedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("added_at");
             entity.Property(e => e.GameId).HasColumnName("game_id");
@@ -144,14 +148,14 @@ public partial class KiroContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("code");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("created_at");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
             entity.Property(e => e.DiscountValue)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("discount_value");
             entity.Property(e => e.MaxUsage).HasColumnName("max_usage");
             entity.Property(e => e.UsedCount).HasColumnName("used_count");
@@ -170,7 +174,7 @@ public partial class KiroContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.DiscountId).HasColumnName("discount_id");
             entity.Property(e => e.UsedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("used_at");
             entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -201,10 +205,10 @@ public partial class KiroContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
             entity.Property(e => e.Price)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("price");
             entity.Property(e => e.ReleaseDate)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("release_date");
             entity.Property(e => e.Title)
@@ -213,7 +217,7 @@ public partial class KiroContext : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Games)
                 .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_game_category");
         });
 
@@ -244,14 +248,14 @@ public partial class KiroContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.DiscountId).HasColumnName("discount_id");
             entity.Property(e => e.FinalPrice)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("final_price");
             entity.Property(e => e.PurchasedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("purchased_at");
             entity.Property(e => e.TotalPrice)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("total_price");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -278,7 +282,7 @@ public partial class KiroContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GameId).HasColumnName("game_id");
             entity.Property(e => e.Price)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("price");
             entity.Property(e => e.PurchaseId).HasColumnName("purchase_id");
 
@@ -301,10 +305,10 @@ public partial class KiroContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Amount)
-                .HasPrecision(10)
+                .HasPrecision(10, 2)
                 .HasColumnName("amount");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("created_at");
             entity.Property(e => e.ReferenceId).HasColumnName("reference_id");
@@ -331,7 +335,7 @@ public partial class KiroContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GameId).HasColumnName("game_id");
             entity.Property(e => e.OwnedAt)
-                .HasDefaultValueSql("'CURRENT_TIMESTAMP(3)'")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(3)")
                 .HasColumnType("timestamp(3)")
                 .HasColumnName("owned_at");
             entity.Property(e => e.UserId).HasColumnName("user_id");
