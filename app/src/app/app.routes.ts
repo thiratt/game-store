@@ -13,6 +13,7 @@ import { Edit } from './pages/profile/edit/edit';
 import { AdminProfile } from './pages/dashboard/profile/admin-profile';
 import { AdminEditProfile } from './pages/dashboard/profile/edit/admin-edit-profile';
 import { NotFound } from './pages/not-found/not-found';
+import { DashboardLayout } from './components/layout/dashboard/dashboard-layout';
 
 export const routes: Routes = [
   {
@@ -33,19 +34,23 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: Dashboard,
+    component: DashboardLayout,
     title: 'แดชบอร์ด',
     canActivate: [AdminGuard],
-  },
-  {
-    path: 'dashboard/profile',
-    component: AdminProfile,
-    canActivate: [AdminGuard],
-  },
-  {
-    path: 'dashboard/profile/edit',
-    component: AdminEditProfile,
-    canActivate: [AdminGuard],
+    children: [
+      {
+        path: '',
+        component: Dashboard,
+      },
+      {
+        path: 'profile',
+        component: AdminProfile,
+      },
+      {
+        path: 'profile/edit',
+        component: AdminEditProfile,
+      },
+    ],
   },
   {
     path: 'auth',
