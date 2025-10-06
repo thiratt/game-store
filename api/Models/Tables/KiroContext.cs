@@ -17,13 +17,13 @@ public partial class KiroContext : DbContext
 
     public virtual DbSet<CartItem> CartItems { get; set; }
 
+    public virtual DbSet<Category> Categories { get; set; }
+
     public virtual DbSet<DiscountCode> DiscountCodes { get; set; }
 
     public virtual DbSet<DiscountUsage> DiscountUsages { get; set; }
 
     public virtual DbSet<Game> Games { get; set; }
-
-    public virtual DbSet<GameCategory> GameCategories { get; set; }
 
     public virtual DbSet<Purchase> Purchases { get; set; }
 
@@ -135,6 +135,20 @@ public partial class KiroContext : DbContext
                 .HasConstraintName("fk_cart_user");
         });
 
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("category");
+
+            entity.HasIndex(e => e.Name, "name").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+        });
+
         modelBuilder.Entity<DiscountCode>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -194,10 +208,7 @@ public partial class KiroContext : DbContext
 
             entity.ToTable("game");
 
-            entity.HasIndex(e => e.CategoryId, "fk_game_category");
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Description)
                 .HasColumnType("text")
                 .HasColumnName("description");
@@ -215,24 +226,25 @@ public partial class KiroContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("title");
 
-            entity.HasOne(d => d.Category).WithMany(p => p.Games)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_game_category");
-        });
-
-        modelBuilder.Entity<GameCategory>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("game_category");
-
-            entity.HasIndex(e => e.Name, "name").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
+            entity.HasMany(d => d.Categories).WithMany(p => p.Games)
+                .UsingEntity<Dictionary<string, object>>(
+                    "GameCategory",
+                    r => r.HasOne<Category>().WithMany()
+                        .HasForeignKey("CategoryId")
+                        .HasConstraintName("fk_gc_category"),
+                    l => l.HasOne<Game>().WithMany()
+                        .HasForeignKey("GameId")
+                        .HasConstraintName("fk_gc_game"),
+                    j =>
+                    {
+                        j.HasKey("GameId", "CategoryId")
+                            .HasName("PRIMARY")
+                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.ToTable("game_category");
+                        j.HasIndex(new[] { "CategoryId" }, "fk_gc_category");
+                        j.IndexerProperty<Guid>("GameId").HasColumnName("game_id");
+                        j.IndexerProperty<int>("CategoryId").HasColumnName("category_id");
+                    });
         });
 
         modelBuilder.Entity<Purchase>(entity =>

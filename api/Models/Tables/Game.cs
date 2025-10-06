@@ -11,8 +11,6 @@ public partial class Game
 
     public decimal Price { get; set; }
 
-    public int CategoryId { get; set; }
-
     public string ImageUrl { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -21,9 +19,9 @@ public partial class Game
 
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
-    public virtual GameCategory Category { get; set; } = null!;
-
     public virtual ICollection<PurchaseItem> PurchaseItems { get; set; } = new List<PurchaseItem>();
 
     public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
+
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 }
