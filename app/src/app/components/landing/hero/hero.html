@@ -44,6 +44,12 @@
             size="large"
           ></p-button>
         </div>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          @for (category of featuredGame?.categories; track $index) {
+          <p-tag [value]="category.name" [rounded]="true" severity="contrast" />
+          }
+        </div>
       </div>
     </div>
   </div>

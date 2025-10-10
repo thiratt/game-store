@@ -4,10 +4,11 @@ import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { Game, GameService } from '../../../services/game.service';
+import { Chip } from "primeng/chip";
 
 @Component({
   selector: 'app-hero',
-  imports: [CommonModule, DecimalPipe, ButtonModule, TagModule, CardModule],
+  imports: [CommonModule, DecimalPipe, ButtonModule, TagModule, CardModule, Chip],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })
