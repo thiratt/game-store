@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminNavigationBar } from '../../components/navbar/admin/admin-navigation-bar';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { Select } from 'primeng/select';
