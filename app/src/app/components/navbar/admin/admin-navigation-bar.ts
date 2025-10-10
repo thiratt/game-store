@@ -18,6 +18,12 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+interface NavItem {
+  label: string;
+  route: string;
+  triggerPath?: string[];
+}
+
 @Component({
   selector: 'app-admin-navigation-bar',
   imports: [
@@ -45,8 +51,8 @@ export class AdminNavigationBar implements OnInit, OnDestroy {
   currentUser: User | null = null;
   private authSubscription: Subscription = new Subscription();
 
-  navigationItems = [
-    { label: 'เกม', route: '/dashboard' },
+  navigationItems: NavItem[] = [
+    { label: 'เกม', route: '/dashboard', triggerPath: ['game'] },
     { label: 'ธุรกรรม', route: '/dashboard/transactions' },
     { label: 'คูปอง', route: '/dashboard/coupons' },
   ];
@@ -83,7 +89,13 @@ export class AdminNavigationBar implements OnInit, OnDestroy {
     }
   }
 
-  isActiveRoute(route: string): boolean {
+  isActiveRoute(route: string, triggerPath?: string[]): boolean {
+    if (triggerPath && triggerPath.length > 0) {
+      return (
+        this.router.url === route || triggerPath.some((path) => this.router.url.includes(path))
+      );
+    }
+
     return this.router.url === route;
   }
 
