@@ -37,7 +37,8 @@ export class ThaiDatePipe implements PipeTransform {
   transform(value: string | Date, format: 'long' | 'short' | 'datetime' = 'long'): string {
     if (!value) return '';
 
-    const date = new Date(value);
+    const utcDate = new Date(value);
+    const date = new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
 
     const day = date.getDate();
     const monthIndex = date.getMonth();
