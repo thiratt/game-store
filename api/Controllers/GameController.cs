@@ -88,12 +88,9 @@ namespace api.Controllers
         [HttpGet("random")]
         public async Task<ActionResult<KiroResponse>> GetRandomGame()
         {
-            var games = await _context.Games
-                .Include(g => g.Categories)
-                .OrderBy(g => Guid.NewGuid())
-                .FirstOrDefaultAsync();
+            var count = await _context.Games.CountAsync();
 
-            if (games == null)
+            if (count == 0)
             {
                 return NotFound(new KiroResponse
                 {
@@ -101,27 +98,44 @@ namespace api.Controllers
                     Message = "No games found"
                 });
             }
+
+            var index = new Random().Next(0, count);
+
+            var game = await _context.Games
+                .Include(g => g.Categories)
+                .Skip(index)
+                .Take(1)
+                .FirstOrDefaultAsync();
+
+            if (game == null)
+            {
+                return NotFound(new KiroResponse
+                {
+                    Success = false,
+                    Message = "No games found"
+                });
+            }
+
             var gameDto = new GameDto
             {
-                Id = games.Id,
-                Title = games.Title,
-                Description = games.Description,
-                Price = games.Price,
-                ReleaseDate = games.ReleaseDate,
-                ImageUrl = games.ImageUrl,
-                Categories = [.. games.Categories.Select(gc => new GameCategoryDto
+                Id = game.Id,
+                Title = game.Title,
+                Description = game.Description,
+                Price = game.Price,
+                ReleaseDate = game.ReleaseDate,
+                ImageUrl = game.ImageUrl,
+                Categories = [.. game.Categories.Select(gc => new GameCategoryDto
                 {
                     Id = gc.Id,
                     Name = gc.Name
                 })],
             };
 
-            var response = new KiroResponse
+            return Ok(new KiroResponse
             {
                 Success = true,
                 Data = gameDto
-            };
-            return Ok(response);
+            });
         }
 
         [HttpGet("categories")]
