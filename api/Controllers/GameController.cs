@@ -30,6 +30,7 @@ namespace api.Controllers
                 Description = g.Description,
                 Price = g.Price,
                 ReleaseDate = g.ReleaseDate,
+                ImageUrl = g.ImageUrl,
                 Categories = [.. g.Categories.Select(gc => new GameCategoryDto
                 {
                     Id = gc.Id,
