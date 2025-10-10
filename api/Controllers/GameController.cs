@@ -85,6 +85,45 @@ namespace api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("random")]
+        public async Task<ActionResult<KiroResponse>> GetRandomGame()
+        {
+            var games = await _context.Games
+                .Include(g => g.Categories)
+                .OrderBy(g => Guid.NewGuid())
+                .FirstOrDefaultAsync();
+
+            if (games == null)
+            {
+                return NotFound(new KiroResponse
+                {
+                    Success = false,
+                    Message = "No games found"
+                });
+            }
+            var gameDto = new GameDto
+            {
+                Id = games.Id,
+                Title = games.Title,
+                Description = games.Description,
+                Price = games.Price,
+                ReleaseDate = games.ReleaseDate,
+                ImageUrl = games.ImageUrl,
+                Categories = [.. games.Categories.Select(gc => new GameCategoryDto
+                {
+                    Id = gc.Id,
+                    Name = gc.Name
+                })],
+            };
+
+            var response = new KiroResponse
+            {
+                Success = true,
+                Data = gameDto
+            };
+            return Ok(response);
+        }
+
         [HttpGet("categories")]
         public async Task<ActionResult<KiroResponse>> GetCategories()
         {
