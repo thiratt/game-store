@@ -1,0 +1,68 @@
+<main class="px-6">
+  <div class="flex gap-2 mb-4">
+    <p-button icon="pi pi-arrow-left" label="กลับ" size="small" (onClick)="onNavigateBack()" />
+    <h1 class="text-3xl font-bold">เพิ่มเกมใหม่</h1>
+  </div>
+  <div class="flex flex-col gap-3">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-4">
+        <div class="flex flex-col gap-1">
+          <label for="name">ชื่อเกม</label>
+          <input pInputText id="name" [(ngModel)]="game.name" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="price">ราคา</label>
+          <p-inputnumber inputId="price" [(ngModel)]="game.price" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="price">ประเภทของเกม</label>
+          <p-multiselect
+            [options]="catergories"
+            [(ngModel)]="game.catergories"
+            placeholder="เลือกประเภทของเกม"
+            optionLabel="name"
+            display="chip"
+            emptyFilterMessage="ไม่พบประเภทที่ตรงกัน (ลองกดเพิ่มประเภทใหม่)"
+          >
+            <ng-template let-country #item>
+              <div>{{ country.name }} [ใช้งานโดย 2 เกม]</div>
+            </ng-template>
+            <ng-template #footer>
+              <div class="p-3 flex justify-between">
+                <p-button
+                  label="เพิ่มประเภท"
+                  severity="secondary"
+                  text
+                  size="small"
+                  icon="pi pi-plus"
+                />
+                <p-button label="ลบประเภท" severity="danger" text size="small" icon="pi pi-times" />
+              </div>
+            </ng-template>
+          </p-multiselect>
+        </div>
+      </div>
+      <div
+        class="relative flex border-2 border-dashed rounded-2xl overflow-hidden hover:bg-[var(--p-button-text-primary-hover-background)] transition-colors ease-in-out"
+      >
+        <div
+          class="absolute inset-0 flex flex-col justify-center items-center gap-4 select-none cursor-pointer"
+        >
+          <i class="pi pi-cloud-upload" style="font-size: 4rem"></i>
+          <p class="text-center text-xl">คลิกหรือวางรูปภาพที่นี่เพื่ออัปโหลดรูปภาพ</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="description">รายละเอียด</label>
+      <textarea
+        rows="10"
+        class="resize-none"
+        id="description"
+        pTextarea
+        [(ngModel)]="game.description"
+        fluid
+      ></textarea>
+    </div>
+  </div>
+</main>
