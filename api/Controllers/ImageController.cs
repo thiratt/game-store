@@ -94,5 +94,54 @@ namespace api.Controllers
                 });
             }
         }
+
+        [HttpDelete("{filename}")]
+        public ActionResult<KiroResponse> DeleteImage(string filename)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(filename))
+                {
+                    return BadRequest(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "Filename is required"
+                    });
+                }
+
+                var actualFilename = filename;
+                if (filename.StartsWith("/image/"))
+                {
+                    actualFilename = filename[7..]; // Remove "/image/" prefix
+                }
+
+                var deleted = ImageHelper.Delete(actualFilename);
+
+                if (deleted)
+                {
+                    return Ok(new KiroResponse
+                    {
+                        Success = true,
+                        Message = "Image deleted successfully"
+                    });
+                }
+                else
+                {
+                    return NotFound(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "Image not found or could not be deleted"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new KiroResponse
+                {
+                    Success = false,
+                    Message = $"Failed to delete image: {ex.Message}"
+                });
+            }
+        }
     }
 }

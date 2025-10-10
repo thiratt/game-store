@@ -39,6 +39,7 @@ export class AddGame implements OnInit {
   isDragOver: boolean = false;
   uploadProgress: number = 0;
   isSubmitting: boolean = false;
+  uploadedImageUrl: string = '';
 
   catergories: GameCategory[] = [];
 
@@ -83,6 +84,16 @@ export class AddGame implements OnInit {
   }
 
   onNavigateBack(): void {
+    if (this.uploadedImageUrl) {
+      this.gameService.deleteImage(this.uploadedImageUrl).subscribe({
+        next: (response) => {
+          console.log('Uploaded image cleaned up successfully');
+        },
+        error: (error) => {
+          console.error('Failed to delete uploaded image:', error);
+        },
+      });
+    }
     this.router.navigate(['/dashboard'], { replaceUrl: true });
   }
 
@@ -118,7 +129,20 @@ export class AddGame implements OnInit {
 
   removeImage(event: Event): void {
     event.stopPropagation();
+
+    if (this.uploadedImageUrl) {
+      this.gameService.deleteImage(this.uploadedImageUrl).subscribe({
+        next: (response) => {
+          console.log('Image deleted from server successfully');
+        },
+        error: (error) => {
+          console.error('Failed to delete image from server:', error);
+        },
+      });
+    }
+
     this.game.coverImage = '';
+    this.uploadedImageUrl = '';
     this.uploadProgress = 0;
   }
 
@@ -142,6 +166,18 @@ export class AddGame implements OnInit {
       return;
     }
 
+    const oldImageUrl = this.uploadedImageUrl;
+    if (oldImageUrl) {
+      this.gameService.deleteImage(oldImageUrl).subscribe({
+        next: (response) => {
+          console.log('Old image deleted successfully before uploading new one');
+        },
+        error: (error) => {
+          console.error('Failed to delete old image:', error);
+        },
+      });
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       this.game.coverImage = e.target?.result as string;
@@ -153,6 +189,7 @@ export class AddGame implements OnInit {
       next: (response) => {
         this.uploadProgress = 100;
         if (response.success && response.data) {
+          this.uploadedImageUrl = response.data;
           this.game.coverImage = response.data;
           this.messageService.add({
             severity: 'success',
@@ -164,6 +201,7 @@ export class AddGame implements OnInit {
       error: (error) => {
         this.uploadProgress = 0;
         this.game.coverImage = '';
+        this.uploadedImageUrl = '';
         console.error('Upload error:', error);
         this.messageService.add({
           severity: 'error',
@@ -194,13 +232,14 @@ export class AddGame implements OnInit {
       next: (response) => {
         this.isSubmitting = false;
         if (response.success) {
+          this.uploadedImageUrl = '';
           this.messageService.add({
             severity: 'success',
             summary: 'สำเร็จ',
             detail: 'เพิ่มเกมใหม่เรียบร้อยแล้ว',
           });
           setTimeout(() => {
-            this.onNavigateBack();
+            this.router.navigate(['/dashboard'], { replaceUrl: true });
           }, 1500);
         }
       },

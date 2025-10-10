@@ -63,4 +63,9 @@ export class GameService {
     formData.append('image', file, file.name);
     return this.http.post<ApiResponse<string>>(`${this.endpoint}/image/upload`, formData);
   }
+
+  deleteImage(imageUrl: string): Observable<ApiResponse<any>> {
+    const filename = imageUrl.replace('/image/', '');
+    return this.http.delete<ApiResponse<any>>(`${this.endpoint}/image/${filename}`);
+  }
 }
