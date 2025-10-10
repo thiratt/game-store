@@ -9,7 +9,8 @@
           </h1>
         </a>
         <div class="flex items-center gap-2">
-          @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route, link.triggerPath)) {
+          @for (link of navigationItems; track $index) { @if (isActiveRoute(link.route,
+          link.triggerPath)) {
           <p-button
             label="{{ link.label }}"
             [routerLink]="link.route"
