@@ -2,7 +2,7 @@
 <section class="hero-section relative overflow-hidden">
   <!-- Background Image with Overlay -->
   <div class="hero-background">
-    <img [src]="featuredGame.backgroundImage" [alt]="featuredGame.title" class="hero-image" />
+    <img [src]="endpoint + featuredGame?.imageUrl" [alt]="featuredGame?.title" class="hero-image" />
     <div class="hero-overlay"></div>
   </div>
 
@@ -12,18 +12,18 @@
       <div class="max-w-2xl">
         <!-- Game Title -->
         <h1 class="hero-title">
-          {{ featuredGame.title }}
+          {{ featuredGame?.title }}
         </h1>
 
         <!-- Game Description -->
         <p class="hero-description">
-          {{ featuredGame.description }}
+          {{ featuredGame?.description }}
         </p>
 
         <!-- Price Section -->
         <div class="price-section">
           <div class="flex items-center gap-4 mb-6">
-            <span class="current-price"> ราคา {{ featuredGame.price | number }} บาท </span>
+            <span class="current-price"> ราคา {{ featuredGame?.price | number }} บาท </span>
           </div>
         </div>
 

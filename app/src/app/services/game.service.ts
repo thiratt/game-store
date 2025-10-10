@@ -46,6 +46,10 @@ export class GameService {
     return this.apiUrl;
   }
 
+  getLatestReleaseGames(): Observable<ApiResponse<Game>> {
+    return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/latest`);
+  }
+
   getCategories(): Observable<ApiResponse<GameCategory[]>> {
     return this.http.get<ApiResponse<GameCategory[]>>(`${this.endpoint}/game/categories`);
   }

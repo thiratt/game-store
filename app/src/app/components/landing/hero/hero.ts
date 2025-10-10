@@ -3,6 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { Game, GameService } from '../../../services/game.service';
 
 @Component({
   selector: 'app-hero',
@@ -11,15 +12,23 @@ import { CommonModule, DecimalPipe } from '@angular/common';
   styleUrl: './hero.scss',
 })
 export class Hero {
-  featuredGame = {
-    title: 'SILENT HILL F',
-    description: 'ค้นพบความงดงามท่ามกลางความสยองขวัญในเกมสยองขวัญหลอนประสาทแนวญี่ปุ่นโฉมใหม่นี้',
-    price: 1999,
-    originalPrice: 2499,
-    discount: 20,
-    tags: ['สยองขวัญ', 'ผจญภัย', 'เล่นคนเดียว'],
-    backgroundImage: '/1401549.jpg',
-  };
+  featuredGame: Game | null = null;
+
+  constructor(private gameService: GameService) {
+    this.loadFeaturedGame();
+  }
+
+  get endpoint(): string {
+    return this.gameService.endpoint;
+  }
+
+  loadFeaturedGame() {
+    this.gameService.getLatestReleaseGames().subscribe((response) => {
+      if (response.success) {
+        this.featuredGame = response.data!;
+      }
+    });
+  }
 
   onBuyNow() {
     console.log('Buy now clicked');
