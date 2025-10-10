@@ -9,17 +9,14 @@ import { InputIconModule } from 'primeng/inputicon';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { Chip } from 'primeng/chip';
+import { GameService, Game } from '../../services/game.service';
 
-interface GameCategory {
+interface GameCategoryOption {
   label: string;
-  value: string;
-}
-
-interface Game {
-  title: string;
-  category: string;
-  price: number;
-  imageUrl: string;
+  value: string | number;
 }
 
 @Component({
@@ -34,28 +31,73 @@ interface Game {
     IconFieldModule,
     InputIconModule,
     FloatLabelModule,
-    RouterLink
-],
+    RouterLink,
+    ToastModule,
+    Chip,
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
+  providers: [MessageService],
 })
 export class Dashboard implements OnInit {
-  selectedCategory: GameCategory | undefined;
-  gameCategories: GameCategory[] = [];
-  games: Game[] = [
-    {
-      title: 'SILENT HILL f',
-      category: 'horror',
-      price: 1999,
-      imageUrl: '/1401549.jpg',
-    },
-  ];
+  selectedCategory: GameCategoryOption | undefined;
+  gameCategories: GameCategoryOption[] = [];
+  games: Game[] = [];
+  isLoading: boolean = false;
+
+  constructor(private gameService: GameService, private messageService: MessageService) {}
+
+  get endpoint(): string {
+    return this.gameService.endpoint;
+  }
 
   ngOnInit() {
-    this.gameCategories = [
-      { label: 'ทั้งหมด', value: 'all' },
-      { label: 'สยองขวัญ', value: 'horror' },
-      { label: 'ผจญภัย', value: 'adventure' },
-    ];
+    this.loadCategories();
+    this.loadGames();
+  }
+
+  loadCategories(): void {
+    this.gameService.getCategories().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.gameCategories = [
+            { label: 'ทั้งหมด', value: 'all' },
+            ...response.data.map((category) => ({
+              label: category.name,
+              value: category.id,
+            })),
+          ];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถโหลดประเภทเกมได้',
+        });
+      },
+    });
+  }
+
+  loadGames(): void {
+    this.isLoading = true;
+    this.gameService.getGames().subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.success && response.data) {
+          this.games = response.data;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error loading games:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถโหลดรายการเกมได้',
+        });
+      },
+    });
   }
 }
