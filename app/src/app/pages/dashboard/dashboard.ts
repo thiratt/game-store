@@ -9,6 +9,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { DecimalPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 interface GameCategory {
   label: string;
@@ -27,7 +28,6 @@ interface Game {
   imports: [
     DecimalPipe,
     FormsModule,
-    AdminNavigationBar,
     CardModule,
     ButtonModule,
     Select,
@@ -35,7 +35,8 @@ interface Game {
     IconFieldModule,
     InputIconModule,
     FloatLabelModule,
-  ],
+    RouterLink
+],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
