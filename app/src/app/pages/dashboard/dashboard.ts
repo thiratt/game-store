@@ -9,11 +9,12 @@ import { InputIconModule } from 'primeng/inputicon';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Chip } from 'primeng/chip';
 import { GameService, Game } from '../../services/game.service';
-import { ThaiDatePipe } from "../../pipe/thai-date.pipe";
+import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 
 interface GameCategoryOption {
   label: string;
@@ -34,12 +35,13 @@ interface GameCategoryOption {
     FloatLabelModule,
     RouterLink,
     ToastModule,
+    ConfirmDialogModule,
     Chip,
-    ThaiDatePipe
-],
+    ThaiDatePipe,
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
 })
 export class Dashboard implements OnInit {
   selectedCategory: GameCategoryOption | undefined;
@@ -47,7 +49,11 @@ export class Dashboard implements OnInit {
   games: Game[] = [];
   isLoading: boolean = false;
 
-  constructor(private gameService: GameService, private messageService: MessageService) {}
+  constructor(
+    private gameService: GameService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {}
 
   get endpoint(): string {
     return this.gameService.endpoint;
@@ -98,6 +104,53 @@ export class Dashboard implements OnInit {
           severity: 'error',
           summary: 'เกิดข้อผิดพลาด',
           detail: 'ไม่สามารถโหลดรายการเกมได้',
+        });
+      },
+    });
+  }
+
+  confirmDelete(game: Game): void {
+    this.confirmationService.confirm({
+      message: `คุณแน่ใจหรือไม่ที่จะลบเกม "${game.title}"?`,
+      header: 'ยืนยันการลบ',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'ลบ',
+      rejectLabel: 'ยกเลิก',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deleteGame(game);
+      },
+    });
+  }
+
+  private deleteGame(game: Game): void {
+    if (!game.id) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'เกิดข้อผิดพลาด',
+        detail: 'ไม่พบ ID ของเกม',
+      });
+      return;
+    }
+
+    this.gameService.deleteGame(game.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.games = this.games.filter((g) => g.id !== game.id);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'สำเร็จ',
+            detail: 'ลบเกมเรียบร้อยแล้ว',
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting game:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถลบเกมได้',
         });
       },
     });

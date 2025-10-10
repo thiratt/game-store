@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Helper;
 using api.Models.Dtos;
 using api.Models.Request;
 using api.Models.Response;
@@ -82,6 +83,44 @@ namespace api.Controllers
                 {
                     Success = false,
                     Message = $"Failed to add game: {ex.Message}"
+                });
+            }
+        }
+
+        [HttpDelete("game/{id}")]
+        public async Task<ActionResult<KiroResponse>> DeleteGame(Guid id)
+        {
+            try
+            {
+                var game = await _context.Games
+                    .Include(g => g.Categories)
+                    .FirstOrDefaultAsync(g => g.Id == id);
+
+                if (game == null)
+                {
+                    return NotFound(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "Game not found"
+                    });
+                }
+
+                _context.Games.Remove(game);
+                ImageHelper.Delete(game.ImageUrl.Replace("/image/", ""));
+                await _context.SaveChangesAsync();
+
+                return Ok(new KiroResponse
+                {
+                    Success = true,
+                    Message = "Game deleted successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new KiroResponse
+                {
+                    Success = false,
+                    Message = $"Failed to delete game: {ex.Message}"
                 });
             }
         }

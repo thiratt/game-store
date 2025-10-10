@@ -79,6 +79,7 @@
             icon="pi pi-trash"
             severity="danger"
             class="flex items-center justify-center [&_span]:text-white"
+            (onClick)="confirmDelete(game)"
           />
         </div>
       </ng-template>
@@ -89,3 +90,4 @@
 </main>
 
 <p-toast />
+<p-confirmdialog />

@@ -68,4 +68,8 @@ export class GameService {
     const filename = imageUrl.replace('/image/', '');
     return this.http.delete<ApiResponse<any>>(`${this.endpoint}/image/${filename}`);
   }
+
+  deleteGame(gameId: string): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.adminEndpoint}/game/${gameId}`);
+  }
 }
