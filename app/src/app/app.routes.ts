@@ -14,6 +14,7 @@ import { AdminProfile } from './pages/dashboard/profile/admin-profile';
 import { AdminEditProfile } from './pages/dashboard/profile/edit/admin-edit-profile';
 import { NotFound } from './pages/not-found/not-found';
 import { DashboardLayout } from './components/layout/dashboard/dashboard-layout';
+import { AddGame } from './pages/dashboard/game/add/add-game';
 
 export const routes: Routes = [
   {
@@ -41,6 +42,11 @@ export const routes: Routes = [
       {
         path: '',
         component: Dashboard,
+      },
+      {
+        path: 'game/add',
+        component: AddGame,
+        title: 'เพิ่มเกม',
       },
       {
         path: 'profile',
