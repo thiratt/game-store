@@ -132,5 +132,12 @@
     </div>
   </div>
 </main>
-
+@if (isRedirecting) {
+<div class="fixed min-h-svh bg-black/40 backdrop-blur-xs inset-0 flex justify-center items-center">
+  <div class="flex flex-col items-center gap-4">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p class="text-lg">เพิ่มเกมสำเร็จ กำลังเปลี่ยนเส้นทางไปยังหน้าหลัก...</p>
+  </div>
+</div>
+}
 <p-toast />

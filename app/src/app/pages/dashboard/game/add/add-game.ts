@@ -39,6 +39,7 @@ export class AddGame implements OnInit {
   isDragOver: boolean = false;
   uploadProgress: number = 0;
   isSubmitting: boolean = false;
+  isRedirecting: boolean = false;
   uploadedImageUrl: string = '';
 
   catergories: GameCategory[] = [];
@@ -233,6 +234,7 @@ export class AddGame implements OnInit {
         this.isSubmitting = false;
         if (response.success) {
           this.uploadedImageUrl = '';
+          this.isRedirecting = true;
           this.messageService.add({
             severity: 'success',
             summary: 'สำเร็จ',
