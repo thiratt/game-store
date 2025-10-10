@@ -1,4 +1,4 @@
-<main class="px-6">
+<main class="px-6 pb-6">
   <h1 class="text-3xl font-bold mb-4">เกมทั้งหมด</h1>
 
   <!-- Filter / Search -->
@@ -44,7 +44,7 @@
 
   <!-- Game List -->
   @else {
-  <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
     @for (game of games; track game.id) {
     <p-card class="rounded-2xl overflow-hidden">
       <ng-template #header>
@@ -58,12 +58,14 @@
       <ng-template #title> {{ game.title }} </ng-template>
       <ng-template #subtitle> {{ game.price | number : '1.0-0' }} บาท </ng-template>
       <ng-template #content>
-        <div class="flex flex-wrap gap-1 mb-3">
-          @for (category of game.categories; track category.id) {
-          <p-chip [label]="category.name" class="text-sm" />
-          }
+        <div class="h-fit sm:h-40 xl:h-32 transition-all duration-300">
+          <div class="flex flex-wrap gap-1 mb-3">
+            @for (category of game.categories; track category.id) {
+            <p-chip [label]="category.name" class="text-xs" />
+            }
+          </div>
+          <p class="text-sm line-clamp-2">{{ game.description }}</p>
         </div>
-        <p class="text-sm line-clamp-2">{{ game.description }}</p>
       </ng-template>
       <ng-template #footer>
         <div class="flex gap-2 mt-3">
