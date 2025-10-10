@@ -7,12 +7,13 @@ import { InputText } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Chip } from 'primeng/chip';
 import { GameService, Game } from '../../services/game.service';
+import { ThaiDatePipe } from "../../pipe/thai-date.pipe";
 
 interface GameCategoryOption {
   label: string;
@@ -34,7 +35,8 @@ interface GameCategoryOption {
     RouterLink,
     ToastModule,
     Chip,
-  ],
+    ThaiDatePipe
+],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
   providers: [MessageService],
