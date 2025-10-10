@@ -50,6 +50,10 @@ export class GameService {
     return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/latest`);
   }
 
+  // getRandomGame(): Observable<ApiResponse<Game>> {
+  //   return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/random`);
+  // }
+
   getCategories(): Observable<ApiResponse<GameCategory[]>> {
     return this.http.get<ApiResponse<GameCategory[]>>(`${this.endpoint}/game/categories`);
   }
