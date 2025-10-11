@@ -172,16 +172,16 @@ export class EditGame implements OnInit {
   removeImage(event: Event): void {
     event.stopPropagation();
 
-    if (this.uploadedImageUrl) {
-      this.gameService.deleteImage(this.uploadedImageUrl).subscribe({
-        next: (response) => {
-          console.log('Image deleted from server successfully');
-        },
-        error: (error) => {
-          console.error('Failed to delete image from server:', error);
-        },
-      });
-    }
+    // if (this.uploadedImageUrl) {
+    //   this.gameService.deleteImage(this.uploadedImageUrl).subscribe({
+    //     next: (response) => {
+    //       console.log('Image deleted from server successfully');
+    //     },
+    //     error: (error) => {
+    //       console.error('Failed to delete image from server:', error);
+    //     },
+    //   });
+    // }
 
     this.game.coverImage = '';
     this.uploadedImageUrl = '';
