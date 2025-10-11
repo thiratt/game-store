@@ -1,8 +1,4 @@
-<nav
-  class="bg-surface-950/70 backdrop-blur-sm shadow-md top-0 left-0 right-0 z-10"
-  [class.fixed]="position === 'fixed'"
-  [class.static]="position === 'static'"
->
+<nav class="fixed bg-surface-950/70 backdrop-blur-sm shadow-md top-0 left-0 right-0 z-50">
   <div class="py-3 px-4 flex items-center justify-between">
     <div class="relative flex flex-1 items-center me-2">
       <div
@@ -45,7 +41,7 @@
       >
         @if (isSearchFocused) {
         <p-select
-          class="bg-primary-900/40!"
+          class="sx"
           [options]="[{ name: 'test' }]"
           placeholder="ทั้งหมด"
           optionLabel="name"
@@ -112,9 +108,8 @@
   </div>
 </nav>
 <div
-  class="search-overlay bg-surface-950/40 backdrop-blur-md"
-  [class.active-fixed]="isSearchFocused && position === 'fixed'"
-  [class.active-static]="isSearchFocused && position === 'static'"
+  class="search-overlay bg-surface-950/40 backdrop-blur-md z-10"
+  [class.active]="isSearchFocused"
   (click)="onSearchBlur()"
 ></div>
 <p-toast />

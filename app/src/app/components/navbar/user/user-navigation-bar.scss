@@ -20,19 +20,10 @@
   transition: all 0.3s ease-in-out;
   user-select: none;
 
-  &.active-fixed {
+  &.active {
     top: 0;
     opacity: 1;
     visibility: visible;
     overflow: hidden;
-    z-index: 2;
-  }
-
-  &.active-static {
-    top: 64px;
-    opacity: 1;
-    visibility: visible;
-    overflow: hidden;
-    z-index: 2;
   }
 }
