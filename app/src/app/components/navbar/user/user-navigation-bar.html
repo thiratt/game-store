@@ -39,9 +39,19 @@
 
       @if (!authMode) {
       <div
-        class="absolute transition-all duration-300 ease-in-out right-0 w-1/4"
+        class="absolute grid gap-2 items-center transition-all duration-300 ease-in-out right-0 w-1/4"
         [class.w-full]="isSearchFocused"
+        [class.grid-cols-[10%_auto]]="isSearchFocused"
       >
+        @if (isSearchFocused) {
+        <p-select
+          class="bg-primary-900/40!"
+          [options]="[{ name: 'test' }]"
+          placeholder="ทั้งหมด"
+          optionLabel="name"
+          size="small"
+        />
+        }
         <p-floatlabel variant="on">
           <p-iconfield>
             <p-inputicon class="pi pi-search" />
@@ -56,6 +66,7 @@
               (focus)="onSearchFocus()"
               (input)="onSearchInput()"
               (keyup.escape)="onSearchBlur()"
+              fluid
             />
             @if (isSearchFocused) {
             <p-inputicon class="pi pi-times cursor-pointer z-50" (click)="clearSearch()" />

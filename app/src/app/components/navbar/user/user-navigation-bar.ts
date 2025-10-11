@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Select } from "primeng/select";
 
 @Component({
   selector: 'app-user-navigation-bar',
@@ -36,7 +37,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     TooltipModule,
     ToastModule,
     ConfirmDialogModule,
-  ],
+    Select
+],
   templateUrl: './user-navigation-bar.html',
   styleUrl: './user-navigation-bar.scss',
   providers: [ConfirmationService, MessageService],
