@@ -1,0 +1,48 @@
+<section class="px-4 py-6">
+  <div class="flex items-center justify-between gap-3 mb-4">
+    <h2 class="text-2xl font-bold">เกมทั้งหมด</h2>
+    <div class="flex items-center gap-2">
+      <p-button
+        icon="pi pi-chevron-left"
+        class="p-button-rounded p-button-text p-button-plain"
+        (onClick)="goToPreviousDay()"
+        pTooltip="วันก่อนหน้า"
+      ></p-button>
+      <p-button
+        icon="pi pi-chevron-right"
+        class="p-button-rounded p-button-text p-button-plain"
+        (onClick)="goToNextDay()"
+        pTooltip="วันถัดไป"
+      ></p-button>
+    </div>
+  </div>
+  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    @for (game of games; track game.id) {
+    <p-card class="rounded-2xl overflow-hidden">
+      <ng-template #header>
+        <img
+          alt="{{ game.title }}"
+          class="w-full h-56 object-cover"
+          [src]="endpoint + game.imageUrl"
+          (error)="$event.target.src = '/1401549.jpg'"
+        />
+      </ng-template>
+      <ng-template #title> {{ game.title }} </ng-template>
+      <ng-template #subtitle>
+        <div class="flex flex-col">
+          <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>
+          <p>วางขายเมื่อวันที่ {{ game.releaseDate | thaiDate : 'datetime' }}</p>
+        </div>
+      </ng-template>
+      <ng-template #footer>
+        <div class="flex gap-2 mt-3">
+          <p-button label="ซื้อเลย" class="flex-1" styleClass="w-full" />
+          <p-button icon="pi pi-shopping-cart" variant="outlined" />
+        </div>
+      </ng-template>
+    </p-card>
+    }
+  </div>
+</section>
+
+<p-toast />
