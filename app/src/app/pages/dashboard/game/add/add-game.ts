@@ -9,7 +9,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { GameService, GameCategory } from '../../../../services/game.service';
+import { GameService } from '../../../../services/game.service';
+import { GameCategory } from '../../../../interfaces/game.interface';
 
 interface GameForm {
   name: string;

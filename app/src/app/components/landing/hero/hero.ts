@@ -3,7 +3,8 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Game, GameService } from '../../../services/game.service';
+import { Game } from '../../../interfaces/game.interface';
+import { GameService } from '../../../services/game.service';
 
 @Component({
   selector: 'app-hero',

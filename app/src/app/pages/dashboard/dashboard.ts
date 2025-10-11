@@ -13,8 +13,9 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Chip } from 'primeng/chip';
-import { GameService, Game } from '../../services/game.service';
+import { GameService } from '../../services/game.service';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
+import { Game } from '../../interfaces/game.interface';
 
 interface GameCategoryOption {
   label: string;
