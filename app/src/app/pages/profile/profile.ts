@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Card } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { UserNavigationBar } from '../../components/navbar/user/user-navigation-bar';
 import { AuthService } from '../../services/auth.service';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -17,7 +16,6 @@ import { Static } from "../../components/layout/static/static";
   selector: 'app-user-profile',
   imports: [
     CommonModule,
-    UserNavigationBar,
     Card,
     ButtonModule,
     ToggleButtonModule,

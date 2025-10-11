@@ -12,7 +12,6 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { UserNavigationBar } from '../../../components/navbar/user/user-navigation-bar';
 import { AuthService } from '../../../services/auth.service';
 import { debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { Static } from "../../../components/layout/static/static";
@@ -21,7 +20,6 @@ import { Static } from "../../../components/layout/static/static";
   selector: 'app-edit',
   imports: [
     FormsModule,
-    UserNavigationBar,
     CardModule,
     ButtonModule,
     FloatLabelModule,
