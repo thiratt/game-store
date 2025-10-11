@@ -45,7 +45,6 @@ import { Select } from "primeng/select";
 })
 export class UserNavigationBar implements OnInit, OnDestroy {
   @Input() authMode: boolean = false;
-  @Input() position: 'static' | 'fixed' = 'fixed';
   @ViewChild('searchInput') searchInput: ElementRef | undefined;
 
   searchQuery: string = '';
