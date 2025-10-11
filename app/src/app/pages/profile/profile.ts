@@ -11,6 +11,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { TableModule } from 'primeng/table';
 import { InputNumber } from 'primeng/inputnumber';
 import { RouterLink } from '@angular/router';
+import { Static } from "../../components/layout/static/static";
 
 @Component({
   selector: 'app-user-profile',
@@ -26,7 +27,8 @@ import { RouterLink } from '@angular/router';
     TableModule,
     InputNumber,
     RouterLink,
-  ],
+    Static
+],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
