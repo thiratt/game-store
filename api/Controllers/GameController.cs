@@ -138,6 +138,44 @@ namespace api.Controllers
             });
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<KiroResponse>> GetGameById(Guid id)
+        {
+            var game = await _context.Games
+                .Include(g => g.Categories)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (game == null)
+            {
+                return NotFound(new KiroResponse
+                {
+                    Success = false,
+                    Message = "Game not found"
+                });
+            }
+
+            var gameDto = new GameDto
+            {
+                Id = game.Id,
+                Title = game.Title,
+                Description = game.Description,
+                Price = game.Price,
+                ReleaseDate = game.ReleaseDate,
+                ImageUrl = game.ImageUrl,
+                Categories = [.. game.Categories.Select(gc => new GameCategoryDto
+                {
+                    Id = gc.Id,
+                    Name = gc.Name
+                })]
+            };
+
+            return Ok(new KiroResponse
+            {
+                Success = true,
+                Data = gameDto
+            });
+        }
+
         [HttpGet("categories")]
         public async Task<ActionResult<KiroResponse>> GetCategories()
         {

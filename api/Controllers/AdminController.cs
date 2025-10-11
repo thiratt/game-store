@@ -124,5 +124,82 @@ namespace api.Controllers
                 });
             }
         }
+
+        [HttpPut("game/{id}")]
+        public async Task<ActionResult<KiroResponse>> UpdateGame(Guid id, [FromBody] AddGameRequest request)
+        {
+            try
+            {
+                var game = await _context.Games
+                    .Include(g => g.Categories)
+                    .FirstOrDefaultAsync(g => g.Id == id);
+
+                if (game == null)
+                {
+                    return NotFound(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "Game not found"
+                    });
+                }
+
+                var existingCategories = await _context.Categories
+                    .Where(c => request.CategoryIds.Contains(c.Id))
+                    .ToListAsync();
+
+                if (existingCategories.Count != request.CategoryIds.Count)
+                {
+                    return BadRequest(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "One or more categories do not exist"
+                    });
+                }
+
+                game.Title = request.Title;
+                game.Description = request.Description;
+                game.Price = request.Price;
+                game.ReleaseDate = request.ReleaseDate;
+                if (!string.IsNullOrEmpty(request.ImageUrl))
+                {
+                    game.ImageUrl = request.ImageUrl;
+                }
+
+                game.Categories.Clear();
+                game.Categories = existingCategories;
+
+                await _context.SaveChangesAsync();
+
+                var gameDto = new GameDto
+                {
+                    Id = game.Id,
+                    Title = game.Title,
+                    Description = game.Description,
+                    Price = game.Price,
+                    ReleaseDate = game.ReleaseDate,
+                    ImageUrl = game.ImageUrl,
+                    Categories = [.. game.Categories.Select(c => new GameCategoryDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name
+                    })]
+                };
+
+                return Ok(new KiroResponse
+                {
+                    Success = true,
+                    Data = gameDto,
+                    Message = "Game updated successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new KiroResponse
+                {
+                    Success = false,
+                    Message = $"Failed to update game: {ex.Message}"
+                });
+            }
+        }
     }
 }
