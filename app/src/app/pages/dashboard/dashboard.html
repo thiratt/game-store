@@ -74,7 +74,15 @@
       </ng-template>
       <ng-template #footer>
         <div class="flex gap-2 mt-3">
-          <p-button icon="pi pi-pencil" label="แก้ไข" class="flex-1" styleClass="w-full" />
+          <a
+            pButton
+            [routerLink]="'/dashboard/game/edit/' + game.id"
+            icon="pi pi-pencil"
+            class="flex-1"
+            styleClass="w-full"
+          >
+            <span pButtonLabel>แก้ไข</span>
+          </a>
           <p-button
             icon="pi pi-trash"
             severity="danger"
