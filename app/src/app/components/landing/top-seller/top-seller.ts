@@ -7,50 +7,23 @@ import { ThaiYear } from '../../../directive/thai-year.directive';
 import { CardModule } from 'primeng/card';
 import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { GameService } from '../../../services/game.service';
+import { Game } from '../../../interfaces/game.interface';
+import { MessageService } from 'primeng/api';
+import { Toast } from "primeng/toast";
 
 @Component({
   selector: 'app-top-seller',
-  imports: [ButtonModule, DatePicker, ThaiYear, FormsModule, CardModule, DecimalPipe, ThaiDatePipe],
+  imports: [ButtonModule, DatePicker, ThaiYear, FormsModule, CardModule, DecimalPipe, ThaiDatePipe, Toast],
   templateUrl: './top-seller.html',
   styleUrl: './top-seller.scss',
+  providers: [MessageService],
 })
 export class TopSeller implements OnInit {
+  isLoading: boolean = false;
   selectedDate: Date | null = null;
-  games = [
-    {
-      id: '2a21bc94-b2bf-413f-a418-290d7a0787b5',
-      title: 'The Last of Us Part I',
-      description:
-        'สัมผัสประสบการณ์เกมที่ได้รับรางวัลมากมายที่เป็นต้นกำเนิดของรายการโทรทัศน์ที่ได้รับคำชมอย่างล้นหลาม พาโจเอลและเอลลี่เดินทางข้ามสหรัฐอเมริกาหลังโลกาวินาศ และพบกับเหล่าพันธมิตรและศัตรูที่คุณจะไม่มีวันลืมใน The Last of Us™',
-      categories: [
-        {
-          id: 1,
-          name: 'กระโดดข้ามด่าน',
-        },
-        {
-          id: 2,
-          name: 'กีฬา',
-        },
-        {
-          id: 3,
-          name: 'จังหวะดนตรี',
-        },
-        {
-          id: 4,
-          name: 'จำลองสถานการณ์',
-        },
-        {
-          id: 5,
-          name: 'ต่อสู้',
-        },
-      ],
-      releaseDate: '2025-10-10T11:22:34.894',
-      price: 1999,
-      imageUrl: '/image/0f1caa57-4fb3-473f-9613-ec87cdc1b6d3.jpg',
-    },
-  ];
+  games: Game[] = [];
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private messageService: MessageService) {}
 
   get endpoint(): string {
     return this.gameService.endpoint;
@@ -58,6 +31,28 @@ export class TopSeller implements OnInit {
 
   ngOnInit() {
     this.selectedDate = new Date();
+    this.loadGames();
+  }
+
+  loadGames(): void {
+    this.isLoading = true;
+    this.gameService.getGames().subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.success && response.data) {
+          this.games = response.data;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error loading games:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถโหลดรายการเกมได้',
+        });
+      },
+    });
   }
 
   onDateChange(date: Date | null) {
