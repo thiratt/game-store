@@ -159,7 +159,6 @@ namespace api.Controllers
                 game.Title = request.Title;
                 game.Description = request.Description;
                 game.Price = request.Price;
-                game.ReleaseDate = request.ReleaseDate;
                 if (!string.IsNullOrEmpty(request.ImageUrl))
                 {
                     game.ImageUrl = request.ImageUrl;
