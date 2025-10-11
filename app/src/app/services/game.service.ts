@@ -2,21 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface GameCategory {
-  id: number;
-  name: string;
-}
-
-export interface Game {
-  id?: string;
-  title: string;
-  description: string;
-  price: number;
-  releaseDate: Date;
-  categories: GameCategory[];
-  imageUrl?: string;
-}
+import { Game, GameCategory } from '../interfaces/game.interface';
 
 export interface AddGameRequest {
   title: string;
