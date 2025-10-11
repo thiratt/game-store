@@ -66,4 +66,12 @@ export class GameService {
   deleteGame(gameId: string): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.adminEndpoint}/game/${gameId}`);
   }
+
+  getGameById(gameId: string): Observable<ApiResponse<Game>> {
+    return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/${gameId}`);
+  }
+
+  updateGame(gameId: string, gameData: AddGameRequest): Observable<ApiResponse<Game>> {
+    return this.http.put<ApiResponse<Game>>(`${this.adminEndpoint}/game/${gameId}`, gameData);
+  }
 }

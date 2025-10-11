@@ -1,0 +1,151 @@
+<main class="px-6">
+  <div class="flex items-center gap-2 mb-4">
+    <p-button icon="pi pi-arrow-left" label="กลับ" (onClick)="onNavigateBack()" />
+    <h1 class="text-3xl font-bold">แก้ไขเกม</h1>
+    <p-button
+      label="บันทึกการแก้ไข"
+      icon="pi pi-save"
+      (onClick)="onSubmit()"
+      [loading]="isSubmitting"
+      [disabled]="
+        !game.name ||
+        !game.description ||
+        game.catergories.length === 0 ||
+        !game.coverImage ||
+        game.price <= 0 ||
+        isLoading
+      "
+      class="ml-auto"
+    />
+  </div>
+  <div class="flex flex-col gap-3">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-4">
+        <div class="flex flex-col gap-1">
+          <label for="name">ชื่อเกม</label>
+          <input pInputText id="name" [(ngModel)]="game.name" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="price">ราคา</label>
+          <p-inputnumber inputId="price" [(ngModel)]="game.price" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="price">ประเภทของเกม</label>
+          <p-multiselect
+            [options]="catergories"
+            [(ngModel)]="game.catergories"
+            placeholder="เลือกประเภทของเกม"
+            optionLabel="name"
+            dataKey="id"
+            display="chip"
+            emptyFilterMessage="ไม่พบประเภทที่ตรงกัน"
+            [showClear]="true"
+          >
+            <ng-template let-category #item>
+              <div>{{ category.name }}</div>
+            </ng-template>
+          </p-multiselect>
+        </div>
+      </div>
+      <div
+        class="relative flex border-2 border-dashed rounded-2xl overflow-hidden hover:bg-[var(--p-button-text-primary-hover-background)] transition-colors ease-in-out"
+        [class.border-blue-500]="isDragOver"
+        [class.bg-blue-50]="isDragOver"
+        (click)="fileInput.click()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          style="display: none"
+        />
+
+        <!-- Image Preview -->
+        @if (game.coverImage) {
+        <div class="absolute inset-0 flex items-center justify-center">
+          <img
+            [src]="endpoint + game.coverImage"
+            alt="Game cover preview"
+            class="max-w-full max-h-full object-contain"
+          />
+          <p-button
+            icon="pi pi-times"
+            [rounded]="true"
+            type="button"
+            class="absolute top-2 right-2"
+            severity="danger"
+            aria-label="Remove Image"
+            (click)="removeImage($event)"
+          />
+        </div>
+        }
+
+        <!-- Upload placeholder -->
+        @if (!game.coverImage) {
+        <div
+          class="absolute inset-0 flex flex-col justify-center items-center gap-4 select-none cursor-pointer"
+        >
+          <i
+            class="pi pi-cloud-upload"
+            style="font-size: 4rem"
+            [class.animate-bounce]="isDragOver"
+          ></i>
+          <p class="text-center text-xl">
+            {{ isDragOver ? 'วางรูปภาพที่นี่' : 'คลิกหรือวางรูปภาพที่นี่เพื่ออัปโหลดรูปภาพ' }}
+          </p>
+          <p class="text-sm text-gray-500">รองรับ JPG, JPEG, PNG, GIF, WebP (ไฟล์ไม่เกิน 5MB)</p>
+        </div>
+        }
+
+        <!-- Upload progress -->
+        @if (uploadProgress > 0 && uploadProgress < 100) {
+        <div
+          class="absolute inset-0 flex flex-col justify-center items-center gap-4 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-4">
+            <p class="text-center mb-2">กำลังอัปโหลด...</p>
+            <div class="w-48 bg-gray-200 rounded-full h-2">
+              <div
+                class="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                [style.width.%]="uploadProgress"
+              ></div>
+            </div>
+            <p class="text-center text-sm mt-2">{{ uploadProgress }}%</p>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="description">รายละเอียด</label>
+      <textarea
+        rows="10"
+        class="resize-none"
+        id="description"
+        pTextarea
+        [(ngModel)]="game.description"
+        fluid
+      ></textarea>
+    </div>
+  </div>
+</main>
+@if (isLoading) {
+<div class="fixed min-h-svh bg-black/40 backdrop-blur-xs inset-0 flex justify-center items-center">
+  <div class="flex flex-col items-center gap-4">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p class="text-lg">กำลังโหลดข้อมูลเกม...</p>
+  </div>
+</div>
+} @if (isRedirecting) {
+<div class="fixed min-h-svh bg-black/40 backdrop-blur-xs inset-0 flex justify-center items-center">
+  <div class="flex flex-col items-center gap-4">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p class="text-lg">แก้ไขเกมสำเร็จ กำลังเปลี่ยนเส้นทางไปยังหน้าหลัก...</p>
+  </div>
+</div>
+}
+<p-toast />
