@@ -17,6 +17,7 @@ import { DashboardLayout } from './components/layout/dashboard/dashboard-layout'
 import { AddGame } from './pages/dashboard/game/add/add-game';
 import { EditGame } from './pages/dashboard/game/edit/edit-game';
 import { GameDetail } from './pages/game/game-detail';
+import { Cart } from './pages/cart/cart';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,12 @@ export const routes: Routes = [
     path: 'profile',
     component: UserProfile,
     title: 'โปรไฟล์',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cart',
+    component: Cart,
+    title: 'ตะกร้าสินค้า',
     canActivate: [AuthGuard],
   },
   {
