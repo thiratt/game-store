@@ -23,7 +23,15 @@ namespace api.Controllers
         {
             try
             {
-                // Validate categories exist
+                if (request.CategoryIds.Count <= 5)
+                {
+                    return BadRequest(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "ประเภทของเกมต้องมีอย่างน้อย 5 ประเภท"
+                    });
+                }
+
                 var existingCategories = await _context.Categories
                     .Where(c => request.CategoryIds.Contains(c.Id))
                     .ToListAsync();
