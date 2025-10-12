@@ -108,7 +108,8 @@
             icon="pi pi-credit-card"
             fluid
             size="large"
-            [disabled]="cartItems.length === 0"
+            [disabled]="cartItems.length === 0 || isLoading"
+            [loading]="isLoading"
             (click)="proceedToCheckout()"
           />
         </div>

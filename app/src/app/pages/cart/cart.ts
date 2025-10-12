@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { Static } from '../../components/layout/static/static';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { CartService, CartItem } from '../../services/cart.service';
+import { PurchaseService } from '../../services/purchase.service';
 
 @Component({
   selector: 'app-cart',
@@ -47,6 +48,7 @@ export class Cart implements OnInit, OnDestroy {
 
   constructor(
     private cartService: CartService,
+    private purchaseService: PurchaseService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private router: Router
@@ -147,7 +149,6 @@ export class Cart implements OnInit, OnDestroy {
       return;
     }
 
-    // TODO: Implement discount code API when available
     this.messageService.add({
       severity: 'info',
       summary: 'แจ้งเตือน',
@@ -165,12 +166,56 @@ export class Cart implements OnInit, OnDestroy {
       return;
     }
 
-    // TODO: Navigate to checkout page when available
-    this.messageService.add({
-      severity: 'info',
-      summary: 'แจ้งเตือน',
-      detail: 'ฟีเจอร์ชำระเงินจะเปิดใช้งานเร็วๆ นี้',
+    this.confirmationService.confirm({
+      message: `คุณต้องการซื้อเกม ${this.cartItems.length} รายการ รวมเป็นเงิน ${this.finalTotal.toLocaleString()} บาท หรือไม่?`,
+      header: 'ยืนยันการซื้อ',
+      icon: 'pi pi-shopping-cart',
+      rejectButtonProps: {
+        label: 'ยกเลิก',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: 'ซื้อเลย',
+        severity: 'success',
+        size: 'small',
+      },
+      accept: () => {
+        this.buyGames();
+      },
     });
+  }
+
+  buyGames(): void {
+    this.isLoading = true;
+    this.subscriptions.add(
+      this.purchaseService.checkoutCart().subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'สำเร็จ',
+              detail: response.message || 'ซื้อเกมเรียบร้อยแล้ว',
+            });
+            // Refresh cart (should be empty now)
+            this.loadCartItems();
+            // Navigate to library or game list
+            this.router.navigate(['/'], { replaceUrl: true });
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('Error purchasing games:', error);
+          const errorMessage = error.error?.message || 'ไม่สามารถซื้อเกมได้';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'เกิดข้อผิดพลาด',
+            detail: errorMessage,
+          });
+        },
+      })
+    );
   }
 
   navigateToGame(gameId: string): void {
