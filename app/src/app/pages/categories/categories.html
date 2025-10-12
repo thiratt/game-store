@@ -10,15 +10,37 @@
         placeholder="ทั้งหมด"
         optionLabel="name"
         class="min-w-[150px]"
+        (onChange)="onCategoryChange()"
       />
       <p-floatlabel variant="on" class="flex-1 max-w-md">
         <p-iconfield>
           <p-inputicon class="pi pi-search" />
-          <input pInputText id="search-game" class="w-full" />
+          <input
+            pInputText
+            id="search-game"
+            class="w-full"
+            [(ngModel)]="searchQuery"
+            (input)="onSearchInputChange()"
+            (keyup.enter)="searchGames()"
+          />
           <label for="search-game">ค้นหาเกม</label>
         </p-iconfield>
       </p-floatlabel>
-      <p-button label="ค้นหา" icon="pi pi-search" />
+      <p-button
+        label="ค้นหา"
+        icon="pi pi-search"
+        (onClick)="searchGames()"
+        [disabled]="isLoading"
+      />
+      @if (isSearchMode) {
+      <p-button
+        label="ล้าง"
+        icon="pi pi-times"
+        severity="secondary"
+        (onClick)="clearSearch()"
+        [disabled]="isLoading"
+      />
+      }
     </div>
   </div>
 
@@ -35,7 +57,6 @@
   <div class="text-center py-12">
     <i class="pi pi-inbox" style="font-size: 3rem; color: var(--p-text-muted-color)"></i>
     <p class="text-lg mt-4" style="color: var(--p-text-muted-color)">ยังไม่มีเกมในระบบ</p>
-    <p-button routerLink="/dashboard/game/add" label="เพิ่มเกมแรก" icon="pi pi-plus" class="mt-4" />
   </div>
   }
 

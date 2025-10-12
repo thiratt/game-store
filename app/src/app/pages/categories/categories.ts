@@ -16,7 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { Static } from '../../components/layout/static/static';
 import { UserGameCard } from '../../components/user/game-card/game-card';
 import { Game, GameCategoryOption } from '../../interfaces/game.interface';
-import { GameService } from '../../services/game.service';
+import { GameService, ApiResponse } from '../../services/game.service';
 
 @Component({
   selector: 'app-categories',
@@ -44,6 +44,8 @@ export class Categories implements OnInit {
   gameCategories: GameCategoryOption[] = [];
   games: Game[] = [];
   isLoading: boolean = false;
+  searchQuery: string = '';
+  isSearchMode: boolean = false;
 
   constructor(private gameService: GameService, private messageService: MessageService) {}
 
@@ -83,14 +85,20 @@ export class Categories implements OnInit {
 
   loadGames(): void {
     this.isLoading = true;
-    this.gameService.getGames().subscribe({
-      next: (response) => {
+    const categoryId = this.selectedCategory?.id || 0;
+
+    const gameRequest =
+      categoryId === 0 ? this.gameService.getGames() : this.gameService.searchGames('', categoryId);
+
+    gameRequest.subscribe({
+      next: (response: ApiResponse<Game[]>) => {
         this.isLoading = false;
         if (response.success && response.data) {
+          console.log(response.data);
           this.games = response.data;
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
         console.error('Error loading games:', error);
         this.messageService.add({
@@ -100,5 +108,54 @@ export class Categories implements OnInit {
         });
       },
     });
+  }
+
+  onCategoryChange(): void {
+    if (!this.isSearchMode) {
+      this.loadGames();
+    }
+  }
+
+  searchGames(): void {
+    if (!this.searchQuery.trim()) {
+      this.isSearchMode = false;
+      this.loadGames();
+      return;
+    }
+
+    this.isLoading = true;
+    this.isSearchMode = true;
+    const categoryId = this.selectedCategory?.id || 0;
+
+    this.gameService.searchGames(this.searchQuery.trim(), categoryId).subscribe({
+      next: (response: ApiResponse<Game[]>) => {
+        this.isLoading = false;
+        if (response.success && response.data) {
+          this.games = response.data;
+        }
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.error('Error searching games:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถค้นหาเกมได้',
+        });
+      },
+    });
+  }
+
+  onSearchInputChange(): void {
+    if (!this.searchQuery.trim()) {
+      this.isSearchMode = false;
+      this.loadGames();
+    }
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.isSearchMode = false;
+    this.loadGames();
   }
 }
