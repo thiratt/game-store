@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Static } from "../../components/layout/static/static";
-import { Card } from "primeng/card";
-import { Button } from "primeng/button";
-import { InputText } from "primeng/inputtext";
-import { TagModule } from "primeng/tag";
-import { TooltipModule } from "primeng/tooltip";
+import { Static } from '../../components/layout/static/static';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CartService, CartItem } from '../../services/cart.service';
-import { ThaiDatePipe } from "../../pipe/thai-date.pipe";
+import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 
 @Component({
   selector: 'app-cart',
@@ -28,11 +28,11 @@ import { ThaiDatePipe } from "../../pipe/thai-date.pipe";
     TooltipModule,
     ToastModule,
     ConfirmDialogModule,
-    ThaiDatePipe
-],
+    ThaiDatePipe,
+  ],
   templateUrl: './cart.html',
   styleUrl: './cart.scss',
-  providers: [MessageService, ConfirmationService]
+  providers: [MessageService, ConfirmationService],
 })
 export class Cart implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
@@ -86,9 +86,9 @@ export class Cart implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'error',
             summary: 'เกิดข้อผิดพลาด',
-            detail: 'ไม่สามารถโหลดตะกร้าสินค้าได้'
+            detail: 'ไม่สามารถโหลดตะกร้าสินค้าได้',
           });
-        }
+        },
       })
     );
   }
@@ -116,7 +116,7 @@ export class Cart implements OnInit, OnDestroy {
                 this.messageService.add({
                   severity: 'success',
                   summary: 'สำเร็จ',
-                  detail: response.message || 'ลบสินค้าออกจากตะกร้าเรียบร้อยแล้ว'
+                  detail: response.message || 'ลบสินค้าออกจากตะกร้าเรียบร้อยแล้ว',
                 });
                 this.loadCartItems();
               }
@@ -126,12 +126,12 @@ export class Cart implements OnInit, OnDestroy {
               this.messageService.add({
                 severity: 'error',
                 summary: 'เกิดข้อผิดพลาด',
-                detail: 'ไม่สามารถลบสินค้าออกจากตะกร้าได้'
+                detail: 'ไม่สามารถลบสินค้าออกจากตะกร้าได้',
               });
-            }
+            },
           })
         );
-      }
+      },
     });
   }
 
@@ -140,7 +140,7 @@ export class Cart implements OnInit, OnDestroy {
       this.messageService.add({
         severity: 'warn',
         summary: 'แจ้งเตือน',
-        detail: 'กรุณากรอกโค้ดส่วนลด'
+        detail: 'กรุณากรอกโค้ดส่วนลด',
       });
       return;
     }
@@ -149,7 +149,7 @@ export class Cart implements OnInit, OnDestroy {
     this.messageService.add({
       severity: 'info',
       summary: 'แจ้งเตือน',
-      detail: 'ฟีเจอร์โค้ดส่วนลดจะเปิดใช้งานเร็วๆ นี้'
+      detail: 'ฟีเจอร์โค้ดส่วนลดจะเปิดใช้งานเร็วๆ นี้',
     });
   }
 
@@ -158,7 +158,7 @@ export class Cart implements OnInit, OnDestroy {
       this.messageService.add({
         severity: 'warn',
         summary: 'แจ้งเตือน',
-        detail: 'ตะกร้าสินค้าของคุณว่างเปล่า'
+        detail: 'ตะกร้าสินค้าของคุณว่างเปล่า',
       });
       return;
     }
@@ -167,12 +167,12 @@ export class Cart implements OnInit, OnDestroy {
     this.messageService.add({
       severity: 'info',
       summary: 'แจ้งเตือน',
-      detail: 'ฟีเจอร์ชำระเงินจะเปิดใช้งานเร็วๆ นี้'
+      detail: 'ฟีเจอร์ชำระเงินจะเปิดใช้งานเร็วๆ นี้',
     });
   }
 
   navigateToGame(gameId: string): void {
-    this.router.navigate(['/game/detail', gameId]);
+    this.router.navigate(['/game', gameId]);
   }
 
   continueShopping(): void {
