@@ -129,7 +129,7 @@ export class UserNavigationBar implements OnInit, OnDestroy {
 
   onSelectSearchResult(event: AutoCompleteSelectEvent) {
     const game: Game = event.value;
-    window.location.href = '/game/detail/' + game.id;
+    window.location.href = '/game/' + game.id;
   }
 
   onLogout() {

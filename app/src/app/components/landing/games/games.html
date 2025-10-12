@@ -22,9 +22,10 @@
       <ng-template #header>
         <img
           alt="{{ game.title }}"
-          class="w-full h-56 object-cover"
+          class="w-full h-56 object-cover cursor-pointer"
           [src]="endpoint + game.imageUrl"
           (error)="$event.target.src = '/1401549.jpg'"
+          [routerLink]="['/game', game.id]"
         />
       </ng-template>
       <ng-template #title> {{ game.title }} </ng-template>

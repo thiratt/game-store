@@ -8,10 +8,11 @@ import { GameService } from '../../../services/game.service';
 import { Game } from '../../../interfaces/game.interface';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-games',
-  imports: [ButtonModule, CardModule, ToastModule, FormsModule, DecimalPipe, ThaiDatePipe],
+  imports: [ButtonModule, CardModule, ToastModule, FormsModule, DecimalPipe, ThaiDatePipe, RouterLink],
   templateUrl: './games.html',
   styleUrl: './games.scss',
   providers: [MessageService],
