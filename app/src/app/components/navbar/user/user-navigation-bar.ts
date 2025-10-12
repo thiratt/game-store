@@ -202,18 +202,13 @@ export class UserNavigationBar implements OnInit, OnDestroy {
       },
       accept: () => {
         this.logout();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'สำเร็จ',
-          detail: 'ออกจากระบบเรียบร้อยแล้ว',
-        });
       },
     });
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/']);
+    window.location.href = '/';
   }
 
   searchGames(event: AutoCompleteCompleteEvent) {
