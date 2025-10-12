@@ -32,7 +32,7 @@ import { ToastModule } from 'primeng/toast';
         <div class="relative overflow-hidden">
           <img
             alt="{{ game.title }}"
-            class="w-full h-56 object-cover cursor-pointer hover:scale-103 transition-transform"
+            class="aspect-video w-full h-56 object-cover cursor-pointer hover:scale-103 transition-transform"
             [src]="endpoint + game.imageUrl"
             (error)="$event.target.src = '/1401549.jpg'"
             [routerLink]="['/game', game.id]"
