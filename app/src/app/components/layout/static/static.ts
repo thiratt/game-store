@@ -6,7 +6,7 @@ import { UserNavigationBar } from '../../navbar/user/user-navigation-bar';
   imports: [UserNavigationBar],
   template: `
     <app-user-navigation-bar></app-user-navigation-bar>
-    <main class="px-4 pt-[64px]">
+    <main class="px-4 pb-4 pt-[64px]">
       <ng-content></ng-content>
     </main>
   `,
