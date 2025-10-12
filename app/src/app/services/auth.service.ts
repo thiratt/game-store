@@ -51,7 +51,7 @@ export interface SignupResponse {
 })
 export class AuthService {
   private apiUrl = environment.endpoint;
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
