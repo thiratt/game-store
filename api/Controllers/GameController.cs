@@ -36,6 +36,7 @@ namespace api.Controllers
             var games = await _context.Games
                 .Include(g => g.Categories)
                 .Include(g => g.UserGames.Where(ug => ug.UserId == userId))
+                .OrderBy(g => g.Title)
                 .AsSplitQuery()
                 .ToListAsync();
 
