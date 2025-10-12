@@ -56,7 +56,7 @@ export class AdminNavigationBar implements OnInit, OnDestroy {
 
   navigationItems: NavItem[] = [
     { label: 'เกม', route: '/dashboard', triggerPath: ['game'] },
-    { label: 'ธุรกรรม', route: '/dashboard/transactions' },
+    { label: 'ธุรกรรม', route: '/dashboard/transaction' },
     { label: 'คูปอง', route: '/dashboard/coupons' },
   ];
 
