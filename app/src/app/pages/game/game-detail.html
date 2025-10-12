@@ -47,7 +47,9 @@
             </div>
 
             <div class="flex flex-col gap-2">
-              @if (currentUser) {
+              @if (currentUser) { @if (game.ownedAt) {
+              <p-button label="คุณเป็นเจ้าของเกมนี้แล้ว" size="large" fluid disabled />
+              } @else {
               <p-button label="ซื้อเลย" size="large" fluid (onClick)="buyNow()" />
               <p-button
                 label="เพิ่มใส่ตะกร้า"
@@ -57,7 +59,7 @@
                 fluid
                 (onClick)="addToCart()"
               />
-              } @else {
+              } } @else {
               <p-button
                 label="เข้าสู่ระบบเพื่อซื้อเกม"
                 size="large"

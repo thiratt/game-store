@@ -86,7 +86,9 @@ export class GameService {
   }
 
   getGameById(gameId: string): Observable<ApiResponse<Game>> {
-    return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/${gameId}`);
+    return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/${gameId}`, {
+      headers: this.buildHeaders(),
+    });
   }
 
   updateGame(gameId: string, gameData: AddGameRequest): Observable<ApiResponse<Game>> {

@@ -203,11 +203,15 @@ namespace api.Controllers
             });
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<KiroResponse>> GetGameById(Guid id)
         {
+            var userId = GetCurrentUserId();
+            
             var game = await _context.Games
                 .Include(g => g.Categories)
+                .Include(g => g.UserGames.Where(ug => ug.UserId == userId))
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(g => g.Id == id);
 
             if (game == null)
@@ -227,6 +231,7 @@ namespace api.Controllers
                 Price = game.Price,
                 ReleaseDate = game.ReleaseDate,
                 ImageUrl = game.ImageUrl,
+                OwnedAt = game.UserGames.FirstOrDefault()?.OwnedAt,
                 Categories = [.. game.Categories.Select(gc => new GameCategoryDto
                 {
                     Id = gc.Id,
