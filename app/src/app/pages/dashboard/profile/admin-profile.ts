@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { AdminNavigationBar } from '../../../components/navbar/admin/admin-navigation-bar';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -9,7 +8,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-profile',
-  imports: [AdminNavigationBar, CardModule, ButtonModule, TableModule, DatePipe, RouterLink],
+  imports: [CardModule, ButtonModule, TableModule, DatePipe, RouterLink],
   templateUrl: './admin-profile.html',
   styleUrl: './admin-profile.scss',
 })
