@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AdminNavigationBar } from '../../../../components/navbar/admin/admin-navigation-bar';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -13,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-admin-edit-profile',
   imports: [
-    AdminNavigationBar,
     ButtonModule,
     CardModule,
     FloatLabelModule,
