@@ -1,0 +1,55 @@
+<app-static>
+  <h1 class="text-2xl font-bold">ตะกร้าสินค้า</h1>
+  <div class="grid grid-cols-[1fr_350px] gap-4 items-start">
+    <div class="space-y-2">
+      <p-card>
+        <div class="flex gap-3">
+          <img
+            class="aspect-video h-52 object-cover"
+            src="http://localhost:7772/image/f2630bc5-09f5-436c-8482-db8a0008d7d8.webp"
+          />
+          <div class="flex flex-col justify-between flex-1">
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <h2 class="text-xl font-semibold">Cyberpunk 2077</h2>
+                <p class="text-lg">1,590 บาท</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <p-tag class="text-xs!" [value]="'Action'" [rounded]="true" severity="contrast" />
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <p-button icon="pi pi-trash" severity="danger" class="[&_span]:text-white" />
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <div class="sticky top-[70px] space-y-2">
+      <p-card header="โค้ดส่วนลด">
+        <div class="grid grid-cols-[1fr_auto] gap-2">
+          <input pInputText />
+          <p-button label="ใช้โค้ด" />
+        </div>
+      </p-card>
+      <p-card header="สรุปคำสั่งซื้อ">
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between">
+            <span>ราคาสินค้า (1 ชิ้น)</span>
+            <span>1,590 บาท</span>
+          </div>
+          <div class="flex justify-between">
+            <span>ส่วนลด</span>
+            <span>-0 บาท</span>
+          </div>
+          <hr />
+          <div class="flex justify-between font-bold text-lg">
+            <span>ยอดรวมทั้งหมด</span>
+            <span>1,590 บาท</span>
+          </div>
+          <p-button label="ชำระเงิน" fluid />
+        </div>
+      </p-card>
+    </div>
+  </div>
+</app-static>
