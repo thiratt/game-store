@@ -33,18 +33,20 @@
     <div class="space-y-3">
       <p-card *ngFor="let item of cartItems" class="cart-item-card">
         <div class="flex gap-4">
-          <img
-            class="aspect-video h-44 object-cover rounded cursor-pointer"
-            [src]="item.imageUrl ? endpoint + item.imageUrl : '/1401549.jpg'"
-            [alt]="item.title"
-            (error)="$event.target.src = '/1401549.jpg'"
-            (click)="navigateToGame(item.gameId)"
-          />
+          <div class="relative overflow-hidden rounded">
+            <img
+              class="aspect-video h-44 object-cover cursor-pointer hover:scale-103 transition-transform"
+              [src]="item.imageUrl ? endpoint + item.imageUrl : '/1401549.jpg'"
+              [alt]="item.title"
+              (error)="$event.target.src = '/1401549.jpg'"
+              (click)="navigateToGame(item.gameId)"
+            />
+          </div>
           <div class="flex flex-col justify-between flex-1">
             <div class="space-y-2">
               <div class="flex justify-between">
                 <h2
-                  class="text-lg font-semibold cursor-pointer hover:text-primary-600"
+                  class="text-lg underline-offset-8 font-semibold cursor-pointer hover:underline hover:underline-offset-4 transition-all"
                   (click)="navigateToGame(item.gameId)"
                 >
                   {{ item.title }}
