@@ -22,6 +22,7 @@ import { HomeGuard } from './services/home.guard';
 import { Categories } from './pages/categories/categories';
 import { PurchaseHistory } from './pages/purchase-history/purchase-history';
 import { MyGames } from './pages/my-games/my-games';
+import { Transaction } from './pages/dashboard/transaction/transaction';
 
 export const routes: Routes = [
   {
@@ -71,6 +72,11 @@ export const routes: Routes = [
       {
         path: '',
         component: Dashboard,
+      },
+      {
+        path: 'transaction',
+        component: Transaction,
+        title: 'ธุรกรรม',
       },
       {
         path: 'game/add',
