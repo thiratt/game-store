@@ -49,21 +49,39 @@ import { ToastModule } from 'primeng/toast';
       </ng-template>
       <ng-template #subtitle>
         <div class="flex flex-col">
-          <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>
-          <p>วางขายเมื่อวันที่ {{ game.releaseDate | thaiDate : 'datetime' }}</p>
+          @if (isOwned) {
+            <p class="text-green-600 font-semibold">คุณมีเกมนี้แล้ว</p>
+            @if (game.ownedAt) {
+              <p>ซื้อเมื่อ {{ game.ownedAt | thaiDate : 'datetime' }}</p>
+            }
+          } @else {
+            <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>
+            <p>วางขายเมื่อวันที่ {{ game.releaseDate | thaiDate : 'datetime' }}</p>
+          }
         </div>
       </ng-template>
       <ng-template #footer>
         <div class="flex gap-2 mt-3">
-          <p-button label="ซื้อเลย" class="flex-1" styleClass="w-full" (click)="buyNow()" />
-          <p-button
-            [icon]="(isInCart$ | async) ? 'pi pi-check' : 'pi pi-shopping-cart'"
-            [variant]="(isInCart$ | async) ? 'text' : 'outlined'"
-            [severity]="(isInCart$ | async) ? 'success' : undefined"
-            [pTooltip]="(isInCart$ | async) ? 'อยู่ในตะกร้าแล้ว' : 'เพิ่มลงตะกร้า'"
-            (click)="addToCart()"
-            [disabled]="isInCart$ | async"
-          />
+          @if (isOwned) {
+            <p-button 
+              label="เล่นเกม" 
+              class="flex-1" 
+              styleClass="w-full" 
+              severity="success"
+              icon="pi pi-play"
+              (click)="playGame()" 
+            />
+          } @else {
+            <p-button label="ซื้อเลย" class="flex-1" styleClass="w-full" (click)="buyNow()" />
+            <p-button
+              [icon]="(isInCart$ | async) ? 'pi pi-check' : 'pi pi-shopping-cart'"
+              [variant]="(isInCart$ | async) ? 'text' : 'outlined'"
+              [severity]="(isInCart$ | async) ? 'success' : undefined"
+              [pTooltip]="(isInCart$ | async) ? 'อยู่ในตะกร้าแล้ว' : 'เพิ่มลงตะกร้า'"
+              (click)="addToCart()"
+              [disabled]="isInCart$ | async"
+            />
+          }
         </div>
       </ng-template>
     </p-card>
@@ -75,6 +93,10 @@ export class UserGameCard implements OnInit, OnDestroy {
 
   isInCart$: Observable<boolean> = new Observable<boolean>();
   private subscriptions = new Subscription();
+
+  get isOwned(): boolean {
+    return !!this.game.ownedAt;
+  }
 
   constructor(
     private authService: AuthService,
@@ -168,5 +190,10 @@ export class UserGameCard implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  playGame(): void {
+    // Navigate to game detail page for now
+    this.router.navigate(['/game', this.game.id]);
   }
 }
