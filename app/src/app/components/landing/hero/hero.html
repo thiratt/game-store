@@ -38,15 +38,15 @@
           ></p-button>
 
           <p-button
-            label="เพิ่มลงในตะกร้า"
-            icon="pi pi-plus"
+            [label]="(isInCart$ | async) ? 'อยู่ในตะกร้าแล้ว' : 'เพิ่มลงในตะกร้า'"
+            [icon]="(isInCart$ | async) ? 'pi pi-shopping-cart' : 'pi pi-check'"
+            [disabled]="isInCart$ | async"
             (click)="onAddToWishlist()"
             variant="outlined"
             size="large"
           ></p-button>
-          }
-          @else {
-            <p class="text-xl">คุณเป็นเจ้าของเกมนี้แล้ว</p>
+          } @else {
+          <p class="text-xl">คุณเป็นเจ้าของเกมนี้แล้ว</p>
           }
         </div>
 
@@ -59,3 +59,5 @@
     </div>
   </div>
 </section>
+
+<p-toast />
