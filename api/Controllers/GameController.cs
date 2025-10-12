@@ -7,6 +7,7 @@ using api.Models.Response;
 using api.Models.Tables;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace api.Controllers
 {
@@ -16,12 +17,12 @@ namespace api.Controllers
     {
         private readonly KiroContext _context = context;
 
-        private Guid GetCurrentUserId()
+        private Guid? GetCurrentUserId()
         {
             bool isUserIdExists = Request.Headers.TryGetValue("X-User-ID", out var userIdHeader);
             if (!isUserIdExists || !Guid.TryParse(userIdHeader, out Guid userId))
             {
-                throw new UnauthorizedAccessException("User ID is missing or invalid.");
+                return null;
             }
 
             return userId;
@@ -30,8 +31,12 @@ namespace api.Controllers
         [HttpGet]
         public async Task<ActionResult<KiroResponse>> Get()
         {
+            var userId = GetCurrentUserId();
+
             var games = await _context.Games
                 .Include(g => g.Categories)
+                .Include(g => g.UserGames.Where(ug => ug.UserId == userId))
+                .AsSplitQuery()
                 .ToListAsync();
 
             var gameDtos = games.Select(g => new GameDto
@@ -47,6 +52,7 @@ namespace api.Controllers
                     Id = gc.Id,
                     Name = gc.Name
                 })],
+                OwnedAt = g.UserGames.FirstOrDefault()?.OwnedAt,
             }).ToList();
 
             var response = new KiroResponse
