@@ -47,12 +47,23 @@ namespace api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<KiroResponse>> SearchGames([FromQuery] string q, [FromQuery] int? c)
+        public async Task<ActionResult<KiroResponse>> SearchGames([FromQuery] string? q, [FromQuery] int? c)
         {
-            var games = await _context.Games
+            var gamesQuery = _context.Games
                 .Include(g => g.Categories)
-                .Where(g => g.Title.Contains(q) && (!c.HasValue || c == 0 || g.Categories.Any(cat => cat.Id == c.Value)))
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                gamesQuery = gamesQuery.Where(g => g.Title.Contains(q));
+            }
+
+            if (c.HasValue && c.Value != 0)
+            {
+                gamesQuery = gamesQuery.Where(g => g.Categories.Any(cat => cat.Id == c.Value));
+            }
+
+            var games = await gamesQuery.ToListAsync();
 
             var gameDtos = games.Select(g => new GameDto
             {
@@ -62,11 +73,11 @@ namespace api.Controllers
                 Price = g.Price,
                 ReleaseDate = g.ReleaseDate,
                 ImageUrl = g.ImageUrl,
-                Categories = [.. g.Categories.Select(gc => new GameCategoryDto
+                Categories = g.Categories.Select(gc => new GameCategoryDto
                 {
                     Id = gc.Id,
                     Name = gc.Name
-                })],
+                }).ToList()
             }).ToList();
 
             var response = new KiroResponse
@@ -74,6 +85,7 @@ namespace api.Controllers
                 Success = true,
                 Data = gameDtos
             };
+
             return Ok(response);
         }
 
