@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
 import { MessageService } from 'primeng/api';
@@ -10,10 +10,11 @@ import { Game } from '../../interfaces/game.interface';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { Static } from '../../components/layout/static/static';
 import { TagModule } from 'primeng/tag';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-game-detail',
-  imports: [CommonModule, Button, ToastModule, ThaiDatePipe, Static, TagModule],
+  imports: [CommonModule, Button, ToastModule, ThaiDatePipe, Static, TagModule, RouterLink],
   templateUrl: './game-detail.html',
   styleUrl: './game-detail.scss',
   providers: [MessageService],
@@ -26,6 +27,7 @@ export class GameDetail implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private authService: AuthService,
     private gameService: GameService,
     private cartService: CartService,
     private messageService: MessageService
@@ -33,6 +35,10 @@ export class GameDetail implements OnInit {
 
   get endpoint(): string {
     return this.gameService.endpoint;
+  }
+
+  get currentUser() {
+    return this.authService.currentUser;
   }
 
   ngOnInit(): void {

@@ -48,24 +48,25 @@
             </div>
 
             <div class="flex flex-col gap-2">
-              <p-button
-                label="ซื้อเลย"
-                styleClass="buy-button"
-                size="large"
-                fluid
-                (onClick)="buyNow()"
-              >
-              </p-button>
+              @if (currentUser) {
+              <p-button label="ซื้อเลย" size="large" fluid (onClick)="buyNow()" />
               <p-button
                 label="เพิ่มใส่ตะกร้า"
                 icon="pi pi-shopping-cart"
                 [outlined]="true"
-                styleClass="cart-button"
                 size="large"
                 fluid
                 (onClick)="addToCart()"
+              />
+              } @else {
+              <p-button
+                label="เข้าสู่ระบบเพื่อซื้อเกม"
+                size="large"
+                fluid
+                [routerLink]="['/auth/login']"
               >
               </p-button>
+              }
             </div>
           </div>
         </div>
