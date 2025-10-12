@@ -46,6 +46,37 @@ namespace api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<KiroResponse>> SearchGames([FromQuery] string q)
+        {
+            var games = await _context.Games
+                .Include(g => g.Categories)
+                .Where(g => g.Title.Contains(q) || g.Description.Contains(q))
+                .ToListAsync();
+
+            var gameDtos = games.Select(g => new GameDto
+            {
+                Id = g.Id,
+                Title = g.Title,
+                Description = g.Description,
+                Price = g.Price,
+                ReleaseDate = g.ReleaseDate,
+                ImageUrl = g.ImageUrl,
+                Categories = [.. g.Categories.Select(gc => new GameCategoryDto
+                {
+                    Id = gc.Id,
+                    Name = gc.Name
+                })],
+            }).ToList();
+
+            var response = new KiroResponse
+            {
+                Success = true,
+                Data = gameDtos
+            };
+            return Ok(response);
+        }
+
         [HttpGet("latest")]
         public async Task<ActionResult<KiroResponse>> GetLatestGames()
         {
