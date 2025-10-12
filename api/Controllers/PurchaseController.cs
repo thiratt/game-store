@@ -85,7 +85,7 @@ namespace api.Controllers
                     return BadRequest(new KiroResponse
                     {
                         Success = false,
-                        Message = $"ยอดเงินในกระเป๋าไม่เพียงพอ ต้องการ {finalPrice:N0} บาท มีอยู่ {user.WalletBalance:N0} บาท"
+                        Message = $"ยอดเงินในกระเป๋าไม่เพียงพอ"
                     });
                 }
 
