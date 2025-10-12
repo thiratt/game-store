@@ -41,8 +41,9 @@
       >
         @if (isSearchFocused) {
         <p-select
-          class="sx"
-          [options]="[{ name: 'test' }]"
+          [(ngModel)]="selectedCategory"
+          (onChange)="onSelectCategoryChange($event)"
+          [options]="gameCategories"
           placeholder="ทั้งหมด"
           optionLabel="name"
           size="small"

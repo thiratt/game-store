@@ -20,12 +20,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
-import { Select } from 'primeng/select';
+import { Select, SelectChangeEvent } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Subscription, Observable } from 'rxjs';
 
-import { Game } from '../../../interfaces/game.interface';
+import { Game, GameCategoryOption } from '../../../interfaces/game.interface';
 import { AuthService, User } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
 import { ApiResponse, GameService } from '../../../services/game.service';
@@ -59,8 +59,9 @@ import { ApiResponse, GameService } from '../../../services/game.service';
 export class UserNavigationBar implements OnInit, OnDestroy {
   @Input() authMode: boolean = false;
   searchResults = signal<Game[]>([]);
+  gameCategories: GameCategoryOption[] = [];
+  selectedCategory: GameCategoryOption | undefined;
   searchQuery: string = '';
-  isMobileMenuOpen: boolean = false;
   isSearchFocused: boolean = false;
   currentUser: User | null = null;
   cartCount$: Observable<number>;
@@ -101,11 +102,38 @@ export class UserNavigationBar implements OnInit, OnDestroy {
     this.authSubscription = this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
+
+    this.loadCategories();
   }
 
   ngOnDestroy() {
     this.authSubscription.unsubscribe();
     this.routerSubscription.unsubscribe();
+  }
+
+  loadCategories(): void {
+    this.gameService.getCategories().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.gameCategories = [
+            { id: 0, name: 'ทั้งหมด', value: 'all' },
+            ...response.data.map((category) => ({
+              id: category.id,
+              name: category.name,
+              value: category.id,
+            })),
+          ];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถโหลดประเภทเกมได้',
+        });
+      },
+    });
   }
 
   clearSearch() {
@@ -132,6 +160,24 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   onSelectSearchResult(event: AutoCompleteSelectEvent) {
     const game: Game = event.value;
     window.location.href = '/game/' + game.id;
+  }
+
+  onSelectCategoryChange(event: SelectChangeEvent) {
+    const query = this.searchQuery;
+    const category = this.selectedCategory?.id || 0;
+    if (query && query.trim()) {
+      this.gameService.searchGames(query.trim(), category).subscribe({
+        next: (response: ApiResponse<Game[]>) => {
+          if (response.success && response.data) {
+            this.searchResults.set(response.data);
+          } else {
+            this.searchResults.set([]);
+          }
+        },
+      });
+    } else {
+      this.searchResults.set([]);
+    }
   }
 
   onLogout() {
@@ -167,8 +213,9 @@ export class UserNavigationBar implements OnInit, OnDestroy {
 
   searchGames(event: AutoCompleteCompleteEvent) {
     const query = event.query;
+    const category = this.selectedCategory?.id || 0;
     if (query && query.trim()) {
-      this.gameService.searchGames(query.trim()).subscribe({
+      this.gameService.searchGames(query.trim(), category).subscribe({
         next: (response: ApiResponse<Game[]>) => {
           if (response.success && response.data) {
             this.searchResults.set(response.data);
