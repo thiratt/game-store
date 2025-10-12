@@ -1,0 +1,82 @@
+<app-static>
+  <div>
+    <!-- Loading State -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <div class="loading-content">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>กำลังโหลดข้อมูลเกม...</p>
+      </div>
+    </div>
+    }
+
+    <!-- Game Detail Content -->
+    @if(!isLoading && game) {
+    <div class="flex flex-col gap-2">
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Game Image -->
+        <img
+          [src]="game.imageUrl ? endpoint + game.imageUrl : '/1401549.jpg'"
+          [alt]="game.title"
+          (error)="$event.target.src = '/1401549.jpg'"
+        />
+
+        <!-- Game Info -->
+        <div class="flex flex-col justify-between">
+          <div class="space-y-1">
+            <h1 class="text-2xl font-semibold">{{ game.title }}</h1>
+            @if(game.categories && game.categories.length > 0) {
+            <div class="flex flex-wrap gap-2">
+              @for (category of game.categories; track $index) {
+              <p-tag [value]="category.name" [rounded]="true" severity="contrast" />
+              }
+            </div>
+            }
+          </div>
+
+          <div class="space-y-4">
+            <div class="game-meta">
+              <div class="release-date">
+                <span class="label">วางขายเมื่อวันที่</span>
+                <span class="value">{{ game.releaseDate | thaiDate }}</span>
+              </div>
+
+              <div class="text-2xl font-bold">
+                <span>{{ game.price | number : '1.0-0' }} บาท</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <p-button label="ซื้อเลย" styleClass="buy-button" size="large" fluid> </p-button>
+              <p-button
+                label="เพิ่มใส่ตะกร้า"
+                [outlined]="true"
+                styleClass="cart-button"
+                size="large"
+                fluid
+              >
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Description -->
+      <div class="flex flex-col">
+        <h2 class="text-xl font-semibold">รายละเอียดเกม</h2>
+        <p>{{ game.description || 'ไม่มีรายละเอียด' }}</p>
+      </div>
+    </div>
+    }
+
+    <!-- Error State -->
+    @if (!isLoading && !game) {
+    <div class="error-container">
+      <h2>ไม่พบเกมที่คุณต้องการ</h2>
+      <p-button (onClick)="onNavigateBack()" label="กลับไปหน้าหลัก" size="small"> </p-button>
+    </div>
+    }
+  </div>
+</app-static>
+
+<p-toast></p-toast>
