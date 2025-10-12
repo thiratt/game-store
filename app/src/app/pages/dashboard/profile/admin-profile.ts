@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { AuthService } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
+
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-admin-profile',

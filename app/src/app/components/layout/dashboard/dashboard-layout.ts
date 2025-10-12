@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
 import { AdminNavigationBar } from '../../navbar/admin/admin-navigation-bar';
 
 @Component({

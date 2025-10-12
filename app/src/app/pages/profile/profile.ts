@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
+import { RouterLink } from '@angular/router';
+
 import { ButtonModule } from 'primeng/button';
-import { ToggleButtonModule } from 'primeng/togglebutton';
-import { AuthService } from '../../services/auth.service';
+import { Card } from 'primeng/card';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
-import { TableModule } from 'primeng/table';
 import { InputNumber } from 'primeng/inputnumber';
-import { RouterLink } from '@angular/router';
-import { Static } from "../../components/layout/static/static";
+import { TableModule } from 'primeng/table';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+
+import { AuthService } from '../../services/auth.service';
+import { Static } from '../../components/layout/static/static';
 
 @Component({
   selector: 'app-user-profile',
@@ -25,8 +27,8 @@ import { Static } from "../../components/layout/static/static";
     TableModule,
     InputNumber,
     RouterLink,
-    Static
-],
+    Static,
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

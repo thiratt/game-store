@@ -1,8 +1,10 @@
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { Component } from '@angular/core';
+
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { CommonModule, DecimalPipe } from '@angular/common';
+
 import { Game } from '../../../interfaces/game.interface';
 import { GameService } from '../../../services/game.service';
 

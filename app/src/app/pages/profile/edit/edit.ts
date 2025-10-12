@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../../services/auth.service';
 import { debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil } from 'rxjs';
-import { Static } from "../../../components/layout/static/static";
+import { Static } from '../../../components/layout/static/static';
 
 @Component({
   selector: 'app-edit',
@@ -25,8 +25,8 @@ import { Static } from "../../../components/layout/static/static";
     FloatLabelModule,
     InputTextModule,
     MessageModule,
-    Static
-],
+    Static,
+  ],
   templateUrl: './edit.html',
   styleUrl: './edit.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

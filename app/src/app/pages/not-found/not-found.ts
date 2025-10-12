@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { AdminNavigationBar } from '../../components/navbar/admin/admin-navigation-bar';
-import { UserNavigationBar } from '../../components/navbar/user/user-navigation-bar';
-import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
+
+import { ButtonModule } from 'primeng/button';
+
+import { AdminNavigationBar } from '../../components/navbar/admin/admin-navigation-bar';
+import { AuthService } from '../../services/auth.service';
+import { UserNavigationBar } from '../../components/navbar/user/user-navigation-bar';
 
 @Component({
   selector: 'app-not-found',

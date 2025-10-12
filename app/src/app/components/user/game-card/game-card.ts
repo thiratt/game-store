@@ -1,11 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+
 import { Game } from '../../../interfaces/game.interface';
 import { GameService } from '../../../services/game.service';
+import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 
 @Component({
   selector: 'app-user-game-card',

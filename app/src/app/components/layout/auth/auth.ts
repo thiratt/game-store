@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+
 import { UserNavigationBar } from '../../navbar/user/user-navigation-bar';
 
 @Component({

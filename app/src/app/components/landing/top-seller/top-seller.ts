@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { DatePicker } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
-import { ThaiYear } from '../../../directive/thai-year.directive';
+
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { GameService } from '../../../services/game.service';
-import { Game } from '../../../interfaces/game.interface';
+import { DatePicker } from 'primeng/datepicker';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+
+import { Game } from '../../../interfaces/game.interface';
+import { GameService } from '../../../services/game.service';
+import { ThaiYear } from '../../../directive/thai-year.directive';
 import { UserGameCard } from '../../user/game-card/game-card';
 
 @Component({

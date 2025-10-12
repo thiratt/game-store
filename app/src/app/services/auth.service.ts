@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+
 import { environment } from '../../environments/environment';
 
 export interface User {
@@ -126,17 +128,16 @@ export class AuthService {
       formData.append('profileImage', request.profileImage, request.profileImage.name);
     }
 
-    return this.http.put<SignupResponse>(
-      `${this.endpoint}/profile/${this.currentUser?.id}`,
-      formData
-    ).pipe(
-      tap((response) => {
-        if (response.success && response.data) {
-          localStorage.setItem('currentUser', JSON.stringify(response.data));
-          this.currentUserSubject.next(response.data);
-        }
-      })
-    );
+    return this.http
+      .put<SignupResponse>(`${this.endpoint}/profile/${this.currentUser?.id}`, formData)
+      .pipe(
+        tap((response) => {
+          if (response.success && response.data) {
+            localStorage.setItem('currentUser', JSON.stringify(response.data));
+            this.currentUserSubject.next(response.data);
+          }
+        })
+      );
   }
 
   logout(): void {

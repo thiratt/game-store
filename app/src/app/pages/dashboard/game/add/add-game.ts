@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Button } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { Router, RouterLink } from '@angular/router';
+
+import { Button } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputText } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
-import { GameService } from '../../../../services/game.service';
+
 import { GameCategory } from '../../../../interfaces/game.interface';
+import { GameService } from '../../../../services/game.service';
 
 interface GameForm {
   name: string;

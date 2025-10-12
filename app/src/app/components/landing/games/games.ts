@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
+
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { GameService } from '../../../services/game.service';
-import { Game } from '../../../interfaces/game.interface';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { UserGameCard } from "../../user/game-card/game-card";
+
+import { Game } from '../../../interfaces/game.interface';
+import { GameService } from '../../../services/game.service';
+import { UserGameCard } from '../../user/game-card/game-card';
 
 @Component({
   selector: 'app-games',

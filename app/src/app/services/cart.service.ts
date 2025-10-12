@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export interface CartItem {
   id: number;

@@ -18,7 +18,6 @@ import { GameService } from '../../services/game.service';
 import { Static } from '../../components/layout/static/static';
 import { UserGameCard } from '../../components/user/game-card/game-card';
 
-
 @Component({
   selector: 'app-categories',
   imports: [

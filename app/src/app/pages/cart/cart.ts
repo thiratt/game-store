@@ -1,18 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Static } from '../../components/layout/static/static';
-import { Card } from 'primeng/card';
+
 import { Button } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
-import { TooltipModule } from 'primeng/tooltip';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { Card } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputText } from 'primeng/inputtext';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+
 import { CartService, CartItem } from '../../services/cart.service';
+import { Static } from '../../components/layout/static/static';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 
 @Component({
