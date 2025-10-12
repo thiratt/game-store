@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -13,6 +13,11 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 import { Static } from '../../components/layout/static/static';
 import { AuthService } from '../../services/auth.service';
+import { TopupService, TransactionHistory } from '../../services/topup.service';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -28,25 +33,37 @@ import { AuthService } from '../../services/auth.service';
     InputNumber,
     RouterLink,
     Static,
+    ToastModule,
+    ConfirmDialogModule,
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class UserProfile {
+export class UserProfile implements OnInit, OnDestroy {
   isTopupVisible: boolean = false;
   selectedAmount: number | null = null;
   customAmount: number | null = null;
+  isProcessing: boolean = false;
+  transactionHistory: TransactionHistory[] = [];
+  isLoadingHistory: boolean = false;
 
-  transactionHistory = [
-    {
-      date: '2024-10-01',
-      type: 'เติมเงิน',
-      description: 'เติมเงินเข้ากระเป๋า',
-      amount: 500,
-    },
-  ];
+  private subscriptions: Subscription = new Subscription();
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private topupService: TopupService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadTransactionHistory();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   get currentUser() {
     return this.authService.currentUser;
@@ -91,19 +108,107 @@ export class UserProfile {
     return amount !== null && amount > 0;
   }
 
+  loadTransactionHistory(): void {
+    this.isLoadingHistory = true;
+    this.subscriptions.add(
+      this.topupService.getTransactionHistory().subscribe({
+        next: (response) => {
+          this.isLoadingHistory = false;
+          if (response.success && response.data) {
+            this.transactionHistory = response.data;
+          }
+        },
+        error: (error) => {
+          this.isLoadingHistory = false;
+          console.error('Error loading transaction history:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'เกิดข้อผิดพลาด',
+            detail: 'ไม่สามารถโหลดประวัติการทำรายการได้',
+          });
+        },
+      })
+    );
+  }
+
   processTopup(): void {
     const amount = this.getTopupAmount();
 
-    if (!this.isTopupValid()) {
-      console.warn('Invalid topup amount');
+    if (!this.isTopupValid() || !amount) {
       return;
     }
 
-    console.log(`Processing topup of ${amount} บาท`);
+    this.confirmationService.confirm({
+      message: `คุณต้องการเติมเงิน ${amount.toLocaleString()} บาท หรือไม่?`,
+      header: 'ยืนยันการเติมเงิน',
+      icon: 'pi pi-wallet',
+      rejectButtonProps: {
+        label: 'ยกเลิก',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: 'เติมเงิน',
+        severity: 'success',
+        size: 'small',
+      },
+      accept: () => {
+        this.executeTopup(amount);
+      },
+    });
+  }
 
-    this.resetTopupForm();
+  executeTopup(amount: number): void {
+    this.isProcessing = true;
 
-    this.isTopupVisible = false;
+    this.subscriptions.add(
+      this.topupService.processTopup({ amount }).subscribe({
+        next: (response) => {
+          this.isProcessing = false;
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'สำเร็จ',
+              detail: response.message || 'เติมเงินเรียบร้อยแล้ว',
+            });
+
+            // Refresh wallet balance and transaction history
+            this.refreshWalletBalance();
+            this.loadTransactionHistory();
+
+            // Reset form
+            this.resetTopupForm();
+            this.isTopupVisible = false;
+          }
+        },
+        error: (error) => {
+          this.isProcessing = false;
+          console.error('Error processing topup:', error);
+          const errorMessage = error.error?.message || 'ไม่สามารถเติมเงินได้';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'เกิดข้อผิดพลาด',
+            detail: errorMessage,
+          });
+        },
+      })
+    );
+  }
+
+  refreshWalletBalance(): void {
+    this.subscriptions.add(
+      this.topupService.getWalletBalance().subscribe({
+        next: (response) => {
+          if (response.success && response.data && this.currentUser) {
+            // Update the current user's wallet balance
+            this.currentUser.walletBalance = response.data.balance;
+          }
+        },
+        error: (error) => {
+          console.error('Error refreshing wallet balance:', error);
+        },
+      })
+    );
   }
 
   private resetTopupForm(): void {

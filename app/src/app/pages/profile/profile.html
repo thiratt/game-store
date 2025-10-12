@@ -80,13 +80,21 @@
           class="w-full"
           styleClass="w-full"
           (click)="processTopup()"
-          [disabled]="!isTopupValid()"
+          [disabled]="!isTopupValid() || isProcessing"
+          [loading]="isProcessing"
           [severity]="isTopupValid() ? 'primary' : 'secondary'"
         />
       </p-card>
     </div>
     <div>
       <h3 class="text-lg font-semibold">ประวัติการทำรายการ</h3>
+
+      @if (isLoadingHistory) {
+      <div class="text-center py-8">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p class="mt-2">กำลังโหลดประวัติการทำรายการ...</p>
+      </div>
+      } @else {
       <p-table [value]="transactionHistory" class="rounded-xl overflow-hidden" showGridlines>
         <ng-template #header>
           <tr>
@@ -98,13 +106,20 @@
         </ng-template>
         <ng-template #body let-data>
           <tr>
-            <td>{{ data.date | date : 'short' }}</td>
+            <td>{{ data.createdAt | date : 'short' }}</td>
             <td>{{ data.type }}</td>
             <td>{{ data.description }}</td>
-            <td>{{ data.amount > 0 ? '+' : '' }}{{ data.amount }} บาท</td>
+            <td>{{ data.amount > 0 ? '+' : '' }}{{ data.amount | number : '1.0-0' }} บาท</td>
           </tr>
         </ng-template>
       </p-table>
+      }
     </div>
   </div>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog></p-confirmDialog>
 </app-static>
