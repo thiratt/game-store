@@ -19,12 +19,18 @@ import { AdminGuard } from './services/admin.guard';
 import { AuthGuard } from './services/auth.guard';
 import { GuestGuard } from './services/guest.guard';
 import { HomeGuard } from './services/home.guard';
+import { Categories } from './pages/categories/categories';
 
 export const routes: Routes = [
   {
     path: '',
     component: Index,
     canActivate: [HomeGuard],
+  },
+  {
+    path: 'categories',
+    component: Categories,
+    title: 'หมวดหมู่',
   },
   {
     path: 'profile',
