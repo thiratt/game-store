@@ -51,7 +51,7 @@ namespace api.Controllers
         {
             var games = await _context.Games
                 .Include(g => g.Categories)
-                .Where(g => g.Title.Contains(q) && (!c.HasValue || g.Categories.Any(cat => cat.Id == c.Value)))
+                .Where(g => g.Title.Contains(q) && (!c.HasValue || c == 0 || g.Categories.Any(cat => cat.Id == c.Value)))
                 .ToListAsync();
 
             var gameDtos = games.Select(g => new GameDto
