@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
@@ -42,11 +42,25 @@ export class PurchaseService {
   }
 
   checkoutCart(): Observable<ApiResponse<Purchase>> {
-    return this.http.post<ApiResponse<Purchase>>(
-      `${this.endpoint}/checkout`,
-      {},
-      { headers: this.buildHeaders() }
-    );
+    return this.http
+      .post<ApiResponse<Purchase>>(
+        `${this.endpoint}/checkout`,
+        {},
+        { headers: this.buildHeaders() }
+      )
+      .pipe(
+        tap((response) => {
+          if (response.success && response.data) {
+            const currentUser = this.userService.currentUser;
+            if (currentUser) {
+              this.userService.updateCurrentUser({
+                key: 'walletBalance',
+                value: (currentUser.walletBalance - response.data.finalPrice).toString(),
+              });
+            }
+          }
+        })
+      );
   }
 
   getPurchaseHistory(): Observable<ApiResponse<Purchase[]>> {
