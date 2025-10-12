@@ -20,15 +20,24 @@
     @for (game of games; track game.id) {
     <p-card class="rounded-2xl overflow-hidden">
       <ng-template #header>
-        <img
-          alt="{{ game.title }}"
-          class="w-full h-56 object-cover cursor-pointer"
-          [src]="endpoint + game.imageUrl"
-          (error)="$event.target.src = '/1401549.jpg'"
-          [routerLink]="['/game', game.id]"
-        />
+        <div class="relative overflow-hidden">
+          <img
+            alt="{{ game.title }}"
+            class="w-full h-56 object-cover cursor-pointer hover:scale-103 transition-transform"
+            [src]="endpoint + game.imageUrl"
+            (error)="$event.target.src = '/1401549.jpg'"
+            [routerLink]="['/game', game.id]"
+          />
+        </div>
       </ng-template>
-      <ng-template #title> {{ game.title }} </ng-template>
+      <ng-template #title>
+        <a
+          class="cursor-pointer underline-offset-8 hover:underline hover:underline-offset-4 transition-all"
+          [routerLink]="['/game', game.id]"
+        >
+          {{ game.title }}
+        </a>
+      </ng-template>
       <ng-template #subtitle>
         <div class="flex flex-col">
           <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>

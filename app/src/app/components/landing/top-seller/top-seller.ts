@@ -9,11 +9,22 @@ import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { GameService } from '../../../services/game.service';
 import { Game } from '../../../interfaces/game.interface';
 import { MessageService } from 'primeng/api';
-import { Toast } from "primeng/toast";
+import { Toast } from 'primeng/toast';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-top-seller',
-  imports: [ButtonModule, DatePicker, ThaiYear, FormsModule, CardModule, DecimalPipe, ThaiDatePipe, Toast],
+  imports: [
+    ButtonModule,
+    DatePicker,
+    ThaiYear,
+    FormsModule,
+    CardModule,
+    DecimalPipe,
+    ThaiDatePipe,
+    Toast,
+    RouterLink,
+  ],
   templateUrl: './top-seller.html',
   styleUrl: './top-seller.scss',
   providers: [MessageService],
