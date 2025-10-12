@@ -29,6 +29,7 @@
 
         <!-- Action Buttons -->
         <div class="flex gap-4">
+          @if (!featuredGame?.ownedAt) {
           <p-button
             label="ซื้อเลย"
             icon="pi pi-shopping-cart"
@@ -43,6 +44,10 @@
             variant="outlined"
             size="large"
           ></p-button>
+          }
+          @else {
+            <p class="text-xl">คุณเป็นเจ้าของเกมนี้แล้ว</p>
+          }
         </div>
 
         <div class="mt-6 flex flex-wrap gap-2">

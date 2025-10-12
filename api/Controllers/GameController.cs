@@ -109,9 +109,13 @@ namespace api.Controllers
         [HttpGet("latest")]
         public async Task<ActionResult<KiroResponse>> GetLatestGames()
         {
+            var userId = GetCurrentUserId();
+
             var games = await _context.Games
                 .Include(g => g.Categories)
+                .Include(g => g.UserGames.Where(ug => ug.UserId == userId))
                 .OrderByDescending(g => g.ReleaseDate)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (games == null)
@@ -135,6 +139,7 @@ namespace api.Controllers
                     Id = gc.Id,
                     Name = gc.Name
                 })],
+                OwnedAt = games.UserGames.FirstOrDefault()?.OwnedAt,
             };
 
             var response = new KiroResponse
