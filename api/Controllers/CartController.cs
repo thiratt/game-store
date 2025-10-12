@@ -19,7 +19,6 @@ namespace api.Controllers
             bool isUserIdExists = Request.Headers.TryGetValue("X-User-ID", out var userIdHeader);
             if (!isUserIdExists || !Guid.TryParse(userIdHeader, out Guid userId))
             {
-                System.Console.WriteLine("User ID header missing or invalid: " + userIdHeader);
                 throw new UnauthorizedAccessException("User ID is missing or invalid.");
             }
 

@@ -16,6 +16,17 @@ namespace api.Controllers
     {
         private readonly KiroContext _context = context;
 
+        private Guid GetCurrentUserId()
+        {
+            bool isUserIdExists = Request.Headers.TryGetValue("X-User-ID", out var userIdHeader);
+            if (!isUserIdExists || !Guid.TryParse(userIdHeader, out Guid userId))
+            {
+                throw new UnauthorizedAccessException("User ID is missing or invalid.");
+            }
+
+            return userId;
+        }
+
         [HttpGet]
         public async Task<ActionResult<KiroResponse>> Get()
         {
