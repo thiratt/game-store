@@ -1,0 +1,50 @@
+<app-static>
+  <h1 class="text-3xl font-bold mb-4">หมวดหมู่เกม</h1>
+
+  <!-- Filter / Search -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div class="flex flex-1 items-center gap-3">
+      <p-select
+        [(ngModel)]="selectedCategory"
+        [options]="gameCategories"
+        placeholder="ทั้งหมด"
+        optionLabel="label"
+        class="min-w-[150px]"
+      />
+      <p-floatlabel variant="on" class="flex-1 max-w-md">
+        <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input pInputText id="search-game" class="w-full" />
+          <label for="search-game">ค้นหาเกม</label>
+        </p-iconfield>
+      </p-floatlabel>
+      <p-button label="ค้นหา" icon="pi pi-search" />
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading) {
+  <div class="flex justify-center items-center py-12">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <span class="ml-2">กำลังโหลด...</span>
+  </div>
+  }
+
+  <!-- Empty State -->
+  @else if (games.length === 0) {
+  <div class="text-center py-12">
+    <i class="pi pi-inbox" style="font-size: 3rem; color: var(--p-text-muted-color)"></i>
+    <p class="text-lg mt-4" style="color: var(--p-text-muted-color)">ยังไม่มีเกมในระบบ</p>
+    <p-button routerLink="/dashboard/game/add" label="เพิ่มเกมแรก" icon="pi pi-plus" class="mt-4" />
+  </div>
+  }
+
+  <!-- Game List -->
+  @else {
+  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    @for (game of games; track game.id) {
+    <app-user-game-card [game]="game"></app-user-game-card>
+    }
+  </div>
+  }
+</app-static>
