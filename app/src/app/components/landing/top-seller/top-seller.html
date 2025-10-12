@@ -27,9 +27,9 @@
       ></p-button>
     </div>
   </div>
-  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="flex flex-row overflow-auto mb-4 space-x-4 hide-scrollbar">
     @for (game of games; track game.id) {
-    <app-user-game-card [game]="game"></app-user-game-card>
+    <app-user-game-card [game]="game" class="flex-shrink-0"></app-user-game-card>
     }
   </div>
 </section>
