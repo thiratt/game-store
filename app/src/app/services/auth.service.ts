@@ -6,6 +6,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
+import { ApiResponse } from './cart.service';
 
 export interface User {
   id: string;
@@ -151,5 +152,27 @@ export class AuthService {
         `${this.userService.endpoint}/auth/check?username=${encodeURIComponent(username)}`
       )
       .pipe(map((response) => ({ available: response.success })));
+  }
+
+  refreshUserData(): Observable<ApiResponse<User>> {
+    if (!this.userService.currentUser) {
+      this.logout();
+      return new Observable((observer) => {
+        observer.next({ success: false, message: 'No user logged in' });
+        observer.complete();
+      });
+    }
+
+    return this.http
+      .get<ApiResponse<User>>(
+        `${this.userService.endpoint}/profile/${this.userService.currentUser.id}`
+      )
+      .pipe(
+        tap((response) => {
+          if (response && response.data) {
+            this.userService.setCurrentUser(response.data);
+          }
+        })
+      );
   }
 }

@@ -52,6 +52,7 @@ export class UserProfile implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
   constructor(
+    public authService: AuthService,
     private userService: UserService,
     private topupService: TopupService,
     private messageService: MessageService,
@@ -207,6 +208,22 @@ export class UserProfile implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error refreshing wallet balance:', error);
+        },
+      })
+    );
+  }
+
+  refreshProfile(): void {
+    this.subscriptions.add(
+      this.authService.refreshUserData().subscribe({
+        next: (response) => {
+          if (response) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'สำเร็จ',
+              detail: 'ข้อมูลโปรไฟล์ได้รับการอัปเดตแล้ว',
+            });
+          }
         },
       })
     );

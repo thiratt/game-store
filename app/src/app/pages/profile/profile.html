@@ -24,7 +24,7 @@
           ยอดเงินคงเหลือ {{ currentUser?.walletBalance }} บาท
         </h2>
 
-        <div class="flex mt-2">
+        <div class="flex gap-2 mt-2">
           <p-button
             icon="pi pi-pencil"
             label="แก้ไขโปรไฟล์"
@@ -32,6 +32,7 @@
             styleClass="w-full"
             routerLink="/profile/edit"
           />
+          <p-button icon="pi pi-refresh" (click)="refreshProfile()" />
         </div>
       </p-card>
 
