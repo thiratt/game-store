@@ -74,4 +74,10 @@ export class GameService {
   updateGame(gameId: string, gameData: AddGameRequest): Observable<ApiResponse<Game>> {
     return this.http.put<ApiResponse<Game>>(`${this.adminEndpoint}/game/${gameId}`, gameData);
   }
+
+  searchGames(query: string): Observable<ApiResponse<Game[]>> {
+    return this.http.get<ApiResponse<Game[]>>(`${this.endpoint}/game/search`, {
+      params: { q: query },
+    });
+  }
 }

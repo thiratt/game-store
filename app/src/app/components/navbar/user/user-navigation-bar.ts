@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, ViewChild, OnInit, OnDestroy, signal } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  signal,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +24,14 @@ import { Subscription } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Select } from "primeng/select";
+import { Select } from 'primeng/select';
+import {
+  AutoCompleteCompleteEvent,
+  AutoCompleteModule,
+  AutoCompleteSelectEvent,
+} from 'primeng/autocomplete';
+import { ApiResponse, GameService } from '../../../services/game.service';
+import { Game } from '../../../interfaces/game.interface';
 
 @Component({
   selector: 'app-user-navigation-bar',
@@ -37,21 +51,22 @@ import { Select } from "primeng/select";
     TooltipModule,
     ToastModule,
     ConfirmDialogModule,
-    Select
-],
+    Select,
+    AutoCompleteModule,
+  ],
   templateUrl: './user-navigation-bar.html',
   styleUrl: './user-navigation-bar.scss',
   providers: [ConfirmationService, MessageService],
 })
 export class UserNavigationBar implements OnInit, OnDestroy {
   @Input() authMode: boolean = false;
-  @ViewChild('searchInput') searchInput: ElementRef | undefined;
-
+  searchResults = signal<Game[]>([]);
   searchQuery: string = '';
   isMobileMenuOpen: boolean = false;
   isSearchFocused: boolean = false;
   currentUser: User | null = null;
   private authSubscription: Subscription = new Subscription();
+  private routerSubscription: Subscription = new Subscription();
 
   navigationItems = [
     { label: 'หน้าหลัก', route: '/' },
@@ -74,8 +89,10 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private gameService: GameService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -85,14 +102,13 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+    this.authSubscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
   }
 
   clearSearch() {
-    console.log('Clear search clicked');
     this.searchQuery = '';
+    this.searchResults.set([]);
   }
 
   isActiveRoute(route: string): boolean {
@@ -105,15 +121,15 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   }
 
   onSearchBlur() {
+    console.log('🔍 onSearchBlur called');
     this.isSearchFocused = false;
     this.setDisableBodyScrolling(false);
+    this.cdr.detectChanges();
   }
 
-  onSearchInput() {
-    if (this.searchQuery.trim()) {
-      this.isSearchFocused = true;
-      this.setDisableBodyScrolling(true);
-    }
+  onSelectSearchResult(event: AutoCompleteSelectEvent) {
+    const game: Game = event.value;
+    window.location.href = '/game/detail/' + game.id;
   }
 
   onLogout() {
@@ -145,6 +161,23 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   logout() {
     this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  searchGames(event: AutoCompleteCompleteEvent) {
+    const query = event.query;
+    if (query && query.trim()) {
+      this.gameService.searchGames(query.trim()).subscribe({
+        next: (response: ApiResponse<Game[]>) => {
+          if (response.success && response.data) {
+            this.searchResults.set(response.data);
+          } else {
+            this.searchResults.set([]);
+          }
+        },
+      });
+    } else {
+      this.searchResults.set([]);
+    }
   }
 
   get isAuthenticated(): boolean {
