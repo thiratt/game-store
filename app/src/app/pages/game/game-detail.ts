@@ -5,6 +5,7 @@ import { Button } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { GameService } from '../../services/game.service';
+import { CartService } from '../../services/cart.service';
 import { Game } from '../../interfaces/game.interface';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { Static } from "../../components/layout/static/static";
@@ -26,6 +27,7 @@ export class GameDetail implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private gameService: GameService,
+    private cartService: CartService,
     private messageService: MessageService
   ) {}
 
@@ -66,5 +68,50 @@ export class GameDetail implements OnInit {
 
   onNavigateBack(): void {
     this.router.navigate(['/']);
+  }
+
+  addToCart(): void {
+    if (!this.game?.id) return;
+
+    this.cartService.addToCart(this.game.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'สำเร็จ',
+            detail: response.message || 'เพิ่มลงตะกร้าสินค้าเรียบร้อยแล้ว'
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error adding to cart:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถเพิ่มสินค้าลงตะกร้าได้'
+        });
+      }
+    });
+  }
+
+  buyNow(): void {
+    if (!this.game?.id) return;
+
+    // Add to cart first, then navigate to cart
+    this.cartService.addToCart(this.game.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.router.navigate(['/cart']);
+        }
+      },
+      error: (error) => {
+        console.error('Error adding to cart for buy now:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถดำเนินการซื้อได้'
+        });
+      }
+    });
   }
 }

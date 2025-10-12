@@ -47,13 +47,22 @@
             </div>
 
             <div class="flex flex-col gap-2">
-              <p-button label="ซื้อเลย" styleClass="buy-button" size="large" fluid> </p-button>
+              <p-button
+                label="ซื้อเลย"
+                styleClass="buy-button"
+                size="large"
+                fluid
+                (onClick)="buyNow()"
+              >
+              </p-button>
               <p-button
                 label="เพิ่มใส่ตะกร้า"
+                icon="pi pi-shopping-cart"
                 [outlined]="true"
                 styleClass="cart-button"
                 size="large"
                 fluid
+                (onClick)="addToCart()"
               >
               </p-button>
             </div>
