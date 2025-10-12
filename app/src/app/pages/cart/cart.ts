@@ -176,6 +176,6 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   continueShopping(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/'], { replaceUrl: true });
   }
 }
