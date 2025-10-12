@@ -16,6 +16,8 @@
 @if (isModalVisible()) {
 <div
   class="fixed inset-0 bg-black/10 backdrop-blur-md flex items-center justify-center z-50 overscroll-none"
+  animate.enter="fade-in"
+  animate.leave="fade-out"
 >
   <div class="absolute top-0 right-0 px-8 py-4">
     <p-button
