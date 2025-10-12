@@ -63,10 +63,10 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   selectedCategory: GameCategoryOption | undefined;
   searchQuery: string = '';
   isSearchFocused: boolean = false;
-  currentUser: User | null = null;
-  cartCount$: Observable<number>;
+  cartCount: number = 0;
   private authSubscription: Subscription = new Subscription();
   private routerSubscription: Subscription = new Subscription();
+  private cartSubscription: Subscription = new Subscription();
 
   navigationItems = [
     { label: 'หน้าหลัก', route: '/' },
@@ -99,13 +99,12 @@ export class UserNavigationBar implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef
-  ) {
-    this.cartCount$ = this.cartService.cartCount$;
-  }
+  ) {}
 
   ngOnInit() {
-    this.authSubscription = this.authService.currentUser$.subscribe((user) => {
-      this.currentUser = user;
+    this.cartSubscription = this.cartService.cartCount$.subscribe((count) => {
+      this.cartCount = count;
+      this.cdr.detectChanges();
     });
 
     this.loadCategories();
@@ -235,6 +234,10 @@ export class UserNavigationBar implements OnInit, OnDestroy {
 
   get endpoint(): string {
     return this.authService.endpoint;
+  }
+
+  get currentUser(): User | null {
+    return this.authService.currentUser;
   }
 
   private setDisableBodyScrolling(disable: boolean) {
