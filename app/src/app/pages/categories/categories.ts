@@ -29,7 +29,6 @@ import { GameService, ApiResponse } from '../../services/game.service';
     IconFieldModule,
     InputIconModule,
     FloatLabelModule,
-    RouterLink,
     ToastModule,
     ConfirmDialogModule,
     Static,
@@ -94,7 +93,6 @@ export class Categories implements OnInit {
       next: (response: ApiResponse<Game[]>) => {
         this.isLoading = false;
         if (response.success && response.data) {
-          console.log(response.data);
           this.games = response.data;
         }
       },
