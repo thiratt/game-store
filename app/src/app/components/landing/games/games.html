@@ -18,39 +18,7 @@
   </div>
   <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
     @for (game of games; track game.id) {
-    <p-card class="rounded-2xl overflow-hidden">
-      <ng-template #header>
-        <div class="relative overflow-hidden">
-          <img
-            alt="{{ game.title }}"
-            class="w-full h-56 object-cover cursor-pointer hover:scale-103 transition-transform"
-            [src]="endpoint + game.imageUrl"
-            (error)="$event.target.src = '/1401549.jpg'"
-            [routerLink]="['/game', game.id]"
-          />
-        </div>
-      </ng-template>
-      <ng-template #title>
-        <a
-          class="cursor-pointer underline-offset-8 hover:underline hover:underline-offset-4 transition-all"
-          [routerLink]="['/game', game.id]"
-        >
-          {{ game.title }}
-        </a>
-      </ng-template>
-      <ng-template #subtitle>
-        <div class="flex flex-col">
-          <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>
-          <p>วางขายเมื่อวันที่ {{ game.releaseDate | thaiDate : 'datetime' }}</p>
-        </div>
-      </ng-template>
-      <ng-template #footer>
-        <div class="flex gap-2 mt-3">
-          <p-button label="ซื้อเลย" class="flex-1" styleClass="w-full" />
-          <p-button icon="pi pi-shopping-cart" variant="outlined" />
-        </div>
-      </ng-template>
-    </p-card>
+    <app-user-game-card [game]="game"></app-user-game-card>
     }
   </div>
 </section>

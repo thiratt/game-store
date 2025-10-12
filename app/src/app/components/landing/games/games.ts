@@ -1,18 +1,16 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
-import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { GameService } from '../../../services/game.service';
 import { Game } from '../../../interfaces/game.interface';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { RouterLink } from '@angular/router';
+import { UserGameCard } from "../../user/game-card/game-card";
 
 @Component({
   selector: 'app-games',
-  imports: [ButtonModule, CardModule, ToastModule, FormsModule, DecimalPipe, ThaiDatePipe, RouterLink],
+  imports: [ButtonModule, CardModule, ToastModule, FormsModule, UserGameCard],
   templateUrl: './games.html',
   styleUrl: './games.scss',
   providers: [MessageService],

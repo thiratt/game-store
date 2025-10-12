@@ -1,30 +1,18 @@
-import { DecimalPipe, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { ThaiYear } from '../../../directive/thai-year.directive';
 import { CardModule } from 'primeng/card';
-import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { GameService } from '../../../services/game.service';
 import { Game } from '../../../interfaces/game.interface';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
-import { RouterLink } from '@angular/router';
+import { UserGameCard } from '../../user/game-card/game-card';
 
 @Component({
   selector: 'app-top-seller',
-  imports: [
-    ButtonModule,
-    DatePicker,
-    ThaiYear,
-    FormsModule,
-    CardModule,
-    DecimalPipe,
-    ThaiDatePipe,
-    Toast,
-    RouterLink,
-  ],
+  imports: [ButtonModule, DatePicker, ThaiYear, FormsModule, CardModule, Toast, UserGameCard],
   templateUrl: './top-seller.html',
   styleUrl: './top-seller.scss',
   providers: [MessageService],
