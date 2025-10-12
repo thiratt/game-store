@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -8,50 +8,117 @@ import { CardModule } from 'primeng/card';
 import { Game } from '../../../interfaces/game.interface';
 import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { GameService } from '../../../services/game.service';
+import { CartService } from '../../../services/cart.service';
+import { AuthService } from '../../../services/auth.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-user-game-card',
-  imports: [CardModule, ButtonModule, ThaiDatePipe, DecimalPipe, RouterLink],
+  imports: [CardModule, ButtonModule, ThaiDatePipe, DecimalPipe, RouterLink, ToastModule],
   template: `<p-card class="rounded-2xl overflow-hidden">
-    <ng-template #header>
-      <div class="relative overflow-hidden">
-        <img
-          alt="{{ game.title }}"
-          class="w-full h-56 object-cover cursor-pointer hover:scale-103 transition-transform"
-          [src]="endpoint + game.imageUrl"
-          (error)="$event.target.src = '/1401549.jpg'"
+      <ng-template #header>
+        <div class="relative overflow-hidden">
+          <img
+            alt="{{ game.title }}"
+            class="w-full h-56 object-cover cursor-pointer hover:scale-103 transition-transform"
+            [src]="endpoint + game.imageUrl"
+            (error)="$event.target.src = '/1401549.jpg'"
+            [routerLink]="['/game', game.id]"
+          />
+        </div>
+      </ng-template>
+      <ng-template #title>
+        <a
+          class="cursor-pointer underline-offset-8 hover:underline hover:underline-offset-4 transition-all"
           [routerLink]="['/game', game.id]"
-        />
-      </div>
-    </ng-template>
-    <ng-template #title>
-      <a
-        class="cursor-pointer underline-offset-8 hover:underline hover:underline-offset-4 transition-all"
-        [routerLink]="['/game', game.id]"
-      >
-        {{ game.title }}
-      </a>
-    </ng-template>
-    <ng-template #subtitle>
-      <div class="flex flex-col">
-        <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>
-        <p>วางขายเมื่อวันที่ {{ game.releaseDate | thaiDate : 'datetime' }}</p>
-      </div>
-    </ng-template>
-    <ng-template #footer>
-      <div class="flex gap-2 mt-3">
-        <p-button label="ซื้อเลย" class="flex-1" styleClass="w-full" />
-        <p-button icon="pi pi-shopping-cart" variant="outlined" />
-      </div>
-    </ng-template>
-  </p-card> `,
+        >
+          {{ game.title }}
+        </a>
+      </ng-template>
+      <ng-template #subtitle>
+        <div class="flex flex-col">
+          <p>ราคา {{ game.price | number : '1.0-0' }} บาท</p>
+          <p>วางขายเมื่อวันที่ {{ game.releaseDate | thaiDate : 'datetime' }}</p>
+        </div>
+      </ng-template>
+      <ng-template #footer>
+        <div class="flex gap-2 mt-3">
+          <p-button label="ซื้อเลย" class="flex-1" styleClass="w-full" (click)="buyNow()" />
+          <p-button icon="pi pi-shopping-cart" variant="outlined" (click)="addToCart()" />
+        </div>
+      </ng-template>
+    </p-card>
+    <p-toast /> `,
+  providers: [MessageService],
 })
 export class UserGameCard {
   @Input({ required: true }) game!: Game;
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private authService: AuthService,
+    private gameService: GameService,
+    private cartService: CartService,
+    private messageService: MessageService,
+    private router: Router
+  ) {}
 
   get endpoint(): string {
     return this.gameService.endpoint;
+  }
+
+  addToCart(): void {
+    if (!this.game?.id) return;
+
+    if (!this.authService.isAuthenticated) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.cartService.addToCart(this.game.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'สำเร็จ',
+            detail: response.message || 'เพิ่มลงตะกร้าสินค้าเรียบร้อยแล้ว',
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error adding to cart:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถเพิ่มสินค้าลงตะกร้าได้',
+        });
+      },
+    });
+  }
+
+  buyNow(): void {
+    if (!this.game?.id) return;
+
+    if (!this.authService.isAuthenticated) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Add to cart first, then navigate to cart
+    this.cartService.addToCart(this.game.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.router.navigate(['/cart']);
+        }
+      },
+      error: (error) => {
+        console.error('Error adding to cart for buy now:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'เกิดข้อผิดพลาด',
+          detail: 'ไม่สามารถดำเนินการซื้อได้',
+        });
+      },
+    });
   }
 }
