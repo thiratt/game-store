@@ -16,6 +16,7 @@ import { NotFound } from './pages/not-found/not-found';
 import { DashboardLayout } from './components/layout/dashboard/dashboard-layout';
 import { AddGame } from './pages/dashboard/game/add/add-game';
 import { EditGame } from './pages/dashboard/game/edit/edit-game';
+import { GameDetail } from './pages/game/game-detail';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,11 @@ export const routes: Routes = [
     component: UserProfile,
     title: 'โปรไฟล์',
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'game/detail/:id',
+    component: GameDetail,
+    title: 'รายละเอียดเกม',
   },
   {
     path: 'profile/edit',
