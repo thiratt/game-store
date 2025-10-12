@@ -1,55 +1,134 @@
 <app-static>
-  <h1 class="text-2xl font-bold">ตะกร้าสินค้า</h1>
-  <div class="grid grid-cols-[1fr_350px] gap-4 items-start">
-    <div class="space-y-2">
-      <p-card>
-        <div class="flex gap-3">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">ตะกร้าสินค้า</h1>
+    <p-button
+      label="เลือกซื้อเกมต่อ"
+      icon="pi pi-arrow-left"
+      [outlined]="true"
+      size="small"
+      (click)="continueShopping()"
+    >
+    </p-button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-8">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p class="mt-2">กำลังโหลดตะกร้าสินค้า...</p>
+  </div>
+
+  <!-- Empty Cart -->
+  <div *ngIf="!isLoading && cartItems.length === 0" class="text-center py-16">
+    <i class="pi pi-shopping-cart text-6xl text-gray-400 mb-4"></i>
+    <h2 class="text-xl font-semibold mb-2">ตะกร้าสินค้าของคุณว่างเปล่า</h2>
+    <p class="text-gray-600 mb-4">เริ่มเลือกซื้อเกมที่คุณชื่นชอบได้เลย</p>
+    <p-button label="เลือกซื้อเกม" icon="pi pi-plus" (click)="continueShopping()"> </p-button>
+  </div>
+
+  <!-- Cart Items -->
+  <div
+    *ngIf="!isLoading && cartItems.length > 0"
+    class="grid grid-cols-[1fr_350px] gap-4 items-start"
+  >
+    <div class="space-y-3">
+      <p-card *ngFor="let item of cartItems" class="cart-item-card">
+        <div class="flex gap-4">
           <img
-            class="aspect-video h-52 object-cover"
-            src="http://localhost:7772/image/f2630bc5-09f5-436c-8482-db8a0008d7d8.webp"
+            class="aspect-video h-44 object-cover rounded cursor-pointer"
+            [src]="item.imageUrl ? endpoint + item.imageUrl : '/1401549.jpg'"
+            [alt]="item.title"
+            (error)="$event.target.src = '/1401549.jpg'"
+            (click)="navigateToGame(item.gameId)"
           />
           <div class="flex flex-col justify-between flex-1">
-            <div class="space-y-1">
+            <div class="space-y-2">
               <div class="flex justify-between">
-                <h2 class="text-xl font-semibold">Cyberpunk 2077</h2>
-                <p class="text-lg">1,590 บาท</p>
+                <h2
+                  class="text-lg font-semibold cursor-pointer hover:text-primary-600"
+                  (click)="navigateToGame(item.gameId)"
+                >
+                  {{ item.title }}
+                </h2>
+                <p class="text-lg font-bold">{{ item.price | number : '1.0-0' }} บาท</p>
               </div>
-              <div class="flex flex-wrap gap-2">
-                <p-tag class="text-xs!" [value]="'Action'" [rounded]="true" severity="contrast" />
+              <div class="flex flex-wrap gap-1" *ngIf="item.categories?.length">
+                <p-tag
+                  *ngFor="let category of item.categories"
+                  class="text-xs!"
+                  [value]="category.name"
+                  [rounded]="true"
+                  severity="contrast"
+                />
               </div>
+              <p class="text-sm text-[var(--p-inputtext-placeholder-color)]">
+                เพิ่มเมื่อ: {{ item.addedAt | thaiDate : 'datetime' }}
+              </p>
             </div>
-            <div class="flex justify-end">
-              <p-button icon="pi pi-trash" severity="danger" class="[&_span]:text-white" />
+            <div class="flex justify-end mt-2">
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                size="small"
+                [outlined]="true"
+                pTooltip="ลบออกจากตะกร้า"
+                (click)="removeFromCart(item)"
+              />
             </div>
           </div>
         </div>
       </p-card>
     </div>
-    <div class="sticky top-[70px] space-y-2">
+    <!-- Cart Summary Sidebar -->
+    <div class="sticky top-[70px] space-y-3">
+      <!-- Discount Code Card -->
       <p-card header="โค้ดส่วนลด">
         <div class="grid grid-cols-[1fr_auto] gap-2">
-          <input pInputText />
-          <p-button label="ใช้โค้ด" />
+          <input
+            pInputText
+            [(ngModel)]="discountCode"
+            placeholder="กรอกโค้ดส่วนลด"
+            class="w-full"
+          />
+          <p-button label="ใช้โค้ด" size="small" (click)="applyDiscountCode()" />
         </div>
       </p-card>
+
+      <!-- Order Summary Card -->
       <p-card header="สรุปคำสั่งซื้อ">
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-3">
           <div class="flex justify-between">
-            <span>ราคาสินค้า (1 ชิ้น)</span>
-            <span>1,590 บาท</span>
+            <span>ราคาสินค้า ({{ cartItems.length }} ชิ้น)</span>
+            <span>{{ subtotal | number : '1.0-0' }} บาท</span>
           </div>
-          <div class="flex justify-between">
+
+          <div class="flex justify-between" *ngIf="discountAmount > 0">
             <span>ส่วนลด</span>
-            <span>-0 บาท</span>
+            <span class="text-green-600">-{{ discountAmount | number : '1.0-0' }} บาท</span>
           </div>
-          <hr />
+
+          <hr class="border-gray-200" />
+
           <div class="flex justify-between font-bold text-lg">
             <span>ยอดรวมทั้งหมด</span>
-            <span>1,590 บาท</span>
+            <span>{{ finalTotal | number : '1.0-0' }} บาท</span>
           </div>
-          <p-button label="ชำระเงิน" fluid />
+
+          <p-button
+            label="ดำเนินการชำระเงิน"
+            icon="pi pi-credit-card"
+            fluid
+            size="large"
+            [disabled]="cartItems.length === 0"
+            (click)="proceedToCheckout()"
+          />
         </div>
       </p-card>
     </div>
   </div>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog></p-confirmDialog>
 </app-static>
