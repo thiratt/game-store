@@ -167,7 +167,9 @@ export class Cart implements OnInit, OnDestroy {
     }
 
     this.confirmationService.confirm({
-      message: `คุณต้องการซื้อเกม ${this.cartItems.length} รายการ รวมเป็นเงิน ${this.finalTotal.toLocaleString()} บาท หรือไม่?`,
+      message: `คุณต้องการซื้อเกม ${
+        this.cartItems.length
+      } รายการ รวมเป็นเงิน ${this.finalTotal.toLocaleString()} บาท หรือไม่?`,
       header: 'ยืนยันการซื้อ',
       icon: 'pi pi-shopping-cart',
       rejectButtonProps: {
@@ -198,10 +200,7 @@ export class Cart implements OnInit, OnDestroy {
               summary: 'สำเร็จ',
               detail: response.message || 'ซื้อเกมเรียบร้อยแล้ว',
             });
-            // Refresh cart (should be empty now)
-            this.loadCartItems();
-            // Navigate to library or game list
-            this.router.navigate(['/'], { replaceUrl: true });
+            this.router.navigate(['/my-games']);
           }
         },
         error: (error) => {
