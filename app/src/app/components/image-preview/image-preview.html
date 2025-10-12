@@ -1,0 +1,31 @@
+<div
+  class="relative flex items-center justify-center group w-fit cursor-pointer"
+  (click)="openModal()"
+>
+  <img [src]="src" [class]="class" [alt]="alt" (error)="$event.target.src = '/1401549.jpg'" />
+
+  <div
+    class="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded"
+  ></div>
+
+  <span
+    class="absolute text-4xl! opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pi pi-eye"
+  ></span>
+</div>
+
+@if (isModalVisible()) {
+<div
+  class="fixed inset-0 bg-black/10 backdrop-blur-md flex items-center justify-center z-50 overscroll-none"
+>
+  <div class="absolute top-0 right-0 px-8 py-4">
+    <p-button
+      icon="pi pi-times"
+      class="p-button-rounded p-button-text p-button-plain"
+      pTooltip="ปิด"
+      rounded
+      (click)="closeModal()"
+    />
+  </div>
+  <img [src]="src" animate.enter="image-zoom-in" animate.leave="image-zoom-out" />
+</div>
+}

@@ -1,0 +1,31 @@
+.image-zoom-in {
+  animation: zoom-in 0.3s ease 0s 1 normal forwards;
+}
+
+.image-zoom-out {
+  animation: zoom-in 0.3s ease 0s 1 reverse forwards;
+}
+
+@keyframes zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoom-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
