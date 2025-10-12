@@ -1,0 +1,50 @@
+<main class="px-4">
+  <h1 class="text-2xl font-bold">ธุรกรรม</h1>
+  <div class="grid grid-cols-[25%_auto] gap-4 mt-2">
+    <div class="space-y-3">
+      @for (user of users; track $index) {
+      <p-card
+        class="cursor-pointer hover:bg-primary-800! transition-colors ease-in-out select-none"
+        [class.bg-primary-800!]="user.id === userSelection?.id"
+        (click)="userSelection = user"
+      >
+        <div class="flex">
+          <div class="rounded-full overflow-hidden">
+            <img class="w-20 h-20 object-cover" [src]="endpoint + user.profileImage" />
+          </div>
+          <div class="flex flex-col">
+            <h3 class="text-lg font-semibold ml-3">{{ user.username }}</h3>
+            <p class="text-sm text-muted-color ml-3">{{ user.email }}</p>
+            <p class="ml-3 mt-2">ยอดเงินคงเหลือ {{ user.walletBalance | number : '1.0-0' }} บาท</p>
+          </div>
+        </div>
+      </p-card>
+      }
+    </div>
+    <div>
+      <h3 class="text-lg font-semibold">ประวัติการทำรายการ</h3>
+      <p-table
+        [value]="userSelection?.transactionHistories!"
+        class="rounded-xl overflow-hidden"
+        showGridlines
+      >
+        <ng-template #header>
+          <tr>
+            <th>หมายเลขอ้างอิง</th>
+            <th>วันที่</th>
+            <th>ประเภท</th>
+            <th>คำอธิบาย</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-data>
+          <tr>
+            <td>{{ data.id.split('-')[0] }}</td>
+            <td>{{ data.transactionDate | date : 'short' }}</td>
+            <td>{{ data.type }}</td>
+            <td>{{ data.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</main>
