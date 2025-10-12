@@ -47,11 +47,11 @@ namespace api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<KiroResponse>> SearchGames([FromQuery] string q)
+        public async Task<ActionResult<KiroResponse>> SearchGames([FromQuery] string q, [FromQuery] int? c)
         {
             var games = await _context.Games
                 .Include(g => g.Categories)
-                .Where(g => g.Title.Contains(q) || g.Description.Contains(q))
+                .Where(g => g.Title.Contains(q) && (!c.HasValue || g.Categories.Any(cat => cat.Id == c.Value)))
                 .ToListAsync();
 
             var gameDtos = games.Select(g => new GameDto
