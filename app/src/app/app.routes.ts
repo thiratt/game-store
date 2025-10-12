@@ -20,6 +20,7 @@ import { AuthGuard } from './services/auth.guard';
 import { GuestGuard } from './services/guest.guard';
 import { HomeGuard } from './services/home.guard';
 import { Categories } from './pages/categories/categories';
+import { PurchaseHistory } from './pages/purchase-history/purchase-history';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,12 @@ export const routes: Routes = [
     path: 'cart',
     component: Cart,
     title: 'ตะกร้าสินค้า',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'my-games',
+    component: PurchaseHistory,
+    title: 'ประวัติการซื้อ',
     canActivate: [AuthGuard],
   },
   {
