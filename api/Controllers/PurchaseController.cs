@@ -70,6 +70,29 @@ namespace api.Controllers
                 var totalPrice = cartItems.Sum(c => c.Game.Price);
                 var finalPrice = totalPrice;
 
+                var user = await _context.Accounts.FindAsync(userId);
+                if (user == null)
+                {
+                    return NotFound(new KiroResponse
+                    {
+                        Success = false,
+                        Message = "ไม่พบบัญชีผู้ใช้"
+                    });
+                }
+
+                if (user.WalletBalance < finalPrice)
+                {
+                    return BadRequest(new KiroResponse
+                    {
+                        Success = false,
+                        Message = $"ยอดเงินในกระเป๋าไม่เพียงพอ ต้องการ {finalPrice:N0} บาท มีอยู่ {user.WalletBalance:N0} บาท"
+                    });
+                }
+
+                // Deduct money from wallet
+                user.WalletBalance -= finalPrice;
+                user.UpdatedAt = DateTime.UtcNow;
+
                 var purchase = new Purchase
                 {
                     Id = Guid.NewGuid(),
@@ -100,8 +123,19 @@ namespace api.Controllers
 
                 _context.UserGames.AddRange(userGames);
 
+                var transaction = new TransactionHistory
+                {
+                    UserId = userId,
+                    Type = "PURCHASE",
+                    Amount = -finalPrice,
+                    ReferenceId = purchase.Id,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.TransactionHistories.Add(transaction);
+
                 _context.CartItems.RemoveRange(cartItems);
 
+                // Save all changes
                 await _context.SaveChangesAsync();
 
                 var purchaseDto = new PurchaseDto
