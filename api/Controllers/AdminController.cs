@@ -23,7 +23,7 @@ namespace api.Controllers
         {
             try
             {
-                if (request.CategoryIds.Count <= 5)
+                if (request.CategoryIds.Count < 5)
                 {
                     return BadRequest(new KiroResponse
                     {
