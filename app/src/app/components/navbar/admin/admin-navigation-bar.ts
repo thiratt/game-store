@@ -19,6 +19,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { Subscription } from 'rxjs';
 
 import { AuthService, User } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 
 interface NavItem {
   label: string;
@@ -75,12 +76,13 @@ export class AdminNavigationBar implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private userService: UserService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {}
 
   ngOnInit() {
-    this.authSubscription = this.authService.currentUser$.subscribe((user) => {
+    this.authSubscription = this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
   }
@@ -133,10 +135,10 @@ export class AdminNavigationBar implements OnInit, OnDestroy {
   }
 
   get isAuthenticated(): boolean {
-    return this.authService.isAuthenticated;
+    return this.userService.isAuthenticated;
   }
 
   get endpoint(): string {
-    return this.authService.endpoint;
+    return this.userService.endpoint;
   }
 }

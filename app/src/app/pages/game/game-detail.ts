@@ -14,6 +14,7 @@ import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { GameService } from '../../services/game.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-game-detail',
@@ -39,7 +40,7 @@ export class GameDetail implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService,
+    private userService: UserService,
     private gameService: GameService,
     private cartService: CartService,
     private messageService: MessageService
@@ -50,7 +51,7 @@ export class GameDetail implements OnInit {
   }
 
   get currentUser() {
-    return this.authService.currentUser;
+    return this.userService.currentUser;
   }
 
   ngOnInit(): void {

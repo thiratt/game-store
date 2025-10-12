@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 
 export interface TopupRequest {
   amount: number;
@@ -30,12 +30,12 @@ export interface ApiResponse<T> {
 export class TopupService {
   private readonly endpoint = `${environment.endpoint}/topup`;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   private buildHeaders() {
     const headers = {
       'Content-Type': 'application/json',
-      'X-User-ID': this.authService.currentUser?.id || '',
+      'X-User-ID': this.userService.currentUser?.id || '',
     };
     return headers;
   }
@@ -54,14 +54,12 @@ export class TopupService {
       .pipe(
         tap((response) => {
           if (response.success && response.data) {
-            const currentUser = this.authService.currentUser;
+            const currentUser = this.userService.currentUser;
             if (currentUser) {
-              const updatedUser = {
-                ...currentUser,
-                walletBalance: response.data.newBalance,
-              };
-              this.authService.currentUserSubject.next(updatedUser);
-              localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+              this.userService.updateCurrentUser({
+                key: 'walletBalance',
+                value: response.data.newBalance.toString(),
+              });
             }
           }
         })

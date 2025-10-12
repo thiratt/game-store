@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 
 export interface PurchaseItem {
   gameId: string;
@@ -30,12 +31,12 @@ export interface ApiResponse<T> {
 export class PurchaseService {
   private readonly endpoint = `${environment.endpoint}/purchase`;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   private buildHeaders() {
     const headers = {
       'Content-Type': 'application/json',
-      'X-User-ID': this.authService.currentUser?.id || '',
+      'X-User-ID': this.userService.currentUser?.id || '',
     };
     return headers;
   }

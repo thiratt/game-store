@@ -18,6 +18,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -51,7 +52,7 @@ export class UserProfile implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private topupService: TopupService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
@@ -66,11 +67,11 @@ export class UserProfile implements OnInit, OnDestroy {
   }
 
   get currentUser() {
-    return this.authService.currentUser;
+    return this.userService.currentUser;
   }
 
   get endpoint() {
-    return this.authService.endpoint;
+    return this.userService.endpoint;
   }
 
   toggleTopup(): void {

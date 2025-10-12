@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Game, GameCategory } from '../interfaces/game.interface';
 import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 
 export interface AddGameRequest {
   title: string;
@@ -29,7 +30,7 @@ export class GameService {
   private apiUrl = environment.endpoint;
   private adminEndpoint = this.apiUrl + '/admin';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   get endpoint(): string {
     return this.apiUrl;
@@ -38,7 +39,7 @@ export class GameService {
   private buildHeaders() {
     const headers = {
       'Content-Type': 'application/json',
-      'X-User-ID': this.authService.currentUser?.id || '',
+      'X-User-ID': this.userService.currentUser?.id || '',
     };
     return headers;
   }

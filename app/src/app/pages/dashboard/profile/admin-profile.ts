@@ -7,6 +7,7 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 
 import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-admin-profile',
@@ -22,13 +23,13 @@ export class AdminProfile {
       description: 'เพิ่มเกม Pubg ในระบบ',
     },
   ];
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly userService: UserService) {}
 
   get currentUser() {
-    return this.authService.currentUser;
+    return this.userService.currentUser;
   }
 
   get endpoint(): string {
-    return this.authService.endpoint;
+    return this.userService.endpoint;
   }
 }

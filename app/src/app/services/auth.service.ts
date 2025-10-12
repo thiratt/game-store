@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { UserService } from './user.service';
 
 export interface User {
   id: string;
@@ -50,42 +51,30 @@ export interface SignupResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.endpoint;
-  public currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
-
-  constructor(private http: HttpClient) {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
-    }
-  }
-
-  get currentUser(): User | null {
-    return this.currentUserSubject.value;
-  }
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   get isAuthenticated(): boolean {
-    return !!this.currentUser;
-  }
-
-  get isAdmin(): boolean {
-    return this.currentUser?.role.toLowerCase() === 'admin';
+    return !!this.userService.currentUser;
   }
 
   get endpoint(): string {
-    return this.apiUrl;
+    return this.userService.endpoint;
+  }
+
+  get currentUser(): User | null {
+    return this.userService.currentUser;
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.endpoint}/auth/login`, credentials).pipe(
-      tap((response) => {
-        if (response.success && response.data) {
-          localStorage.setItem('currentUser', JSON.stringify(response.data));
-          this.currentUserSubject.next(response.data);
-        }
-      })
-    );
+    return this.http
+      .post<LoginResponse>(`${this.userService.endpoint}/auth/login`, credentials)
+      .pipe(
+        tap((response) => {
+          if (response.success && response.data) {
+            this.userService.setCurrentUser(response.data);
+          }
+        })
+      );
   }
 
   signup(signupData: SignupRequest): Observable<SignupResponse> {
@@ -98,14 +87,15 @@ export class AuthService {
       formData.append('profileImage', signupData.profileImage, signupData.profileImage.name);
     }
 
-    return this.http.post<SignupResponse>(`${this.endpoint}/auth/signup`, formData).pipe(
-      tap((response) => {
-        if (response.success && response.data) {
-          localStorage.setItem('currentUser', JSON.stringify(response.data));
-          this.currentUserSubject.next(response.data);
-        }
-      })
-    );
+    return this.http
+      .post<SignupResponse>(`${this.userService.endpoint}/auth/signup`, formData)
+      .pipe(
+        tap((response) => {
+          if (response.success && response.data) {
+            this.userService.setCurrentUser(response.data);
+          }
+        })
+      );
   }
 
   // TODO: Change return type to UpdateProfileResponse if needed
@@ -129,12 +119,14 @@ export class AuthService {
     }
 
     return this.http
-      .put<SignupResponse>(`${this.endpoint}/profile/${this.currentUser?.id}`, formData)
+      .put<SignupResponse>(
+        `${this.userService.endpoint}/profile/${this.userService.currentUser?.id}`,
+        formData
+      )
       .pipe(
         tap((response) => {
           if (response.success && response.data) {
-            localStorage.setItem('currentUser', JSON.stringify(response.data));
-            this.currentUserSubject.next(response.data);
+            this.userService.setCurrentUser(response.data);
           }
         })
       );
@@ -142,13 +134,13 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    this.userService.setCurrentUser(null);
   }
 
   checkEmailAvailability(email: string): Observable<{ available: boolean }> {
     return this.http
       .get<{ success: boolean; data?: boolean; message?: string }>(
-        `${this.endpoint}/auth/check?email=${encodeURIComponent(email)}`
+        `${this.userService.endpoint}/auth/check?email=${encodeURIComponent(email)}`
       )
       .pipe(map((response) => ({ available: response.success })));
   }
@@ -156,7 +148,7 @@ export class AuthService {
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http
       .get<{ success: boolean; data?: boolean; message?: string }>(
-        `${this.endpoint}/auth/check?username=${encodeURIComponent(username)}`
+        `${this.userService.endpoint}/auth/check?username=${encodeURIComponent(username)}`
       )
       .pipe(map((response) => ({ available: response.success })));
   }

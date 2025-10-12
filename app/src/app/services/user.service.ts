@@ -15,7 +15,7 @@ export class UserService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor() {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
@@ -36,6 +36,15 @@ export class UserService {
 
   get endpoint(): string {
     return this.apiUrl;
+  }
+
+  setCurrentUser(user: User | null) {
+    this.currentUserSubject.next(user);
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('currentUser');
+    }
   }
 
   updateCurrentUser({ key, value }: { key: keyof User; value: string }) {
