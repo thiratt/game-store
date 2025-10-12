@@ -31,7 +31,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'game/detail/:id',
+    path: 'game/:id',
     component: GameDetail,
     title: 'รายละเอียดเกม',
   },
