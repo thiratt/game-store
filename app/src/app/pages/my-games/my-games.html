@@ -1,0 +1,42 @@
+<app-static>
+  <div class="flex items-center mb-4">
+    <h1 class="text-2xl font-bold">เกมของฉัน ({{ ownedGames.length }})</h1>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-8">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p class="mt-2">กำลังโหลดเกมของคุณ...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && ownedGames.length === 0" class="text-center py-16">
+    <i class="pi pi-inbox text-6xl! mb-4"></i>
+    <h2 class="text-xl font-semibold mb-2">ยังไม่มีเกมในคลัง</h2>
+    <p class="text-[var(--p-inputtext-placeholder-color)] mb-4">
+      เริ่มเลือกซื้อเกมที่คุณชื่นชอบได้เลย
+    </p>
+    <div class="flex gap-2 justify-center">
+      <p-button label="เลือกซื้อเกม" icon="pi pi-plus" (click)="goToGameStore()" />
+      <p-button
+        label="ประวัติการซื้อ"
+        icon="pi pi-receipt"
+        variant="outlined"
+        (click)="goToPurchaseHistory()"
+      />
+    </div>
+  </div>
+
+  <!-- Owned Games List -->
+  <div *ngIf="!isLoading && ownedGames.length > 0">
+    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <app-user-game-card
+        *ngFor="let game of ownedGames; trackBy: trackByGameId"
+        [game]="game"
+      ></app-user-game-card>
+    </div>
+  </div>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+</app-static>
