@@ -33,6 +33,11 @@ export const routes: Routes = [
     title: 'หมวดหมู่',
   },
   {
+    path: 'game/:id',
+    component: GameDetail,
+    title: 'รายละเอียดเกม',
+  },
+  {
     path: 'profile',
     component: UserProfile,
     title: 'โปรไฟล์',
@@ -43,11 +48,6 @@ export const routes: Routes = [
     component: Cart,
     title: 'ตะกร้าสินค้า',
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'game/:id',
-    component: GameDetail,
-    title: 'รายละเอียดเกม',
   },
   {
     path: 'profile/edit',
