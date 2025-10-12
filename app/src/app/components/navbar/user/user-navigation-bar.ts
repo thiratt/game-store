@@ -80,6 +80,11 @@ export class UserNavigationBar implements OnInit, OnDestroy {
       command: () => this.router.navigate(['/profile']),
     },
     {
+      label: 'เกมของฉัน',
+      icon: 'pi pi-book',
+      command: () => this.router.navigate(['/my-games']),
+    },
+    {
       label: 'ออกจากระบบ',
       icon: 'pi pi-sign-out',
       command: () => this.onLogout(),
