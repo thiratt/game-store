@@ -35,7 +35,6 @@ export interface ApiResponse<T = undefined> {
   data?: T;
   message?: string;
 }
-
 @Injectable({
   providedIn: 'root',
 })
@@ -62,15 +61,13 @@ export class CartService {
     return this.apiUrl;
   }
 
-  private buildHeaders() {
-    const headers = {
+  private buildHeaders(): { [key: string]: string } {
+    return {
       'Content-Type': 'application/json',
       'X-User-ID': this.authService.currentUser?.id || '',
     };
-    return headers;
   }
 
-  // Get all cart items
   getCartItems(): Observable<ApiResponse<CartItem[]>> {
     return this.http
       .get<ApiResponse<CartItem[]>>(this.cartEndpoint, { headers: this.buildHeaders() })
@@ -84,7 +81,6 @@ export class CartService {
       );
   }
 
-  // Add item to cart
   addToCart(gameId: string): Observable<ApiResponse> {
     return this.http
       .post<ApiResponse>(`${this.cartEndpoint}/${gameId}`, {}, { headers: this.buildHeaders() })
@@ -94,12 +90,12 @@ export class CartService {
           if (response.success) {
             this.loadCartItems();
             this.loadCartCount();
+            this.loadCartTotal();
           }
         })
       );
   }
 
-  // Remove item from cart
   removeFromCart(cartItemId: number): Observable<ApiResponse> {
     return this.http
       .delete<ApiResponse>(`${this.cartEndpoint}/${cartItemId}`, {
@@ -110,24 +106,30 @@ export class CartService {
           if (response.success) {
             this.loadCartItems();
             this.loadCartCount();
+            this.loadCartTotal();
           }
         })
       );
   }
 
-  // Clear entire cart
   clearCart(): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(this.cartEndpoint, { headers: this.buildHeaders() }).pipe(
       tap((response) => {
         if (response.success) {
           this.cartItemsSubject.next([]);
           this.cartCountSubject.next(0);
+          this.cartTotalSubject.next(0);
         }
       })
     );
   }
 
-  // Get cart item count
+  clearLocalCart(): void {
+    this.cartItemsSubject.next([]);
+    this.cartCountSubject.next(0);
+    this.cartTotalSubject.next(0);
+  }
+
   getCartCount(): Observable<ApiResponse<number>> {
     return this.http
       .get<ApiResponse<number>>(`${this.cartEndpoint}/count`, { headers: this.buildHeaders() })
@@ -140,7 +142,6 @@ export class CartService {
       );
   }
 
-  // Get cart total
   getCartTotal(): Observable<ApiResponse<number>> {
     return this.http
       .get<ApiResponse<number>>(`${this.cartEndpoint}/total`, { headers: this.buildHeaders() })
@@ -153,7 +154,6 @@ export class CartService {
       );
   }
 
-  // Helper methods for state management
   private loadCartItems(): void {
     this.getCartItems().subscribe();
   }
@@ -166,12 +166,10 @@ export class CartService {
     this.getCartTotal().subscribe();
   }
 
-  // Get current cart items synchronously
   getCurrentCartItems(): CartItem[] {
     return this.cartItemsSubject.value;
   }
 
-  // Get current cart count synchronously
   getCurrentCartCount(): number {
     return this.cartCountSubject.value;
   }

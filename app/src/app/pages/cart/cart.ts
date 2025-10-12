@@ -195,6 +195,7 @@ export class Cart implements OnInit, OnDestroy {
         next: (response) => {
           this.isLoading = false;
           if (response.success) {
+            this.cartService.clearLocalCart();
             this.loadCartItems();
             this.messageService.add({
               severity: 'success',
