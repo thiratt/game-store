@@ -11,10 +11,11 @@ import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { Static } from '../../components/layout/static/static';
 import { TagModule } from 'primeng/tag';
 import { AuthService } from '../../services/auth.service';
+import { ImagePreview } from "../../components/image-preview/image-preview";
 
 @Component({
   selector: 'app-game-detail',
-  imports: [CommonModule, Button, ToastModule, ThaiDatePipe, Static, TagModule, RouterLink],
+  imports: [CommonModule, Button, ToastModule, ThaiDatePipe, Static, TagModule, RouterLink, ImagePreview],
   templateUrl: './game-detail.html',
   styleUrl: './game-detail.scss',
   providers: [MessageService],
