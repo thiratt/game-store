@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { Game, GameCategory } from '../interfaces/game.interface';
+import { AuthService } from './auth.service';
 
 export interface AddGameRequest {
   title: string;
@@ -28,14 +29,24 @@ export class GameService {
   private apiUrl = environment.endpoint;
   private adminEndpoint = this.apiUrl + '/admin';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   get endpoint(): string {
     return this.apiUrl;
   }
 
+  private buildHeaders() {
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-User-ID': this.authService.currentUser?.id || '',
+    };
+    return headers;
+  }
+
   getLatestReleaseGames(): Observable<ApiResponse<Game>> {
-    return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/latest`);
+    return this.http.get<ApiResponse<Game>>(`${this.endpoint}/game/latest`, {
+      headers: this.buildHeaders(),
+    });
   }
 
   // getRandomGame(): Observable<ApiResponse<Game>> {
@@ -43,11 +54,15 @@ export class GameService {
   // }
 
   getCategories(): Observable<ApiResponse<GameCategory[]>> {
-    return this.http.get<ApiResponse<GameCategory[]>>(`${this.endpoint}/game/categories`);
+    return this.http.get<ApiResponse<GameCategory[]>>(`${this.endpoint}/game/categories`, {
+      headers: this.buildHeaders(),
+    });
   }
 
   getGames(): Observable<ApiResponse<Game[]>> {
-    return this.http.get<ApiResponse<Game[]>>(`${this.endpoint}/game`);
+    return this.http.get<ApiResponse<Game[]>>(`${this.endpoint}/game`, {
+      headers: this.buildHeaders(),
+    });
   }
 
   addGame(gameData: AddGameRequest): Observable<ApiResponse<Game>> {
