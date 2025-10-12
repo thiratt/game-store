@@ -26,6 +26,11 @@
       (click)="closeModal()"
     />
   </div>
-  <img [src]="src" animate.enter="image-zoom-in" animate.leave="image-zoom-out" />
+  <img
+    [src]="src"
+    class="w-full h-auto object-cover max-h-screen max-w-screen-lg"
+    animate.enter="image-zoom-in"
+    animate.leave="image-zoom-out"
+  />
 </div>
 }
