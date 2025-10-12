@@ -3,6 +3,10 @@ export interface GameCategory {
   name: string;
 }
 
+export interface GameCategoryOption extends GameCategory {
+  value: string | number;
+}
+
 export interface Game {
   id: string;
   title: string;
