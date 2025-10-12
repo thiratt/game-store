@@ -1,24 +1,24 @@
 import { Routes } from '@angular/router';
 
-import { AddGame } from './pages/dashboard/game/add/add-game';
-import { AdminEditProfile } from './pages/dashboard/profile/edit/admin-edit-profile';
-import { AdminGuard } from './services/admin.guard';
-import { AdminProfile } from './pages/dashboard/profile/admin-profile';
 import { Auth } from './components/layout/auth/auth';
-import { AuthGuard } from './services/auth.guard';
+import { DashboardLayout } from './components/layout/dashboard/dashboard-layout';
+import { Login } from './pages/auth/login/login';
+import { Signup } from './pages/auth/signup/signup';
 import { Cart } from './pages/cart/cart';
 import { Dashboard } from './pages/dashboard/dashboard';
-import { DashboardLayout } from './components/layout/dashboard/dashboard-layout';
-import { Edit } from './pages/profile/edit/edit';
+import { AddGame } from './pages/dashboard/game/add/add-game';
 import { EditGame } from './pages/dashboard/game/edit/edit-game';
+import { AdminProfile } from './pages/dashboard/profile/admin-profile';
+import { AdminEditProfile } from './pages/dashboard/profile/edit/admin-edit-profile';
 import { GameDetail } from './pages/game/game-detail';
+import { Index } from './pages/index';
+import { NotFound } from './pages/not-found/not-found';
+import { Edit } from './pages/profile/edit/edit';
+import { UserProfile } from './pages/profile/profile';
+import { AdminGuard } from './services/admin.guard';
+import { AuthGuard } from './services/auth.guard';
 import { GuestGuard } from './services/guest.guard';
 import { HomeGuard } from './services/home.guard';
-import { Index } from './pages/index';
-import { Login } from './pages/auth/login/login';
-import { NotFound } from './pages/not-found/not-found';
-import { Signup } from './pages/auth/signup/signup';
-import { UserProfile } from './pages/profile/profile';
 
 export const routes: Routes = [
   {

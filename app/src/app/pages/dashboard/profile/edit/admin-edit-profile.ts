@@ -1,6 +1,6 @@
+import { Location } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Location } from '@angular/common';
 
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';

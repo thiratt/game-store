@@ -11,8 +11,8 @@ import { InputNumber } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 
-import { AuthService } from '../../services/auth.service';
 import { Static } from '../../components/layout/static/static';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-profile',

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { MessageService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -10,7 +11,6 @@ import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { firstValueFrom } from 'rxjs';
 

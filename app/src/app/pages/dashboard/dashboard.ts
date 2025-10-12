@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Chip } from 'primeng/chip';
@@ -11,13 +12,12 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
-import { MessageService, ConfirmationService } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 
 import { Game } from '../../interfaces/game.interface';
-import { GameService } from '../../services/game.service';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
+import { GameService } from '../../services/game.service';
 
 interface GameCategoryOption {
   label: string;

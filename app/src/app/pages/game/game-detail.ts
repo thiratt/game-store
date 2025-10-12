@@ -2,18 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 
-import { Button } from 'primeng/button';
 import { MessageService } from 'primeng/api';
+import { Button } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
-import { AuthService } from '../../services/auth.service';
-import { CartService } from '../../services/cart.service';
-import { Game } from '../../interfaces/game.interface';
-import { GameService } from '../../services/game.service';
 import { ImagePreview } from '../../components/image-preview/image-preview';
 import { Static } from '../../components/layout/static/static';
+import { Game } from '../../interfaces/game.interface';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
+import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-game-detail',

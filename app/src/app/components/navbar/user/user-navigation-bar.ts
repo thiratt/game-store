@@ -3,33 +3,32 @@ import { Component, Input, OnInit, OnDestroy, signal, ChangeDetectorRef } from '
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
+import { ConfirmationService, MessageService } from 'primeng/api';
+import {
+  AutoCompleteCompleteEvent,
+  AutoCompleteModule,
+  AutoCompleteSelectEvent,
+} from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { Select } from 'primeng/select';
-import { Subscription, Observable } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
+import { Subscription, Observable } from 'rxjs';
 
+import { Game } from '../../../interfaces/game.interface';
 import { AuthService, User } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
-
-import {
-  AutoCompleteCompleteEvent,
-  AutoCompleteModule,
-  AutoCompleteSelectEvent,
-} from 'primeng/autocomplete';
 import { ApiResponse, GameService } from '../../../services/game.service';
-import { Game } from '../../../interfaces/game.interface';
-import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
   selector: 'app-user-navigation-bar',

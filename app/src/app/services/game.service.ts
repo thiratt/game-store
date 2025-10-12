@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Game, GameCategory } from '../interfaces/game.interface';
 import { environment } from '../../environments/environment';
+import { Game, GameCategory } from '../interfaces/game.interface';
 
 export interface AddGameRequest {
   title: string;

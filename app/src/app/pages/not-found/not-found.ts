@@ -4,8 +4,8 @@ import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 import { AdminNavigationBar } from '../../components/navbar/admin/admin-navigation-bar';
-import { AuthService } from '../../services/auth.service';
 import { UserNavigationBar } from '../../components/navbar/user/user-navigation-bar';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-not-found',

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import {
   Component,
   ChangeDetectionStrategy,
@@ -5,16 +6,17 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CardModule } from 'primeng/card';
+
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { AuthService } from '../../../services/auth.service';
 import { debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil } from 'rxjs';
+
 import { Static } from '../../../components/layout/static/static';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-edit',

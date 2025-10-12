@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -9,14 +10,13 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
-import { MessageService, ConfirmationService } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 
-import { Game, GameCategoryOption } from '../../interfaces/game.interface';
-import { GameService } from '../../services/game.service';
 import { Static } from '../../components/layout/static/static';
 import { UserGameCard } from '../../components/user/game-card/game-card';
+import { Game, GameCategoryOption } from '../../interfaces/game.interface';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-categories',

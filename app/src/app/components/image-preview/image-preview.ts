@@ -1,15 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  Output,
-  signal,
-  ViewChild,
-  DestroyRef,
-  inject,
-} from '@angular/core';
+import { Component, HostListener, Input, signal } from '@angular/core';
+
 import { Button } from 'primeng/button';
 
 @Component({
@@ -22,7 +12,7 @@ export class ImagePreview {
   @Input({ required: true }) src: string = '';
   @Input() alt: string = 'Image Preview';
   @Input() class: string = '';
-  
+
   isModalVisible = signal(false);
 
   @HostListener('document:keydown', ['$event'])
