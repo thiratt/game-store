@@ -18,6 +18,7 @@
         <img
           [src]="game.imageUrl ? endpoint + game.imageUrl : '/1401549.jpg'"
           [alt]="game.title"
+          class="w-full h-100 object-cover object-center rounded-lg"
           (error)="$event.target.src = '/1401549.jpg'"
         />
 

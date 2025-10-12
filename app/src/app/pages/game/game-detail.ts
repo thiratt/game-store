@@ -8,8 +8,8 @@ import { GameService } from '../../services/game.service';
 import { CartService } from '../../services/cart.service';
 import { Game } from '../../interfaces/game.interface';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
-import { Static } from "../../components/layout/static/static";
-import { TagModule } from "primeng/tag";
+import { Static } from '../../components/layout/static/static';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-game-detail',
@@ -79,7 +79,7 @@ export class GameDetail implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'สำเร็จ',
-            detail: response.message || 'เพิ่มลงตะกร้าสินค้าเรียบร้อยแล้ว'
+            detail: response.message || 'เพิ่มลงตะกร้าสินค้าเรียบร้อยแล้ว',
           });
         }
       },
@@ -88,9 +88,9 @@ export class GameDetail implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'เกิดข้อผิดพลาด',
-          detail: 'ไม่สามารถเพิ่มสินค้าลงตะกร้าได้'
+          detail: 'ไม่สามารถเพิ่มสินค้าลงตะกร้าได้',
         });
-      }
+      },
     });
   }
 
@@ -109,9 +109,9 @@ export class GameDetail implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'เกิดข้อผิดพลาด',
-          detail: 'ไม่สามารถดำเนินการซื้อได้'
+          detail: 'ไม่สามารถดำเนินการซื้อได้',
         });
-      }
+      },
     });
   }
 }
