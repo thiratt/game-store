@@ -30,7 +30,7 @@ export interface CartSummary {
   total: number;
 }
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T = undefined> {
   success: boolean;
   data?: T;
   message?: string;
@@ -85,15 +85,12 @@ export class CartService {
   }
 
   // Add item to cart
-  addToCart(gameId: string): Observable<ApiResponse<any>> {
+  addToCart(gameId: string): Observable<ApiResponse> {
     return this.http
-      .post<ApiResponse<any>>(
-        `${this.cartEndpoint}/${gameId}`,
-        {},
-        { headers: this.buildHeaders() }
-      )
+      .post<ApiResponse>(`${this.cartEndpoint}/${gameId}`, {}, { headers: this.buildHeaders() })
       .pipe(
         tap((response) => {
+          console.log('Add to cart response:', response);
           if (response.success) {
             this.loadCartItems();
             this.loadCartCount();
@@ -103,9 +100,9 @@ export class CartService {
   }
 
   // Remove item from cart
-  removeFromCart(cartItemId: number): Observable<ApiResponse<any>> {
+  removeFromCart(cartItemId: number): Observable<ApiResponse> {
     return this.http
-      .delete<ApiResponse<any>>(`${this.cartEndpoint}/${cartItemId}`, {
+      .delete<ApiResponse>(`${this.cartEndpoint}/${cartItemId}`, {
         headers: this.buildHeaders(),
       })
       .pipe(
@@ -119,17 +116,15 @@ export class CartService {
   }
 
   // Clear entire cart
-  clearCart(): Observable<ApiResponse<any>> {
-    return this.http
-      .delete<ApiResponse<any>>(this.cartEndpoint, { headers: this.buildHeaders() })
-      .pipe(
-        tap((response) => {
-          if (response.success) {
-            this.cartItemsSubject.next([]);
-            this.cartCountSubject.next(0);
-          }
-        })
-      );
+  clearCart(): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(this.cartEndpoint, { headers: this.buildHeaders() }).pipe(
+      tap((response) => {
+        if (response.success) {
+          this.cartItemsSubject.next([]);
+          this.cartCountSubject.next(0);
+        }
+      })
+    );
   }
 
   // Get cart item count
