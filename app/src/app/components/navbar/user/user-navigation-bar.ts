@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  OnDestroy,
-  signal,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, signal, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +13,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService, User } from '../../../services/auth.service';
-import { Subscription } from 'rxjs';
+import { CartService } from '../../../services/cart.service';
+import { Subscription, Observable } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -65,6 +59,7 @@ export class UserNavigationBar implements OnInit, OnDestroy {
   isMobileMenuOpen: boolean = false;
   isSearchFocused: boolean = false;
   currentUser: User | null = null;
+  cartCount$: Observable<number>;
   private authSubscription: Subscription = new Subscription();
   private routerSubscription: Subscription = new Subscription();
 
@@ -90,10 +85,13 @@ export class UserNavigationBar implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private gameService: GameService,
+    private cartService: CartService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.cartCount$ = this.cartService.cartCount$;
+  }
 
   ngOnInit() {
     this.authSubscription = this.authService.currentUser$.subscribe((user) => {
