@@ -15,4 +15,5 @@ export interface Game {
   releaseDate: Date;
   categories: GameCategory[];
   imageUrl?: string;
+  ownedAt?: Date;
 }
