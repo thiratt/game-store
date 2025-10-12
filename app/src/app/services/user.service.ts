@@ -6,6 +6,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { User } from './auth.service';
+import { UserTransactionDetail } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class UserService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private readonly http: HttpClient) {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
@@ -36,6 +37,12 @@ export class UserService {
 
   get endpoint(): string {
     return this.apiUrl;
+  }
+
+  getAllUsers(): Observable<UserTransactionDetail[]> {
+    return this.http
+      .get<{ success: boolean; data: UserTransactionDetail[] }>(`${this.endpoint}/user/all`)
+      .pipe(map((response) => (response.success ? response.data : [])));
   }
 
   setCurrentUser(user: User | null) {
