@@ -102,15 +102,14 @@
         @if (!isAuthenticated) {
         <p-button label="เข้าสู่ระบบ" variant="text" size="small" [routerLink]="['/auth/login']" />
         <p-button label="สมัครสมาชิก" size="small" [routerLink]="['/auth/signup']" />
+        } @else { @if((cartCount$ | async) && (cartCount$ | async)! > 0) {
+        <p-overlaybadge [value]="(cartCount$ | async)?.toString()" badgeSize="small">
+          <p-button icon="pi pi-shopping-cart" variant="text" size="small" [routerLink]="['/cart']">
+          </p-button>
+        </p-overlaybadge>
         } @else {
-        <p-button
-          icon="pi pi-shopping-cart"
-          variant="text"
-          size="small"
-          [routerLink]="['/cart']"
-          [badge]="(cartCount$ | async)?.toString()"
-        >
-        </p-button>
+        <p-button icon="pi pi-shopping-cart" variant="text" size="small" [routerLink]="['/cart']" />
+        }
         <p-button variant="text" size="small" (click)="menu.toggle($event)">
           <img
             [src]="endpoint + currentUser?.profileImage"

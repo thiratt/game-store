@@ -26,6 +26,7 @@ import {
 } from 'primeng/autocomplete';
 import { ApiResponse, GameService } from '../../../services/game.service';
 import { Game } from '../../../interfaces/game.interface';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
   selector: 'app-user-navigation-bar',
@@ -47,6 +48,7 @@ import { Game } from '../../../interfaces/game.interface';
     ConfirmDialogModule,
     Select,
     AutoCompleteModule,
+    OverlayBadgeModule,
   ],
   templateUrl: './user-navigation-bar.html',
   styleUrl: './user-navigation-bar.scss',
