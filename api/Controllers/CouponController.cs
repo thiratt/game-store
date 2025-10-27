@@ -41,5 +41,33 @@ namespace api.Controllers
             };
             return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCoupon(Guid id)
+        {
+            var coupon = await _context.DiscountCodes.FindAsync(id);
+
+            if (coupon == null)
+            {
+                var notFoundResponse = new KiroResponse
+                {
+                    Data = null,
+                    Message = "Coupon not found",
+                    Success = false
+                };
+                return NotFound(notFoundResponse);
+            }
+
+            _context.DiscountCodes.Remove(coupon);
+            await _context.SaveChangesAsync();
+
+            var response = new KiroResponse
+            {
+                Data = null,
+                Message = "Coupon deleted successfully",
+                Success = true
+            };
+            return Ok(response);
+        }
     }
 }

@@ -17,6 +17,10 @@ export class CouponService {
     return this.http.get<ApiResponse<CouponResponse[]>>(`${this.apiUrl}/coupon`);
   }
 
+  deleteCoupon(id: string): Observable<ApiResponse<null>> {
+    return this.http.delete<ApiResponse<null>>(`${this.apiUrl}/coupon/${id}`);
+  }
+
   get endpoint(): string {
     return this.apiUrl;
   }

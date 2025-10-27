@@ -1,5 +1,6 @@
 <main class="px-4">
   <p-toast />
+  <p-confirmDialog />
 
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">คูปองส่วนลด</h1>
@@ -48,6 +49,7 @@
             icon="pi pi-trash"
             severity="danger"
             size="small"
+            (click)="confirmDelete(data)"
             class="flex items-center justify-center [&_span]:text-white"
           />
         </td>
@@ -57,9 +59,9 @@
       <tr>
         <td colspan="8" class="text-center py-8">
           <div class="flex flex-col items-center">
-            <i class="pi pi-ticket text-4xl text-gray-400 mb-4"></i>
-            <p class="text-gray-500 text-lg">ไม่พบคูปองส่วนลด</p>
-            <p class="text-gray-400 text-sm">เริ่มต้นสร้างคูปองแรกของคุณ</p>
+            <i class="pi pi-ticket text-4xl!"></i>
+            <p class="text-lg">ไม่พบคูปองส่วนลด</p>
+            <p class="text-sm">เริ่มต้นสร้างคูปองแรกของคุณ</p>
           </div>
         </td>
       </tr>
