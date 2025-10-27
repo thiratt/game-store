@@ -5,13 +5,16 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="text-center py-8">
+  @if (isLoading) {
+  <div class="text-center py-8">
     <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
     <p class="mt-2">กำลังโหลดตะกร้าสินค้า...</p>
   </div>
+  }
 
   <!-- Empty Cart -->
-  <div *ngIf="!isLoading && cartItems.length === 0" class="text-center py-16">
+  @if (!isLoading && cartItems.length === 0) {
+  <div class="text-center py-16">
     <i class="pi pi-shopping-cart text-6xl! mb-4"></i>
     <h2 class="text-xl font-semibold mb-2">ตะกร้าสินค้าของคุณว่างเปล่า</h2>
     <p class="text-[var(--p-inputtext-placeholder-color)] mb-4">
@@ -19,12 +22,11 @@
     </p>
     <p-button label="เลือกซื้อเกม" icon="pi pi-plus" (click)="continueShopping()"> </p-button>
   </div>
+  }
 
   <!-- Cart Items -->
-  <div
-    *ngIf="!isLoading && cartItems.length > 0"
-    class="grid grid-cols-[1fr_350px] gap-4 items-start"
-  >
+  @if (!isLoading && cartItems.length > 0) {
+  <div class="grid grid-cols-[1fr_350px] gap-4 items-start">
     <div class="space-y-3">
       <p-card *ngFor="let item of cartItems" class="cart-item-card">
         <div class="flex gap-4">
@@ -116,6 +118,7 @@
       </p-card>
     </div>
   </div>
+  }
 
   <!-- Toast Messages -->
   <p-toast></p-toast>
