@@ -96,6 +96,104 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetAllCoupons), response);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetCoupon(Guid id)
+        {
+            var coupon = await _context.DiscountCodes.FindAsync(id);
+
+            if (coupon == null)
+            {
+                var notFoundResponse = new KiroResponse
+                {
+                    Data = null,
+                    Message = "Coupon not found",
+                    Success = false
+                };
+                return NotFound(notFoundResponse);
+            }
+
+            var couponDto = new CouponDto
+            {
+                Id = coupon.Id,
+                CreatedDate = coupon.CreatedAt,
+                Code = coupon.Code,
+                Description = coupon.Description,
+                DiscountValue = coupon.DiscountValue,
+                MaxUsage = coupon.MaxUsage,
+                UsedCount = coupon.UsedCount,
+                RemainingUsage = coupon.MaxUsage - coupon.UsedCount
+            };
+
+            var response = new KiroResponse
+            {
+                Data = couponDto,
+                Message = "Coupon retrieved successfully",
+                Success = true
+            };
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateCoupon(Guid id, [FromBody] UpdateCouponRequest request)
+        {
+            var coupon = await _context.DiscountCodes.FindAsync(id);
+
+            if (coupon == null)
+            {
+                var notFoundResponse = new KiroResponse
+                {
+                    Data = null,
+                    Message = "Coupon not found",
+                    Success = false
+                };
+                return NotFound(notFoundResponse);
+            }
+
+            if (coupon.Code != request.Code)
+            {
+                var existingCoupon = await _context.DiscountCodes
+                    .FirstOrDefaultAsync(c => c.Code == request.Code && c.Id != id);
+
+                if (existingCoupon != null)
+                {
+                    var conflictResponse = new KiroResponse
+                    {
+                        Data = null,
+                        Message = "Coupon code already exists",
+                        Success = false
+                    };
+                    return Conflict(conflictResponse);
+                }
+            }
+
+            coupon.Code = request.Code;
+            coupon.Description = request.Description;
+            coupon.DiscountValue = request.DiscountValue;
+            coupon.MaxUsage = request.MaxUsage;
+
+            await _context.SaveChangesAsync();
+
+            var updatedCouponDto = new CouponDto
+            {
+                Id = coupon.Id,
+                CreatedDate = coupon.CreatedAt,
+                Code = coupon.Code,
+                Description = coupon.Description,
+                DiscountValue = coupon.DiscountValue,
+                MaxUsage = coupon.MaxUsage,
+                UsedCount = coupon.UsedCount,
+                RemainingUsage = coupon.MaxUsage - coupon.UsedCount
+            };
+
+            var response = new KiroResponse
+            {
+                Data = updatedCouponDto,
+                Message = "Coupon updated successfully",
+                Success = true
+            };
+            return Ok(response);
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCoupon(Guid id)
         {

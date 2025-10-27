@@ -15,3 +15,10 @@ export interface AddCouponRequest {
   discountValue: number;
   maxUsage: number;
 }
+
+export interface UpdateCouponRequest {
+  code: string;
+  description?: string;
+  discountValue: number;
+  maxUsage: number;
+}

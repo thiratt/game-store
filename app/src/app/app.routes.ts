@@ -24,6 +24,7 @@ import { MyGames } from './pages/my-games/my-games';
 import { Transaction } from './pages/dashboard/transaction/transaction';
 import { Coupons } from './pages/dashboard/coupons/coupons';
 import { AddCoupon } from './pages/dashboard/coupons/add/add';
+import { EditCoupon } from './pages/dashboard/coupons/edit/edit';
 
 export const routes: Routes = [
   {
@@ -83,6 +84,11 @@ export const routes: Routes = [
         path: 'coupons/add',
         component: AddCoupon,
         title: 'เพิ่มคูปองส่วนลด',
+      },
+      {
+        path: 'coupons/edit/:id',
+        component: EditCoupon,
+        title: 'แก้ไขคูปองส่วนลด',
       },
       {
         path: 'transaction',
