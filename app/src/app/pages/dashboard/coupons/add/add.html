@@ -1,0 +1,135 @@
+<main class="px-4">
+  <p-toast />
+
+  <div class="flex items-center mb-6 gap-4">
+    <p-button icon="pi pi-arrow-left" label="กลับ" (onClick)="onNavigateBack()" />
+    <h1 class="text-2xl font-bold">เพิ่มคูปองส่วนลด</h1>
+  </div>
+
+  <div>
+    <p-card>
+      <ng-template pTemplate="content">
+        <form [formGroup]="couponForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <!-- Coupon Code Field -->
+          <div>
+            <label for="code" class="font-medium mb-2"> รหัสคูปอง </label>
+            <input
+              pInputText
+              id="code"
+              formControlName="code"
+              placeholder="กรอกรหัสคูปอง เช่น SAVE100"
+              class="w-full"
+              [class.p-invalid]="formControls['code'].invalid && formControls['code'].touched"
+            />
+            <small
+              class="text-red-500 mt-1 block"
+              *ngIf="formControls['code'].invalid && formControls['code'].touched"
+            >
+              <span *ngIf="formControls['code'].errors?.['required']">กรุณากรอกรหัสคูปอง</span>
+              <span *ngIf="formControls['code'].errors?.['minlength']"
+                >รหัสคูปองต้องมีอย่างน้อย 3 ตัวอักษร</span
+              >
+              <span *ngIf="formControls['code'].errors?.['maxlength']"
+                >รหัสคูปองต้องไม่เกิน 20 ตัวอักษร</span
+              >
+            </small>
+          </div>
+
+          <!-- Description Field -->
+          <div>
+            <label for="description" class="block font-medium mb-2"> คำอธิบาย </label>
+            <input
+              pInputText
+              id="description"
+              formControlName="description"
+              placeholder="คำอธิบายเกี่ยวกับคูปอง (ไม่บังคับ)"
+              class="w-full"
+            />
+          </div>
+
+          <!-- Discount Value Field -->
+          <div>
+            <label for="discountValue" class="block font-medium mb-2"> มูลค่าส่วนลด (บาท) </label>
+            <p-inputNumber
+              formControlName="discountValue"
+              inputId="discountValue"
+              placeholder="กรอกจำนวนเงินส่วนลด"
+              mode="decimal"
+              [min]="1"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              spinnerMode="horizontal"
+              decrementButtonClass="p-button-secondary"
+              incrementButtonClass="p-button-secondary"
+              class="w-full"
+              [class.p-invalid]="
+                formControls['discountValue'].invalid && formControls['discountValue'].touched
+              "
+            ></p-inputNumber>
+            <small
+              class="text-red-500 mt-1 block"
+              *ngIf="formControls['discountValue'].invalid && formControls['discountValue'].touched"
+            >
+              <span *ngIf="formControls['discountValue'].errors?.['required']"
+                >กรุณากรอกมูลค่าส่วนลด</span
+              >
+              <span *ngIf="formControls['discountValue'].errors?.['min']"
+                >มูลค่าส่วนลดต้องมากกว่า 0 บาท</span
+              >
+            </small>
+          </div>
+
+          <!-- Max Usage Field -->
+          <div>
+            <label for="maxUsage" class="block text-sm font-medium mb-2">
+              จำนวนการใช้งานสูงสุด
+            </label>
+            <p-inputNumber
+              formControlName="maxUsage"
+              inputId="maxUsage"
+              placeholder="กรอกจำนวนครั้งที่สามารถใช้งานได้"
+              mode="decimal"
+              [min]="1"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              spinnerMode="horizontal"
+              decrementButtonClass="p-button-secondary"
+              incrementButtonClass="p-button-secondary"
+              class="w-full"
+              [class.p-invalid]="
+                formControls['maxUsage'].invalid && formControls['maxUsage'].touched
+              "
+            ></p-inputNumber>
+            <small
+              class="text-red-500 mt-1 block"
+              *ngIf="formControls['maxUsage'].invalid && formControls['maxUsage'].touched"
+            >
+              <span *ngIf="formControls['maxUsage'].errors?.['required']"
+                >กรุณากรอกจำนวนการใช้งานสูงสุด</span
+              >
+              <span *ngIf="formControls['maxUsage'].errors?.['min']"
+                >จำนวนการใช้งานต้องมากกว่า 0 ครั้ง</span
+              >
+            </small>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end gap-3 pt-4">
+            <p-button
+              type="button"
+              label="ยกเลิก"
+              (click)="onNavigateBack()"
+              [disabled]="loading"
+            ></p-button>
+            <p-button
+              type="submit"
+              label="เพิ่มคูปอง"
+              [loading]="loading"
+              [disabled]="couponForm.invalid"
+            ></p-button>
+          </div>
+        </form>
+      </ng-template>
+    </p-card>
+  </div>
+</main>

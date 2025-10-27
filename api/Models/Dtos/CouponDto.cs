@@ -6,7 +6,8 @@ public class CouponDto
     public DateTime CreatedDate { get; set; }
     public string Code { get; set; } = null!;
     public string? Description { get; set; }
-    public decimal TotalAmount { get; set; }
-    public decimal UsedAmount { get; set; }
-    public decimal RemainingAmount { get; set; }
+    public decimal DiscountValue { get; set; }
+    public int MaxUsage { get; set; }
+    public int UsedCount { get; set; }
+    public int RemainingUsage { get; set; }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Models.Dtos;
+using api.Models.Request;
 using api.Models.Response;
 using api.Models.Tables;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,10 @@ namespace api.Controllers
                 CreatedDate = c.CreatedAt,
                 Code = c.Code,
                 Description = c.Description,
-                TotalAmount = c.MaxUsage,
-                UsedAmount = c.UsedCount,
-                RemainingAmount = c.MaxUsage - c.UsedCount
+                DiscountValue = c.DiscountValue,
+                MaxUsage = c.MaxUsage,
+                UsedCount = c.UsedCount,
+                RemainingUsage = c.MaxUsage - c.UsedCount
             }).ToList();
 
             var response = new KiroResponse
@@ -40,6 +42,58 @@ namespace api.Controllers
                 Success = true
             };
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddCoupon([FromBody] AddCouponRequest request)
+        {
+            var existingCoupon = await _context.DiscountCodes
+                .FirstOrDefaultAsync(c => c.Code == request.Code);
+
+            if (existingCoupon != null)
+            {
+                var conflictResponse = new KiroResponse
+                {
+                    Data = null,
+                    Message = "Coupon code already exists",
+                    Success = false
+                };
+                return Conflict(conflictResponse);
+            }
+
+            var newCoupon = new DiscountCode
+            {
+                Id = Guid.NewGuid(),
+                Code = request.Code,
+                Description = request.Description,
+                DiscountValue = request.DiscountValue,
+                MaxUsage = request.MaxUsage,
+                UsedCount = 0,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.DiscountCodes.Add(newCoupon);
+            await _context.SaveChangesAsync();
+
+            var couponDto = new CouponDto
+            {
+                Id = newCoupon.Id,
+                CreatedDate = newCoupon.CreatedAt,
+                Code = newCoupon.Code,
+                Description = newCoupon.Description,
+                DiscountValue = newCoupon.DiscountValue,
+                MaxUsage = newCoupon.MaxUsage,
+                UsedCount = newCoupon.UsedCount,
+                RemainingUsage = newCoupon.MaxUsage - newCoupon.UsedCount
+            };
+
+            var response = new KiroResponse
+            {
+                Data = couponDto,
+                Message = "Coupon created successfully",
+                Success = true
+            };
+            return CreatedAtAction(nameof(GetAllCoupons), response);
         }
 
         [HttpDelete("{id}")]

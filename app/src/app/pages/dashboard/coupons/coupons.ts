@@ -11,6 +11,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 import { CouponService } from '../../../services/coupon.service';
 import { CouponResponse } from '../../../interfaces/coupon.interface';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-coupons',
@@ -24,7 +25,8 @@ import { CouponResponse } from '../../../interfaces/coupon.interface';
     ConfirmDialogModule,
     FormsModule,
     ThaiDatePipe,
-  ],
+    RouterLink
+],
   templateUrl: './coupons.html',
   styleUrl: './coupons.scss',
   providers: [MessageService, ConfirmationService],

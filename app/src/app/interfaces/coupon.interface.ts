@@ -3,7 +3,15 @@ export interface CouponResponse {
   code: string;
   description?: string;
   createdDate: string;
-  totalAmount: number;
-  usedAmount: number;
-  remainingAmount: number;
+  discountValue: number;
+  maxUsage: number;
+  usedCount: number;
+  remainingUsage: number;
+}
+
+export interface AddCouponRequest {
+  code: string;
+  description?: string;
+  discountValue: number;
+  maxUsage: number;
 }

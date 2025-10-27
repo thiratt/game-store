@@ -11,7 +11,7 @@
         [loading]="loading"
         (click)="refreshCoupons()"
       />
-      <p-button label="เพิ่มโค้ด" icon="pi pi-plus" />
+      <p-button routerLink="./add" label="เพิ่มโค้ด" icon="pi pi-plus" />
     </div>
   </div>
 
@@ -28,7 +28,8 @@
         <th>สร้างเมื่อ</th>
         <th>รหัส</th>
         <th>คำอธิบาย</th>
-        <th>จำนวน</th>
+        <th>ส่วนลด (บาท)</th>
+        <th>ใช้งานได้สูงสุด</th>
         <th>ใช้งานแล้ว</th>
         <th>คงเหลือ</th>
         <th></th>
@@ -40,9 +41,10 @@
         <td>{{ data.createdDate | thaiDate : 'datetime' }}</td>
         <td>{{ data.code }}</td>
         <td>{{ data.description ?? '-' }}</td>
-        <td>{{ data.totalAmount }}</td>
-        <td>{{ data.usedAmount }}</td>
-        <td>{{ data.remainingAmount }}</td>
+        <td>{{ data.discountValue }}</td>
+        <td>{{ data.maxUsage }}</td>
+        <td>{{ data.usedCount }}</td>
+        <td>{{ data.remainingUsage }}</td>
         <td class="flex gap-2">
           <p-button type="button" icon="pi pi-pencil" size="small" />
           <p-button
@@ -57,11 +59,11 @@
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="8" class="text-center py-8">
+        <td colspan="9" class="text-center py-8">
           <div class="flex flex-col items-center">
-            <i class="pi pi-ticket text-4xl!"></i>
-            <p class="text-lg">ไม่พบคูปองส่วนลด</p>
-            <p class="text-sm">เริ่มต้นสร้างคูปองแรกของคุณ</p>
+            <i class="pi pi-ticket text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-500 text-lg">ไม่พบคูปองส่วนลด</p>
+            <p class="text-gray-400 text-sm">เริ่มต้นสร้างคูปองแรกของคุณ</p>
           </div>
         </td>
       </tr>

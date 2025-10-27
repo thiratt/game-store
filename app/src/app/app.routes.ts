@@ -23,6 +23,7 @@ import { Categories } from './pages/categories/categories';
 import { MyGames } from './pages/my-games/my-games';
 import { Transaction } from './pages/dashboard/transaction/transaction';
 import { Coupons } from './pages/dashboard/coupons/coupons';
+import { AddCoupon } from './pages/dashboard/coupons/add/add';
 
 export const routes: Routes = [
   {
@@ -77,6 +78,11 @@ export const routes: Routes = [
         path: 'coupons',
         component: Coupons,
         title: 'โค้ดส่วนลด',
+      },
+      {
+        path: 'coupons/add',
+        component: AddCoupon,
+        title: 'เพิ่มคูปองส่วนลด',
       },
       {
         path: 'transaction',
