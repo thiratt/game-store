@@ -6,10 +6,11 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../../services/user.service';
 import { UserTransactionDetail } from '../../../interfaces/user.interface';
+import { ThaiDatePipe } from '../../../pipe/thai-date.pipe';
 
 @Component({
   selector: 'app-transaction',
-  imports: [DecimalPipe, DatePipe, CardModule, ButtonModule, TableModule],
+  imports: [DecimalPipe, CardModule, ButtonModule, TableModule, ThaiDatePipe],
   templateUrl: './transaction.html',
   styleUrl: './transaction.scss',
 })

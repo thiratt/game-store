@@ -107,7 +107,7 @@
         </ng-template>
         <ng-template #body let-data>
           <tr>
-            <td>{{ data.createdAt | date : 'short' }}</td>
+            <td>{{ data.createdAt | thaiDate : 'datetime' }}</td>
             <td>{{ data.type }}</td>
             <td>{{ data.description }}</td>
             <td>{{ data.amount > 0 ? '+' : '' }}{{ data.amount | number : '1.0-0' }} บาท</td>

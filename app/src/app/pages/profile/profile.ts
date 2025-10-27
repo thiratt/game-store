@@ -19,6 +19,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
+import { ThaiDatePipe } from "../../pipe/thai-date.pipe";
 
 @Component({
   selector: 'app-user-profile',
@@ -36,7 +37,8 @@ import { UserService } from '../../services/user.service';
     Static,
     ToastModule,
     ConfirmDialogModule,
-  ],
+    ThaiDatePipe
+],
   providers: [MessageService, ConfirmationService],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',

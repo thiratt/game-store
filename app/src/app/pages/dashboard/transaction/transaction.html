@@ -39,7 +39,7 @@
         <ng-template #body let-data>
           <tr>
             <td>{{ data.id.split('-')[0] }}</td>
-            <td>{{ data.transactionDate | date : 'short' }}</td>
+            <td>{{ data.transactionDate | thaiDate : 'datetime' }}</td>
             <td>{{ data.type }}</td>
             <td>{{ data.description }}</td>
           </tr>
