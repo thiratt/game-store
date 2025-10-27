@@ -109,22 +109,40 @@ namespace api.Controllers
                     .Where(t => t.UserId == userId)
                     .OrderByDescending(t => t.CreatedAt)
                     .Take(50) // Limit to last 50 transactions
-                    .Select(t => new
-                    {
-                        t.Id,
-                        t.Type,
-                        t.Amount,
-                        t.CreatedAt,
-                        Description = t.Type == "TOPUP" ? "เติมเงินเข้ากระเป๋า" :
-                                     t.Type == "PURCHASE" ? "ซื้อเกม" :
-                                     t.Type == "REFUND" ? "คืนเงิน" : "รายการอื่นๆ"
-                    })
                     .ToListAsync();
+
+                var purchaseIds = transactions
+                    .Where(t => t.Type == "PURCHASE" && t.ReferenceId.HasValue)
+                    .Select(t => t.ReferenceId!.Value)
+                    .ToList();
+
+                var purchaseGameNames = await _context.Purchases
+                    .Where(p => purchaseIds.Contains(p.Id))
+                    .Select(p => new
+                    {
+                        PurchaseId = p.Id,
+                        GameNames = p.PurchaseItems.Select(pi => pi.Game.Title).ToList()
+                    })
+                    .ToDictionaryAsync(x => x.PurchaseId, x => x.GameNames);
+
+                var result = transactions.Select(t => new
+                {
+                    t.Id,
+                    t.Type,
+                    t.Amount,
+                    t.CreatedAt,
+                    Description = t.Type == "TOPUP" ? "เติมเงินเข้ากระเป๋า" :
+                                 t.Type == "PURCHASE" ?
+                                     (t.ReferenceId.HasValue && purchaseGameNames.ContainsKey(t.ReferenceId.Value) ?
+                                         $"ซื้อเกม {string.Join(", ", purchaseGameNames[t.ReferenceId.Value])}" :
+                                         "ซื้อเกม") :
+                                 t.Type == "REFUND" ? "คืนเงิน" : "รายการอื่นๆ"
+                }).ToList();
 
                 return Ok(new KiroResponse
                 {
                     Success = true,
-                    Data = transactions
+                    Data = result
                 });
             }
             catch (Exception)
