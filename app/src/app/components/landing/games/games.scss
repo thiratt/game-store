@@ -6,3 +6,19 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+// Ensure proper spacing and prevent layout shifts
+:host {
+  .p-button {
+    transition: opacity 0.2s ease-in-out;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}

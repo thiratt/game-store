@@ -5,18 +5,24 @@
       <p-button
         icon="pi pi-chevron-left"
         class="p-button-rounded p-button-text p-button-plain"
-        (onClick)="goToPreviousDay()"
-        pTooltip="วันก่อนหน้า"
+        (onClick)="slideToLeft()"
+        [disabled]="!canScrollLeft"
+        pTooltip="เลื่อนไปทางซ้าย"
       ></p-button>
       <p-button
         icon="pi pi-chevron-right"
         class="p-button-rounded p-button-text p-button-plain"
-        (onClick)="goToNextDay()"
-        pTooltip="วันถัดไป"
+        (onClick)="slideToRight()"
+        [disabled]="!canScrollRight"
+        pTooltip="เลื่อนไปทางขวา"
       ></p-button>
     </div>
   </div>
-  <div class="flex flex-row overflow-auto mb-4 space-x-4 hide-scrollbar">
+  <div
+    #gameContainer
+    class="flex flex-row overflow-x-auto mb-4 space-x-4 hide-scrollbar scroll-smooth"
+    (scroll)="onScroll()"
+  >
     @for (game of games; track game.id) {
     <app-user-game-card [game]="game" class="flex-shrink-0"></app-user-game-card>
     }
