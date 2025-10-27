@@ -22,3 +22,16 @@ export interface UpdateCouponRequest {
   discountValue: number;
   maxUsage: number;
 }
+
+export interface ValidateCouponRequest {
+  code: string;
+  totalAmount: number;
+}
+
+export interface CouponValidationResponse {
+  couponId: string;
+  code: string;
+  discountValue: number;
+  appliedDiscount: number;
+  description?: string;
+}

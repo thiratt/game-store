@@ -74,15 +74,46 @@
     <div class="sticky top-[70px] space-y-3">
       <!-- Discount Code Card -->
       <p-card header="โค้ดส่วนลด">
+        @if (!couponValidation) {
         <div class="grid grid-cols-[1fr_auto] gap-2">
           <input
             pInputText
             [(ngModel)]="discountCode"
             placeholder="กรอกโค้ดส่วนลด"
             class="w-full"
+            [disabled]="isValidatingCoupon"
           />
-          <p-button label="ใช้โค้ด" (click)="applyDiscountCode()" [disabled]="!discountCode" />
+          <p-button
+            [label]="isValidatingCoupon ? 'กำลังตรวจสอบ...' : 'ใช้โค้ด'"
+            (click)="applyDiscountCode()"
+            [disabled]="!discountCode || isValidatingCoupon"
+            [loading]="isValidatingCoupon"
+          />
         </div>
+        } @else {
+        <div class="space-y-3">
+          <div
+            class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg"
+          >
+            <div class="flex items-center gap-2">
+              <i class="pi pi-check-circle text-green-600"></i>
+              <div>
+                <div class="font-semibold text-green-800">{{ couponValidation.code }}</div>
+                @if (couponValidation.description) {
+                <div class="text-sm text-green-600">{{ couponValidation.description }}</div>
+                }
+              </div>
+            </div>
+            <p-button
+              icon="pi pi-times"
+              size="small"
+              severity="secondary"
+              text
+              (click)="removeCoupon()"
+            />
+          </div>
+        </div>
+        }
       </p-card>
 
       <!-- Order Summary Card -->
@@ -93,10 +124,14 @@
             <span>{{ subtotal | number : '1.0-0' }} บาท</span>
           </div>
 
-          <div class="flex justify-between" *ngIf="discountAmount > 0">
-            <span>ส่วนลด</span>
-            <span class="text-green-600">-{{ discountAmount | number : '1.0-0' }} บาท</span>
+          @if (couponValidation && couponValidation.appliedDiscount > 0) {
+          <div class="flex justify-between">
+            <span>ส่วนลด ({{ couponValidation.code }})</span>
+            <span class="text-green-600"
+              >-{{ couponValidation.appliedDiscount | number : '1.0-0' }} บาท</span
+            >
           </div>
+          }
 
           <hr class="border-gray-200" />
 

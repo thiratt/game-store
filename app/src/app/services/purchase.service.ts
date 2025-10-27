@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import { ApiResponse } from '../interfaces/response.interface';
 import { OwnedGamesResponse } from '../interfaces/game.interface';
+import { CheckoutWithCouponRequest } from '../interfaces/checkout.interface';
 
 export interface PurchaseItem {
   gameId: string;
@@ -36,13 +37,13 @@ export class PurchaseService {
     return headers;
   }
 
-  checkoutCart(): Observable<ApiResponse<Purchase>> {
+  checkoutCart(couponCode?: string): Observable<ApiResponse<Purchase>> {
+    const requestBody: CheckoutWithCouponRequest = couponCode ? { couponCode } : {};
+
     return this.http
-      .post<ApiResponse<Purchase>>(
-        `${this.endpoint}/checkout`,
-        {},
-        { headers: this.buildHeaders() }
-      )
+      .post<ApiResponse<Purchase>>(`${this.endpoint}/checkout`, requestBody, {
+        headers: this.buildHeaders(),
+      })
       .pipe(
         tap((response) => {
           if (response.success && response.data) {

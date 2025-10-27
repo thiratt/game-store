@@ -17,6 +17,8 @@ import { Static } from '../../components/layout/static/static';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { CartService, CartItem } from '../../services/cart.service';
 import { PurchaseService } from '../../services/purchase.service';
+import { CouponService } from '../../services/coupon.service';
+import { CouponValidationResponse } from '../../interfaces/coupon.interface';
 
 @Component({
   selector: 'app-cart',
@@ -43,12 +45,15 @@ export class Cart implements OnInit, OnDestroy {
   cartTotal: number = 0;
   discountCode: string = '';
   discountAmount: number = 0;
+  couponValidation: CouponValidationResponse | null = null;
+  isValidatingCoupon: boolean = false;
 
   private subscriptions: Subscription = new Subscription();
 
   constructor(
     private cartService: CartService,
     private purchaseService: PurchaseService,
+    private couponService: CouponService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private router: Router
@@ -63,7 +68,7 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   get finalTotal(): number {
-    return this.subtotal - this.discountAmount;
+    return this.subtotal - (this.couponValidation?.appliedDiscount || 0);
   }
 
   ngOnInit(): void {
@@ -149,10 +154,46 @@ export class Cart implements OnInit, OnDestroy {
       return;
     }
 
+    this.isValidatingCoupon = true;
+    this.subscriptions.add(
+      this.couponService
+        .validateCoupon({
+          code: this.discountCode,
+          totalAmount: this.subtotal,
+        })
+        .subscribe({
+          next: (response) => {
+            this.isValidatingCoupon = false;
+            if (response.success && response.data) {
+              this.couponValidation = response.data;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'ใช้โค้ดส่วนลดสำเร็จ',
+                detail: `ส่วนลด ${response.data.appliedDiscount.toLocaleString()} บาท`,
+              });
+            }
+          },
+          error: (error) => {
+            this.isValidatingCoupon = false;
+            console.error('Error validating coupon:', error);
+            const errorMessage = error.error?.message || 'โค้ดส่วนลดไม่ถูกต้องหรือหมดอายุ';
+            this.messageService.add({
+              severity: 'error',
+              summary: 'โค้ดส่วนลดไม่ถูกต้อง',
+              detail: errorMessage,
+            });
+          },
+        })
+    );
+  }
+
+  removeCoupon(): void {
+    this.discountCode = '';
+    this.couponValidation = null;
     this.messageService.add({
       severity: 'info',
-      summary: 'แจ้งเตือน',
-      detail: 'ฟีเจอร์โค้ดส่วนลดจะเปิดใช้งานเร็วๆ นี้',
+      summary: 'ลบโค้ดส่วนลดแล้ว',
+      detail: 'ยกเลิกการใช้โค้ดส่วนลดเรียบร้อยแล้ว',
     });
   }
 
@@ -190,17 +231,26 @@ export class Cart implements OnInit, OnDestroy {
 
   buyGames(): void {
     this.isLoading = true;
+    const couponCode = this.couponValidation?.code || undefined;
+
     this.subscriptions.add(
-      this.purchaseService.checkoutCart().subscribe({
+      this.purchaseService.checkoutCart(couponCode).subscribe({
         next: (response) => {
           this.isLoading = false;
           if (response.success) {
             this.cartService.clearLocalCart();
             this.loadCartItems();
+            this.discountCode = '';
+            this.couponValidation = null;
+
+            const purchaseMessage = couponCode
+              ? `ซื้อเกมเรียบร้อยแล้ว (ใช้โค้ดส่วนลด: ${couponCode})`
+              : 'ซื้อเกมเรียบร้อยแล้ว';
+
             this.messageService.add({
               severity: 'success',
               summary: 'สำเร็จ',
-              detail: response.message || 'ซื้อเกมเรียบร้อยแล้ว',
+              detail: response.message || purchaseMessage,
             });
             this.router.navigate(['/my-games']);
           }

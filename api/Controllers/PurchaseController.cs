@@ -84,7 +84,7 @@ namespace api.Controllers
         }
 
         [HttpPost("checkout")]
-        public async Task<ActionResult<KiroResponse>> CheckoutCart()
+        public async Task<ActionResult<KiroResponse>> CheckoutCart([FromBody] CheckoutWithCouponRequest? request = null)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -153,6 +153,59 @@ namespace api.Controllers
                 }
 
                 var finalPrice = totalPrice;
+                Guid? discountId = null;
+
+                if (!string.IsNullOrWhiteSpace(request?.CouponCode))
+                {
+                    var coupon = await _context.DiscountCodes
+                        .FirstOrDefaultAsync(c => c.Code == request.CouponCode);
+
+                    if (coupon == null)
+                    {
+                        _logger.LogWarning("Invalid coupon {CouponCode} for user {UserId}",
+                            request.CouponCode, userId);
+                        return BadRequest(new KiroResponse
+                        {
+                            Success = false,
+                            Message = "โค้ดส่วนลดไม่ถูกต้อง"
+                        });
+                    }
+
+                    if (coupon.UsedCount >= coupon.MaxUsage)
+                    {
+                        _logger.LogWarning("Exhausted coupon {CouponCode} for user {UserId}",
+                            request.CouponCode, userId);
+                        return BadRequest(new KiroResponse
+                        {
+                            Success = false,
+                            Message = "โค้ดส่วนลดนี้ถูกใช้งานหมดแล้ว"
+                        });
+                    }
+
+                    var hasUsedCoupon = await _context.DiscountUsages
+                        .AnyAsync(du => du.DiscountId == coupon.Id && du.UserId == userId);
+
+                    if (hasUsedCoupon)
+                    {
+                        _logger.LogWarning("User {UserId} already used coupon {CouponCode}",
+                            userId, request.CouponCode);
+                        return BadRequest(new KiroResponse
+                        {
+                            Success = false,
+                            Message = "คุณได้ใช้โค้ดส่วนลดนี้แล้ว"
+                        });
+                    }
+
+                    var discountAmount = Math.Min(coupon.DiscountValue, totalPrice);
+                    finalPrice = totalPrice - discountAmount;
+                    discountId = coupon.Id;
+
+                    coupon.UsedCount += 1;
+                    _context.DiscountCodes.Update(coupon);
+
+                    _logger.LogInformation("Applied coupon {CouponCode} with discount {DiscountAmount} for user {UserId}",
+                        request.CouponCode, discountAmount, userId);
+                }
 
                 var user = await _context.Accounts
                     .Where(a => a.Id == userId)
@@ -201,7 +254,7 @@ namespace api.Controllers
                     TotalPrice = totalPrice,
                     FinalPrice = finalPrice,
                     PurchasedAt = DateTime.UtcNow,
-                    DiscountId = null
+                    DiscountId = discountId
                 };
 
                 _context.Purchases.Add(purchase);
@@ -245,6 +298,19 @@ namespace api.Controllers
                     CreatedAt = DateTime.UtcNow
                 };
                 _context.TransactionHistories.Add(transactionHistory);
+
+                if (discountId.HasValue)
+                {
+                    var discountUsage = new DiscountUsage
+                    {
+                        DiscountId = discountId.Value,
+                        UserId = userId,
+                        UsedAt = DateTime.UtcNow
+                    };
+                    _context.DiscountUsages.Add(discountUsage);
+
+                    _logger.LogInformation("Recorded coupon usage for user {UserId}, coupon {DiscountId}", userId, discountId.Value);
+                }
 
                 _context.CartItems.RemoveRange(cartItems);
 

@@ -194,6 +194,96 @@ namespace api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("validate")]
+        public async Task<ActionResult> ValidateCoupon([FromBody] ValidateCouponRequest request)
+        {
+            try
+            {
+                // Get user ID from header
+                if (!Request.Headers.TryGetValue("X-User-ID", out var userIdHeader) ||
+                    string.IsNullOrWhiteSpace(userIdHeader) ||
+                    !Guid.TryParse(userIdHeader, out Guid userId))
+                {
+                    var unauthorizedResponse = new KiroResponse
+                    {
+                        Data = null,
+                        Message = "ไม่ได้รับอนุญาต",
+                        Success = false
+                    };
+                    return Unauthorized(unauthorizedResponse);
+                }
+
+                var coupon = await _context.DiscountCodes
+                    .FirstOrDefaultAsync(c => c.Code == request.Code);
+
+                if (coupon == null)
+                {
+                    var notFoundResponse = new KiroResponse
+                    {
+                        Data = null,
+                        Message = "โค้ดส่วนลดไม่ถูกต้อง",
+                        Success = false
+                    };
+                    return NotFound(notFoundResponse);
+                }
+
+                if (coupon.UsedCount >= coupon.MaxUsage)
+                {
+                    var exhaustedResponse = new KiroResponse
+                    {
+                        Data = null,
+                        Message = "โค้ดส่วนลดนี้ถูกใช้งานหมดแล้ว",
+                        Success = false
+                    };
+                    return BadRequest(exhaustedResponse);
+                }
+
+                // Check if user has already used this coupon
+                var hasUsedCoupon = await _context.DiscountUsages
+                    .AnyAsync(du => du.DiscountId == coupon.Id && du.UserId == userId);
+
+                if (hasUsedCoupon)
+                {
+                    var alreadyUsedResponse = new KiroResponse
+                    {
+                        Data = null,
+                        Message = "คุณได้ใช้โค้ดส่วนลดนี้แล้ว",
+                        Success = false
+                    };
+                    return BadRequest(alreadyUsedResponse);
+                }
+
+                var discount = Math.Min(coupon.DiscountValue, request.TotalAmount);
+
+                var validationResult = new CouponValidationDto
+                {
+                    CouponId = coupon.Id,
+                    Code = coupon.Code,
+                    DiscountValue = coupon.DiscountValue,
+                    AppliedDiscount = discount,
+                    Description = coupon.Description
+                };
+
+                var response = new KiroResponse
+                {
+                    Data = validationResult,
+                    Message = "โค้ดส่วนลดใช้งานได้",
+                    Success = true
+                };
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                var errorResponse = new KiroResponse
+                {
+                    Data = null,
+                    Message = "เกิดข้อผิดพลาดในการตรวจสอบโค้ดส่วนลด",
+                    Success = false
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCoupon(Guid id)
         {
