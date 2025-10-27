@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +24,6 @@ import { ThaiDatePipe } from "../../../pipe/thai-date.pipe";
     CardModule,
     Toast,
     TooltipModule,
-    DatePipe,
     TopSellerGameCard,
     ThaiDatePipe
 ],
