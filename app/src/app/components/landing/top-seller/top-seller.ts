@@ -1,20 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DatePicker } from 'primeng/datepicker';
 import { Toast } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { ThaiYear } from '../../../directive/thai-year.directive';
-import { Game } from '../../../interfaces/game.interface';
+import { TopSellerGame } from '../../../interfaces/game.interface';
 import { GameService } from '../../../services/game.service';
-import { UserGameCard } from '../../user/game-card/game-card';
+import { TopSellerGameCard } from '../top-seller-game-card/top-seller-game-card';
+import { ThaiDatePipe } from "../../../pipe/thai-date.pipe";
 
 @Component({
   selector: 'app-top-seller',
-  imports: [ButtonModule, DatePicker, ThaiYear, FormsModule, CardModule, Toast, UserGameCard],
+  imports: [
+    ButtonModule,
+    DatePicker,
+    ThaiYear,
+    FormsModule,
+    CardModule,
+    Toast,
+    TooltipModule,
+    DatePipe,
+    TopSellerGameCard,
+    ThaiDatePipe
+],
   templateUrl: './top-seller.html',
   styleUrl: './top-seller.scss',
   providers: [MessageService],
@@ -22,7 +36,8 @@ import { UserGameCard } from '../../user/game-card/game-card';
 export class TopSeller implements OnInit {
   isLoading: boolean = false;
   selectedDate: Date | null = null;
-  games: Game[] = [];
+  games: TopSellerGame[] = [];
+  today: Date = new Date();
 
   constructor(private gameService: GameService, private messageService: MessageService) {}
 
@@ -37,7 +52,7 @@ export class TopSeller implements OnInit {
 
   loadGames(): void {
     this.isLoading = true;
-    this.gameService.getGames().subscribe({
+    this.gameService.getTopSellers(this.selectedDate || new Date(), 10).subscribe({
       next: (response) => {
         this.isLoading = false;
         if (response.success && response.data) {
@@ -46,11 +61,11 @@ export class TopSeller implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error loading games:', error);
+        console.error('Error loading top sellers:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'เกิดข้อผิดพลาด',
-          detail: 'ไม่สามารถโหลดรายการเกมได้',
+          detail: 'ไม่สามารถโหลดรายการเกมขายดีได้',
         });
       },
     });
@@ -60,22 +75,25 @@ export class TopSeller implements OnInit {
     this.selectedDate = date;
     if (date) {
       console.log('Selected date in Buddhist Era:', ThaiYear.formatDateToBuddhistEra(date));
+      this.loadGames(); // Reload games when date changes
     }
   }
 
   goToPreviousDay() {
-    // if (this.selectedDate) {
-    //   const newDate = new Date(this.selectedDate);
-    //   newDate.setDate(newDate.getDate() - 1);
-    //   this.selectedDate = newDate;
-    // }
+    if (this.selectedDate) {
+      const newDate = new Date(this.selectedDate);
+      newDate.setDate(newDate.getDate() - 1);
+      this.selectedDate = newDate;
+      this.loadGames();
+    }
   }
 
   goToNextDay() {
-    // if (this.selectedDate) {
-    //   const newDate = new Date(this.selectedDate);
-    //   newDate.setDate(newDate.getDate() + 1);
-    //   this.selectedDate = newDate;
-    // }
+    if (this.selectedDate) {
+      const newDate = new Date(this.selectedDate);
+      newDate.setDate(newDate.getDate() + 1);
+      this.selectedDate = newDate;
+      this.loadGames();
+    }
   }
 }

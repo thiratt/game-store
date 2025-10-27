@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { Game, GameCategory } from '../interfaces/game.interface';
+import { Game, GameCategory, TopSellerGame } from '../interfaces/game.interface';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 
@@ -62,6 +62,18 @@ export class GameService {
 
   getGames(): Observable<ApiResponse<Game[]>> {
     return this.http.get<ApiResponse<Game[]>>(`${this.endpoint}/game`, {
+      headers: this.buildHeaders(),
+    });
+  }
+
+  getTopSellers(date?: Date, limit: number = 10): Observable<ApiResponse<TopSellerGame[]>> {
+    let url = `${this.endpoint}/game/top-sellers?limit=${limit}`;
+    if (date) {
+      const dateStr = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      url += `&date=${dateStr}`;
+    }
+
+    return this.http.get<ApiResponse<TopSellerGame[]>>(url, {
       headers: this.buildHeaders(),
     });
   }

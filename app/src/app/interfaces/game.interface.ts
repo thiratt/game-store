@@ -25,3 +25,8 @@ export interface OwnedGamesResponse {
   pageSize: number;
   totoalPages: number;
 }
+
+export interface TopSellerGame extends Game {
+  rank: number;
+  salesCount: number;
+}

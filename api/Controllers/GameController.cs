@@ -208,7 +208,7 @@ namespace api.Controllers
         public async Task<ActionResult<KiroResponse>> GetGameById(Guid id)
         {
             var userId = GetCurrentUserId();
-            
+
             var game = await _context.Games
                 .Include(g => g.Categories)
                 .Include(g => g.UserGames.Where(ug => ug.UserId == userId))
@@ -262,6 +262,59 @@ namespace api.Controllers
                 Data = categoryDtos
             };
             return Ok(response);
+        }
+
+        [HttpGet("top-sellers")]
+        public async Task<ActionResult<KiroResponse>> GetTopSellers([FromQuery] DateTime? date = null, [FromQuery] int limit = 10)
+        {
+            var userId = GetCurrentUserId();
+            var targetDate = date?.Date ?? DateTime.UtcNow.Date;
+
+            // Get top sellers based on purchase count for the specified date
+            var topSellerGames = await _context.PurchaseItems
+                .Include(pi => pi.Purchase)
+                .Include(pi => pi.Game)
+                .ThenInclude(g => g.Categories)
+                .Include(pi => pi.Game)
+                .ThenInclude(g => g.UserGames.Where(ug => ug.UserId == userId))
+                .Where(pi => pi.Purchase.PurchasedAt.Date == targetDate)
+                .GroupBy(pi => pi.GameId)
+                .Select(g => new
+                {
+                    GameId = g.Key,
+                    SalesCount = g.Count(),
+                    Game = g.First().Game
+                })
+                .OrderByDescending(x => x.SalesCount)
+                .Take(limit)
+                .ToListAsync();
+
+            var topSellerDtos = topSellerGames.Select((item, index) => new TopSellerGameDto
+            {
+                Id = item.Game.Id,
+                Title = item.Game.Title,
+                Description = item.Game.Description,
+                Price = item.Game.Price,
+                ReleaseDate = item.Game.ReleaseDate,
+                ImageUrl = item.Game.ImageUrl,
+                Categories = item.Game.Categories.Select(gc => new GameCategoryDto
+                {
+                    Id = gc.Id,
+                    Name = gc.Name
+                }).ToList(),
+                OwnedAt = item.Game.UserGames.FirstOrDefault()?.OwnedAt,
+                Rank = index + 1,
+                SalesCount = item.SalesCount
+            }).ToList();
+
+            var topSellersResponse = new KiroResponse
+            {
+                Success = true,
+                Data = topSellerDtos,
+                Message = $"Top {topSellerDtos.Count} sellers for {targetDate:yyyy-MM-dd}"
+            };
+
+            return Ok(topSellersResponse);
         }
     }
 }
