@@ -21,18 +21,17 @@
               class="w-full"
               [class.p-invalid]="formControls['code'].invalid && formControls['code'].touched"
             />
-            <small
-              class="text-red-500 mt-1 block"
-              *ngIf="formControls['code'].invalid && formControls['code'].touched"
-            >
-              <span *ngIf="formControls['code'].errors?.['required']">กรุณากรอกรหัสคูปอง</span>
-              <span *ngIf="formControls['code'].errors?.['minlength']"
-                >รหัสคูปองต้องมีอย่างน้อย 3 ตัวอักษร</span
-              >
-              <span *ngIf="formControls['code'].errors?.['maxlength']"
-                >รหัสคูปองต้องไม่เกิน 20 ตัวอักษร</span
-              >
+            @if (formControls['code'].invalid && formControls['code'].touched) {
+            <small class="text-red-500 mt-1 block">
+              @if (formControls['code'].errors?.['required']) {
+              <span>กรุณากรอกรหัสคูปอง</span>
+              } @if (formControls['code'].errors?.['minlength']) {
+              <span>รหัสคูปองต้องมีอย่างน้อย 3 ตัวอักษร</span>
+              } @if (formControls['code'].errors?.['maxlength']) {
+              <span>รหัสคูปองต้องไม่เกิน 20 ตัวอักษร</span>
+              }
             </small>
+            }
           </div>
 
           <!-- Description Field -->
@@ -66,17 +65,15 @@
                 formControls['discountValue'].invalid && formControls['discountValue'].touched
               "
             ></p-inputNumber>
-            <small
-              class="text-red-500 mt-1 block"
-              *ngIf="formControls['discountValue'].invalid && formControls['discountValue'].touched"
-            >
-              <span *ngIf="formControls['discountValue'].errors?.['required']"
-                >กรุณากรอกมูลค่าส่วนลด</span
-              >
-              <span *ngIf="formControls['discountValue'].errors?.['min']"
-                >มูลค่าส่วนลดต้องมากกว่า 0 บาท</span
-              >
+            @if (formControls['discountValue'].invalid && formControls['discountValue'].touched) {
+            <small class="text-red-500 mt-1 block">
+              @if (formControls['discountValue'].errors?.['required']) {
+              <span>กรุณากรอกมูลค่าส่วนลด</span>
+              } @if (formControls['discountValue'].errors?.['min']) {
+              <span>มูลค่าส่วนลดต้องมากกว่า 0 บาท</span>
+              }
             </small>
+            }
           </div>
 
           <!-- Max Usage Field -->
@@ -100,17 +97,15 @@
                 formControls['maxUsage'].invalid && formControls['maxUsage'].touched
               "
             ></p-inputNumber>
-            <small
-              class="text-red-500 mt-1 block"
-              *ngIf="formControls['maxUsage'].invalid && formControls['maxUsage'].touched"
-            >
-              <span *ngIf="formControls['maxUsage'].errors?.['required']"
-                >กรุณากรอกจำนวนการใช้งานสูงสุด</span
-              >
-              <span *ngIf="formControls['maxUsage'].errors?.['min']"
-                >จำนวนการใช้งานต้องมากกว่า 0 ครั้ง</span
-              >
+            @if (formControls['maxUsage'].invalid && formControls['maxUsage'].touched) {
+            <small class="text-red-500 mt-1 block">
+              @if (formControls['maxUsage'].errors?.['required']) {
+              <span>กรุณากรอกจำนวนการใช้งานสูงสุด</span>
+              } @if (formControls['maxUsage'].errors?.['min']) {
+              <span>จำนวนการใช้งานต้องมากกว่า 0 ครั้ง</span>
+              }
             </small>
+            }
           </div>
 
           <!-- Action Buttons -->
