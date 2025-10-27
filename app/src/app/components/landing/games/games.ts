@@ -5,7 +5,6 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
-import { TooltipModule } from 'primeng/tooltip';
 
 import { Game } from '../../../interfaces/game.interface';
 import { GameService } from '../../../services/game.service';
@@ -13,7 +12,7 @@ import { UserGameCard } from '../../user/game-card/game-card';
 
 @Component({
   selector: 'app-games',
-  imports: [ButtonModule, CardModule, ToastModule, TooltipModule, FormsModule, UserGameCard],
+  imports: [ButtonModule, CardModule, ToastModule, FormsModule, UserGameCard],
   templateUrl: './games.html',
   styleUrl: './games.scss',
   providers: [MessageService],
