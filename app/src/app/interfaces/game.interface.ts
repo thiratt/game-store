@@ -17,3 +17,11 @@ export interface Game {
   imageUrl?: string;
   ownedAt?: Date;
 }
+
+export interface OwnedGamesResponse {
+  games: Game[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totoalPages: number;
+}

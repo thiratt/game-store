@@ -45,7 +45,7 @@ export class MyGames implements OnInit, OnDestroy {
         next: (response) => {
           this.isLoading = false;
           if (response.success && response.data) {
-            this.ownedGames = response.data;
+            this.ownedGames = response.data.games;
           }
         },
         error: (error) => {

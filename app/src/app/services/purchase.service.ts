@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
 import { UserService } from './user.service';
+import { ApiResponse } from '../interfaces/response.interface';
+import { OwnedGamesResponse } from '../interfaces/game.interface';
 
 export interface PurchaseItem {
   gameId: string;
@@ -17,12 +18,6 @@ export interface Purchase {
   finalPrice: number;
   purchasedAt: string;
   items: PurchaseItem[];
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  message?: string;
-  data?: T;
 }
 
 @Injectable({
@@ -69,8 +64,8 @@ export class PurchaseService {
     });
   }
 
-  getOwnedGames(): Observable<ApiResponse<any[]>> {
-    return this.http.get<ApiResponse<any[]>>(`${this.endpoint}/owned-games`, {
+  getOwnedGames(): Observable<ApiResponse<OwnedGamesResponse>> {
+    return this.http.get<ApiResponse<OwnedGamesResponse>>(`${this.endpoint}/owned-games`, {
       headers: this.buildHeaders(),
     });
   }
