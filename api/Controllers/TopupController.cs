@@ -25,6 +25,20 @@ namespace api.Controllers
             return userId;
         }
 
+        private static string GetPurchaseDescription(List<string> games)
+        {
+            if (games.Count <= 2)
+            {
+                return "ซื้อเกม " + string.Join(", ", games);
+            }
+            else
+            {
+                var firstTwo = games.Take(2);
+                int remaining = games.Count - 2;
+                return $"ซื้อเกม {string.Join(", ", firstTwo)} และอีก {remaining} เกม";
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<KiroResponse>> ProcessTopup([FromBody] TopupRequest request)
         {
@@ -134,7 +148,7 @@ namespace api.Controllers
                     Description = t.Type == "TOPUP" ? "เติมเงินเข้ากระเป๋า" :
                                  t.Type == "PURCHASE" ?
                                      (t.ReferenceId.HasValue && purchaseGameNames.ContainsKey(t.ReferenceId.Value) ?
-                                         $"ซื้อเกม {string.Join(", ", purchaseGameNames[t.ReferenceId.Value])}" :
+                                         GetPurchaseDescription(purchaseGameNames[t.ReferenceId.Value]) :
                                          "ซื้อเกม") :
                                  t.Type == "REFUND" ? "คืนเงิน" : "รายการอื่นๆ"
                 }).ToList();
