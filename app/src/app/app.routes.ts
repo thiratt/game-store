@@ -22,6 +22,7 @@ import { HomeGuard } from './services/home.guard';
 import { Categories } from './pages/categories/categories';
 import { MyGames } from './pages/my-games/my-games';
 import { Transaction } from './pages/dashboard/transaction/transaction';
+import { Coupons } from './pages/dashboard/coupons/coupons';
 
 export const routes: Routes = [
   {
@@ -71,6 +72,11 @@ export const routes: Routes = [
       {
         path: '',
         component: Dashboard,
+      },
+      {
+        path: 'coupons',
+        component: Coupons,
+        title: 'โค้ดส่วนลด',
       },
       {
         path: 'transaction',
