@@ -86,7 +86,6 @@ export class CartService {
       .post<ApiResponse>(`${this.cartEndpoint}/${gameId}`, {}, { headers: this.buildHeaders() })
       .pipe(
         tap((response) => {
-          console.log('Add to cart response:', response);
           if (response.success) {
             this.loadCartItems();
             this.loadCartCount();
